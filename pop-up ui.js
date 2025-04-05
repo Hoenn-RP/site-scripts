@@ -51,3 +51,31 @@
             uiDisplayPrefs(); // loads the selected ui mode on page load
         });
     })(jQuery);
+
+$(document).ready(function () {
+    const fontTargets = $('blockquote, .omgenmid, .omgen, .palise-post-right .message');
+    const container = $('<div>'); // temp element to get default font size
+
+    // Store original font size
+    let originalSize = parseInt(container.css("font-size")) || 16; // default to 16px if can't detect
+    let currentSize = originalSize;
+
+    function applyFontSize(size) {
+        fontTargets.css('font-size', size + 'px');
+    }
+
+    $('.fontinc').click(function () {
+        currentSize += 2;
+        applyFontSize(currentSize);
+    });
+
+    $('.fontdec').click(function () {
+        currentSize = Math.max(8, currentSize - 2); // Prevent going too small
+        applyFontSize(currentSize);
+    });
+
+    $('.fontres').click(function () {
+        currentSize = originalSize;
+        applyFontSize(currentSize);
+    });
+});
