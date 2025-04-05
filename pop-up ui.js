@@ -53,29 +53,40 @@
     })(jQuery);
 
 $(document).ready(function () {
+    // Select the target elements
     const fontTargets = $('blockquote, .omgenmid, .omgen, .palise-post-right .message');
-    const container = $('<div>'); // temp element to get default font size
 
-    // Store original font size
-    let originalSize = parseInt(container.css("font-size")) || 16; // default to 16px if can't detect
-    let currentSize = originalSize;
+    // Function to change font size
+    function changeFontSize(action) {
+        fontTargets.each(function () {
+            // Get the current font size in pixels
+            let currentSize = parseInt($(this).css('font-size'));
 
-    function applyFontSize(size) {
-        fontTargets.css('font-size', size + 'px');
+            // Determine the new font size based on the action
+            let newSize;
+            if (action === 'increase') {
+                newSize = currentSize + 2;
+            } else if (action === 'decrease') {
+                newSize = currentSize - 2;
+            } else if (action === 'reset') {
+                newSize = ''; // Resets to default
+            }
+
+            // Apply the new font size
+            $(this).css('font-size', newSize);
+        });
     }
 
+    // Event listeners for the buttons
     $('.fontinc').click(function () {
-        currentSize += 2;
-        applyFontSize(currentSize);
+        changeFontSize('increase');
     });
 
     $('.fontdec').click(function () {
-        currentSize = Math.max(8, currentSize - 2); // Prevent going too small
-        applyFontSize(currentSize);
+        changeFontSize('decrease');
     });
 
     $('.fontres').click(function () {
-        currentSize = originalSize;
-        applyFontSize(currentSize);
+        changeFontSize('reset');
     });
 });
