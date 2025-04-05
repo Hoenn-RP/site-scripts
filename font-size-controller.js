@@ -1,32 +1,31 @@
 (function ($) {
     "use strict";
-
-    function setFontSize(size) {
-        // Apply the font size to the target elements
-        $(".palise-post-right").css("font-size", size + "px");
-        // Store the font size in localStorage
-        localStorage.setItem("fontSize", size);
-    }
-
-    $(document).ready(function () {
-        const defaultFontSize = 12; // Default font size in pixels
-        let htmlFontSize = parseInt(localStorage.getItem("fontSize"), 10) || defaultFontSize;
-
-        // Set the initial font size
-        setFontSize(htmlFontSize);
-
-        $(".fontbtn").click(function (e) {
+    function \Size() {
+        let fontBtn = $(".fontbtn");
+        if (localStorage.getItem("fontSize") === null) {
+            var htmlFontSize = 12; // THIS IS YOUR DEFAULT FONT SIZE
+        } else {
+            var htmlFontSize = localStorage.getItem("fontSize");
+            $(".palise-post-right").css("font-size", htmlFontSize + "px"); // GENERIC POST CONTAINER
+        }
+        fontBtn.click(function (e) {
             e.preventDefault();
-
-            if ($(this).hasClass("fontinc")) {
-                htmlFontSize += 1;
-            } else if ($(this).hasClass("fontdec")) {
-                htmlFontSize -= 1;
-            } else if ($(this).hasClass("fontres")) {
-                htmlFontSize = defaultFontSize;
+            let $this = $(this);
+            if ($this.hasClass("fontinc")) {
+                htmlFontSize = Math.round(parseFloat(htmlFontSize) + 1);
+                $(".palise-post-right").css("font-size", htmlFontSize + "px");
+            } else {
+                htmlFontSize = Math.round(parseFloat(htmlFontSize) - 1);
+                $(".palise-post-right").css("font-size", htmlFontSize + "px");
             }
-
-            setFontSize(htmlFontSize);
+            if ($this.hasClass("fontres")) {
+                htmlFontSize = 12;
+                $(".palise-post-right").css("font-size", htmlFontSize + "px");
+            }
+            localStorage.setItem("fontSize", htmlFontSize);
         });
+    }
+    $(window).on("load", function () {
+        fontSize();
     });
 })(jQuery);
