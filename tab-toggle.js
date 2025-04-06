@@ -60,31 +60,32 @@
             $(this).parents("#mini-out").children(".palise-mini-grad").removeClass("fade");
         });
     });
-    $(".palise-clik-1").on("click", function () {
-        $(this).parents(".palise-side-2").children(".palise-side-toggle-1").addClass('toggle-on');
-        $(this).parents(".palise-side-2").children(".palise-side-toggle-2").removeClass('toggle-on');
-        $(this).parents(".palise-side-2").children(".palise-side-toggle-3").removeClass('toggle-on');
-    });
+$(".palise-clik-1").on("click", function () {
+    let $parent = $(this).parents(".palise-side-2");
+    $parent.children(".palise-side-toggle-1").addClass('toggle-on');
+    $parent.children(".palise-side-toggle-2, .palise-side-toggle-3, .palise-side-toggle-4").removeClass('toggle-on');
+});
 
-    $(".palise-side-toggle-off").on("click", function () {
-        $(this).parents(".palise-side-2").children(".palise-side-toggle-1").removeClass('toggle-on');
-    });
+$(".palise-clik-2").on("click", function () {
+    let $parent = $(this).parents(".palise-side-2");
+    $parent.children(".palise-side-toggle-2").addClass('toggle-on');
+    $parent.children(".palise-side-toggle-1, .palise-side-toggle-3, .palise-side-toggle-4").removeClass('toggle-on');
+});
 
-    $(".palise-clik-2").on("click", function () {
-        $(this).parents(".palise-side-2").children(".palise-side-toggle-2").addClass('toggle-on');
-        $(this).parents(".palise-side-2").children(".palise-side-toggle-1").removeClass('toggle-on');
-        $(this).parents(".palise-side-2").children(".palise-side-toggle-3").removeClass('toggle-on');
-    });
+$(".palise-clik-3").on("click", function () {
+    let $parent = $(this).parents(".palise-side-2");
+    $parent.children(".palise-side-toggle-3").addClass('toggle-on');
+    $parent.children(".palise-side-toggle-1, .palise-side-toggle-2, .palise-side-toggle-4").removeClass('toggle-on');
+});
 
-    $(".palise-side-toggle-off").on("click", function () {
-        $(this).parents(".palise-side-2").children(".palise-side-toggle-2").removeClass('toggle-on');
-    });
-    $(".palise-clik-3").on("click", function () {
-        $(this).parents(".palise-side-2").children(".palise-side-toggle-3").addClass('toggle-on');
-        $(this).parents(".palise-side-2").children(".palise-side-toggle-1").removeClass('toggle-on');
-        $(this).parents(".palise-side-2").children(".palise-side-toggle-2").removeClass('toggle-on');
-    });
+$(".palise-clik-4").on("click", function () {
+    let $parent = $(this).parents(".palise-side-2");
+    $parent.children(".palise-side-toggle-4").addClass('toggle-on');
+    $parent.children(".palise-side-toggle-1, .palise-side-toggle-2, .palise-side-toggle-3").removeClass('toggle-on');
+});
 
-    $(".palise-side-toggle-off").on("click", function () {
-        $(this).parents(".palise-side-2").children(".palise-side-toggle-3").removeClass('toggle-on');
-    });
+// Toggle-off buttons (combined into one)
+$(".palise-side-toggle-off").on("click", function () {
+    let $parent = $(this).parents(".palise-side-2");
+    $parent.children(".palise-side-toggle-1, .palise-side-toggle-2, .palise-side-toggle-3, .palise-side-toggle-4").removeClass('toggle-on');
+});
