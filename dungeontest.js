@@ -1,22 +1,19 @@
 $(document).ready(function () {
+    console.log('Dungeon script loaded!');
     $('.dungeon-roll .vdice-value').each(function () {
-        const rollText = $(this).text().trim();
-        const roll = parseInt(rollText, 10);
-
-        if (isNaN(roll)) return; // just in case
-
+        const roll = parseInt($(this).text().trim(), 10);
+        if (isNaN(roll)) return;
         let resultText = '';
-
         if (roll >= 1 && roll <= 10) {
-            resultText = 'A wild Pokemon has appeared! Battle it.';
+            resultText = 'A wild Pokémon has appeared! Battle it.';
         } else if (roll >= 11 && roll <= 20) {
             resultText = 'The cavern starts to shake.';
         } else if (roll >= 21 && roll <= 30) {
-            resultText = 'A pokemon ambush! Prepare to fight.';
+            resultText = 'A Pokémon ambush! Prepare to fight.';
         } else if (roll >= 31 && roll <= 40) {
             resultText = 'You hear a loud roar.';
         } else if (roll >= 41 && roll <= 50) {
-            resultText = 'A special pokeball rests before you.';
+            resultText = 'A special Pokéball rests before you.';
         } else if (roll >= 51 && roll <= 60) {
             resultText = 'You are given a complex riddle to solve.';
         } else if (roll >= 61 && roll <= 70) {
@@ -30,8 +27,6 @@ $(document).ready(function () {
         } else {
             resultText = 'Something went wrong with the roll...';
         }
-
-        // replace number with description
         $(this).text(resultText);
     });
 });
