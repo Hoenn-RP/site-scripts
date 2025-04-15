@@ -1,4 +1,3 @@
-<script>
 $(document).ready(function () {
     $('.dungeon-roll .vdice-value').each(function () {
         const rollText = $(this).text().trim();
@@ -36,4 +35,3 @@ $(document).ready(function () {
         $(this).text(resultText);
     });
 });
-</script>
