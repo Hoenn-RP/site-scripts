@@ -9,7 +9,7 @@ $(document).ready(function () {
         } else if (roll >= 11 && roll <= 20) {
             resultText = 'The cavern starts to shake.';
         } else if (roll >= 21 && roll <= 30) {
-            resultText = 'A Pokemon ambush! Prepare to fight.';
+            resultText = 'A Pokemon ambush! Prepare to fight. [img src="https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/venusaur.png" alt=" "]';
         } else if (roll >= 31 && roll <= 40) {
             resultText = 'You hear a loud roar.';
         } else if (roll >= 41 && roll <= 50) {
