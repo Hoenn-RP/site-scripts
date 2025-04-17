@@ -13,7 +13,7 @@ $(document).ready(function () {
                     <div class="mkj-magikarp">
                         <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
-                    <div class="mkj-textbox">The Magikarp appears to be festive when it uses the move <b>Celebrate</b>!</div>
+                    <div class="mkj-textbox">The Magikarp appears to be having a good time when it uses <b>Celebrate</b>!</div>
                 </div>`;
         } else if (roll >= 6 && roll <= 10) {
             resultText = `
