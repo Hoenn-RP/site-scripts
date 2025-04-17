@@ -116,7 +116,7 @@ $(document).ready(function () {
             resultText = `
                 <div class="mkj-wrapper">
                     <div class="mkj-magikarp">
-                        <img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png">
+                        <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
                     <div class="mkj-textbox">That’s a tiny one! This Magikarp weighs only <b>5.0</b> kg <b>(XXXS)</b>!</div>
                 </div>`;
@@ -124,7 +124,7 @@ $(document).ready(function () {
             resultText = `
                 <div class="mkj-wrapper">
                     <div class="mkj-magikarp">
-                        <img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png">
+                        <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
                     <div class="mkj-textbox">You start to reel in a lightweight fish at <b>7.5</b> kg <b>(XXS)</b>.</div>
                 </div>`;
@@ -132,7 +132,7 @@ $(document).ready(function () {
             resultText = `
                 <div class="mkj-wrapper">
                     <div class="mkj-magikarp">
-                        <img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png">
+                        <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
                     <div class="mkj-textbox">Slightly small. It only weighs <b>9.0</b> kg <b>(XS)</b>.</div>
                 </div>`;
@@ -140,7 +140,7 @@ $(document).ready(function () {
             resultText = `
                 <div class="mkj-wrapper">
                     <div class="mkj-magikarp">
-                        <img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png">
+                        <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
                     <div class="mkj-textbox">A standard catch! This one weighs <b>10.0</b> kg <b>(Normal)</b>.</div>
                 </div>`;
@@ -148,7 +148,7 @@ $(document).ready(function () {
             resultText = `
                 <div class="mkj-wrapper">
                     <div class="mkj-magikarp">
-                        <img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png">
+                        <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
                     <div class="mkj-textbox">Getting hefty! This is a <b>11.0</b> kg <b>(XL)</b> Magikarp.</div>
                 </div>`;
@@ -156,7 +156,7 @@ $(document).ready(function () {
             resultText = `
                 <div class="mkj-wrapper">
                     <div class="mkj-magikarp">
-                        <img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png">
+                        <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
                     <div class="mkj-textbox">It’s heavy! This Magikarp weighs <b>12.5</b> kg <b>(XXL)</b>!</div>
                 </div>`;
@@ -164,7 +164,7 @@ $(document).ready(function () {
             resultText = `
                 <div class="mkj-wrapper">
                     <div class="mkj-magikarp">
-                        <img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png">
+                        <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
                     <div class="mkj-textbox">Holy smokes! It’s huge! A whopping <b>15.0</b> kg <b>(XXXL)</b>!</div>
                 </div>`;
@@ -172,7 +172,7 @@ $(document).ready(function () {
             resultText = `
                 <div class="mkj-wrapper">
                     <div class="mkj-magikarp">
-                        <img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png">
+                        <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
                     <div class="mkj-textbox">It’s an <b>Alpha</b> Magikarp radiating power! It has the ability <b>Wild Might</b> and weighs <b>22.5</b> kg <b>(ALPHA)</b>!</div>
                 </div>`;
