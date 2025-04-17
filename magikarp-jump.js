@@ -198,7 +198,7 @@ $(document).ready(function () {
         } else if (roll <= 12) {
             resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_05.png"></div><div class="mkj-textbox">It has a <b>White & Orange Calico</b> pattern! This slightly different calico pattern has orange patches on a white field.</div></div>';
         } else if (roll <= 16) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_06.png"></div><div class="mkj-textbox">It has a <b>Orange & Gold Calico</b> pattern! You'll feel fortunate when you see this glittering gold and orange calico!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_06.png"></div><div class="mkj-textbox">It has a <b>Orange & Gold Calico</b> pattern! You will feel fortunate when you see this glittering gold and orange calico!</div></div>';
         } else if (roll <= 19) {
             resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_07.png"></div><div class="mkj-textbox">It has a <b>Orange Two-Tone</b> pattern! This basic two-tone pattern has clearly divided sections of orange and white.</div></div>';
         } else if (roll <= 22) {
