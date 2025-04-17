@@ -126,7 +126,7 @@ $(document).ready(function () {
                     <div class="mkj-magikarp">
                         <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
-                    <div class="mkj-textbox">You start to reel in a lightweight fish at <b>7.5</b> kg <b>(XXS)</b>.</div>
+                    <div class="mkj-textbox">This is a small Magikarp that weighs <b>7.5</b> kg <b>(XXS)</b>.</div>
                 </div>`;
         } else if (roll >= 27 && roll <= 39) {
             resultText = `
@@ -150,7 +150,7 @@ $(document).ready(function () {
                     <div class="mkj-magikarp">
                         <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
-                    <div class="mkj-textbox">Getting hefty! This is a <b>11.0</b> kg <b>(XL)</b> Magikarp.</div>
+                    <div class="mkj-textbox">Pretty hefty! This is a <b>11.0</b> kg <b>(XL)</b> Magikarp.</div>
                 </div>`;
         } else if (roll >= 66 && roll <= 78) {
             resultText = `
