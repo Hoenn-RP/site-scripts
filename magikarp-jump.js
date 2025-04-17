@@ -183,4 +183,82 @@ $(document).ready(function () {
         // Replace the number with the HTML content
         $(this).html(resultText);
     });
+
+        $('.magikarp-jump-3 .vdice-value').each(function () {
+        const rollText = $(this).text().trim();
+        const roll = parseInt(rollText, 10);
+        if (isNaN(roll)) return;
+
+        let resultText = '';
+
+        if (roll >= 1 && roll <= 4) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Orange & White Calico</b> pattern!</div></div>';
+        } else if (roll <= 8) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Orange & White & Black Calico</b> pattern!</div></div>';
+        } else if (roll <= 12) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>White & Orange Calico</b> pattern!</div></div>';
+        } else if (roll <= 16) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Orange & Gold Calico</b> pattern!</div></div>';
+        } else if (roll <= 19) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Orange Two-Tone</b> pattern!</div></div>';
+        } else if (roll <= 22) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Orange Orca</b> pattern!</div></div>';
+        } else if (roll <= 25) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Orange Dapples</b> pattern!</div></div>';
+        } else if (roll <= 28) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Pink Two-Tone</b> pattern!</div></div>';
+        } else if (roll <= 31) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Pink Orca</b> pattern!</div></div>';
+        } else if (roll <= 34) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Pink Dapples</b> pattern!</div></div>';
+        } else if (roll <= 37) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Gray Bubbles</b> pattern!</div></div>';
+        } else if (roll <= 40) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Gray Diamonds</b> pattern!</div></div>';
+        } else if (roll <= 43) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Gray Patches</b> pattern!</div></div>';
+        } else if (roll <= 46) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Purple Bubbles</b> pattern!</div></div>';
+        } else if (roll <= 49) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Purple Diamonds</b> pattern!</div></div>';
+        } else if (roll <= 52) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Purple Patches</b> pattern!</div></div>';
+        } else if (roll <= 55) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Apricot Tiger</b> pattern!</div></div>';
+        } else if (roll <= 58) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Apricot Zebra</b> pattern!</div></div>';
+        } else if (roll <= 61) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Apricot Stripes</b> pattern!</div></div>';
+        } else if (roll <= 64) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Brown Tiger</b> pattern!</div></div>';
+        } else if (roll <= 67) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Brown Zebra</b> pattern!</div></div>';
+        } else if (roll <= 70) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Brown Stripes</b> pattern!</div></div>';
+        } else if (roll <= 73) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Orange Forehead</b> pattern!</div></div>';
+        } else if (roll <= 76) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Orange Mask</b> pattern!</div></div>';
+        } else if (roll <= 79) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Black Forehead</b> pattern!</div></div>';
+        } else if (roll <= 82) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Black Mask</b> pattern!</div></div>';
+        } else if (roll <= 85) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Saucy Blue</b> pattern!</div></div>';
+        } else if (roll <= 88) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Blue Raindrops</b> pattern!</div></div>';
+        } else if (roll <= 91) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Saucy Violet</b> pattern!</div></div>';
+        } else if (roll <= 94) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Violet Raindrops</b> pattern!</div></div>';
+        } else if (roll <= 97) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">The Magikarp has the <b>Skelly</b> pattern!</div></div>';
+        } else if (roll <= 100) {
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://archives.bulbagarden.net/media/upload/e/ed/Magikarp_Jump_Pattern_01.png"></div><div class="mkj-textbox">You fished up a <b>Gold (Shiny)</b> Magikarp! Lucky you!</div></div>';
+        } else {
+            resultText = 'Something went wrong with the roll...';
+        }
+
+        $(this).html(resultText);
+    });
 });
