@@ -192,69 +192,69 @@ $(document).ready(function () {
         let resultText = '';
 
         if (roll >= 1 && roll <= 4) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_03.png"></div><div class="mkj-textbox">The magikarp has the <b>Orange & White Calico</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_03.png"></div><div class="mkj-textbox">It has a <b>Orange & White Calico</b> pattern! The basic example of a calico pattern has orange and white patches.</div></div>';
         } else if (roll <= 8) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_04.png"></div><div class="mkj-textbox">The magikarp has the <b>Orange & White & Black Calico</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_04.png"></div><div class="mkj-textbox">It has a <b>Orange & White & Black Calico</b> pattern! This calico pattern Magikarp looks a bit extravagant with its three colors.</div></div>';
         } else if (roll <= 12) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_05.png"></div><div class="mkj-textbox">The magikarp has the <b>White & Orange Calico</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_05.png"></div><div class="mkj-textbox">It has a <b>White & Orange Calico</b> pattern! This slightly different calico pattern has orange patches on a white field.</div></div>';
         } else if (roll <= 16) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_06.png"></div><div class="mkj-textbox">The magikarp has the <b>Orange & Gold Calico</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_06.png"></div><div class="mkj-textbox">It has a <b>Orange & Gold Calico</b> pattern! You'll feel fortunate when you see this glittering gold and orange calico!</div></div>';
         } else if (roll <= 19) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_07.png"></div><div class="mkj-textbox">The magikarp has the <b>Orange Two-Tone</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_07.png"></div><div class="mkj-textbox">It has a <b>Orange Two-Tone</b> pattern! This basic two-tone pattern has clearly divided sections of orange and white.</div></div>';
         } else if (roll <= 22) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_08.png"></div><div class="mkj-textbox">The magikarp has the <b>Orange Orca</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_08.png"></div><div class="mkj-textbox">It has a <b>Orange Orca</b> pattern! This rather rare two-tone pattern looks like it would make for a swift swimmer.</div></div>';
         } else if (roll <= 25) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_09.png"></div><div class="mkj-textbox">The magikarp has the <b>Orange Dapples</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_09.png"></div><div class="mkj-textbox">It has a <b>Orange Dapples</b> pattern! This two-tone pattern is reminiscent of the spray thrown up by the ocean waves.</div></div>';
         } else if (roll <= 28) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_10.png"></div><div class="mkj-textbox">The magikarp has the <b>Pink Two-Tone</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_10.png"></div><div class="mkj-textbox">It has a <b>Pink Two-Tone</b> pattern! This cute two-tone pattern has clear fields of pink and white.</div></div>';
         } else if (roll <= 31) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_11.png"></div><div class="mkj-textbox">The magikarp has the <b>Pink Orca</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_11.png"></div><div class="mkj-textbox">It has a <b>Pink Orca</b> pattern! This two-tone pattern manages to look both cute and cool at the same time.</div></div>';
         } else if (roll <= 34) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_12.png"></div><div class="mkj-textbox">The magikarp has the <b>Pink Dapples</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_12.png"></div><div class="mkj-textbox">It has a <b>Pink Dapples</b> pattern! This popular two-tone look is loved for its cute coloring and pattern.</div></div>';
         } else if (roll <= 37) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_13.png"></div><div class="mkj-textbox">The magikarp has the <b>Gray Bubbles</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_13.png"></div><div class="mkj-textbox">It has a <b>Gray Bubbles</b> pattern! This basic bubble pattern in an understated gray has many fans.</div></div>';
         } else if (roll <= 40) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_14.png"></div><div class="mkj-textbox">The magikarp has the <b>Gray Diamonds</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_14.png"></div><div class="mkj-textbox">It has a <b>Gray Diamonds</b> pattern! This gray pattern would be right in line with a methodical mind.</div></div>';
         } else if (roll <= 43) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_15.png"></div><div class="mkj-textbox">The magikarp has the <b>Gray Patches</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_15.png"></div><div class="mkj-textbox">It has a <b>Gray Patches</b> pattern! This rare gray pattern has an unusually complicated pattern.</div></div>';
         } else if (roll <= 46) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_16.png"></div><div class="mkj-textbox">The magikarp has the <b>Purple Bubbles</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_16.png"></div><div class="mkj-textbox">It has a <b>Purple Bubbles</b> pattern! This vivid purple pattern is dappled with lovely spots.</div></div>';
         } else if (roll <= 49) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_17.png"></div><div class="mkj-textbox">The magikarp has the <b>Purple Diamonds</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_17.png"></div><div class="mkj-textbox">It has a <b>Purple Diamonds</b> pattern! This purple pattern is covered with spots that look like diamonds.</div></div>';
         } else if (roll <= 52) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_18.png></div><div class="mkj-textbox">The magikarp has the <b>Purple Patches</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_18.png></div><div class="mkj-textbox">It has a <b>Purple Patches</b> pattern! This captivating pattern has patches of purple on a white field.</div></div>';
         } else if (roll <= 55) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_19.png"></div><div class="mkj-textbox">The magikarp has the <b>Apricot Tiger</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_19.png"></div><div class="mkj-textbox">It has a <b>Apricot Tiger</b> pattern! This wild striped pattern gives an impression of fierce strength.</div></div>';
         } else if (roll <= 58) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_20.png"></div><div class="mkj-textbox">The magikarp has the <b>Apricot Zebra</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_20.png"></div><div class="mkj-textbox">It has a <b>Apricot Zebra</b> pattern! This striped pattern has real sense of personality captured in its winding lines.</div></div>';
         } else if (roll <= 61) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_21.png"></div><div class="mkj-textbox">The magikarp has the <b>Apricot Stripes</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_21.png"></div><div class="mkj-textbox">It has a <b>Apricot Stripes</b> pattern! This basic striped pattern is simply striking, no matter how you look at it.</div></div>';
         } else if (roll <= 64) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_22.png"></div><div class="mkj-textbox">The magikarp has the <b>Brown Tiger</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_22.png"></div><div class="mkj-textbox">It has a <b>Brown Tiger</b> pattern! This unusual striped pattern seems somehow sturdy and reliable.</div></div>';
         } else if (roll <= 67) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_23.png"></div><div class="mkj-textbox">The magikarp has the <b>Brown Zebra</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_23.png"></div><div class="mkj-textbox">It has a <b>Brown Zebra</b> pattern! This striped specimen seems quite pleased with its winding lines.</div></div>';
         } else if (roll <= 70) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_24.png"></div><div class="mkj-textbox">The magikarp has the <b>Brown Stripes</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_24.png"></div><div class="mkj-textbox">It has a <b>Brown Stripes</b> pattern! This brown striped pattern has the alluring sheen of liquid chocolate.</div></div>';
         } else if (roll <= 73) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_25.png"></div><div class="mkj-textbox">The magikarp has the <b>Orange Forehead</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_25.png"></div><div class="mkj-textbox">It has a <b>Orange Forehead</b> pattern! This playful-looking pattern is known for the bright orange patch on its head.</div></div>';
         } else if (roll <= 76) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_26.png"></div><div class="mkj-textbox">The magikarp has the <b>Orange Mask</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_26.png"></div><div class="mkj-textbox">It has a <b>Orange Mask</b> pattern! This eye-catching pattern has a splash of coloration only on its face.</div></div>';
         } else if (roll <= 79) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_27.png"></div><div class="mkj-textbox">The magikarp has the <b>Black Forehead</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_27.png"></div><div class="mkj-textbox">It has a <b>Black Forehead</b> pattern! This rather reserved pattern has black only on its forehead.</div></div>';
         } else if (roll <= 82) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_28.png"></div><div class="mkj-textbox">The magikarp has the <b>Black Mask</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_28.png"></div><div class="mkj-textbox">It has a <b>Black Mask</b> pattern! This surprising pattern has just one patch of startling black across its face.</div></div>';
         } else if (roll <= 85) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_29.png"></div><div class="mkj-textbox">The magikarp has the <b>Saucy Blue</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_29.png"></div><div class="mkj-textbox">It has a <b>Saucy Blue</b> pattern! The splashy pattern on its back looks as though a bucket was upended onto it.</div></div>';
         } else if (roll <= 88) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_30.png"></div><div class="mkj-textbox">The magikarp has the <b>Blue Raindrops</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_30.png"></div><div class="mkj-textbox">It has a <b>Blue Raindrops</b> pattern! The drippy patterns decorating its back are exquisite.</div></div>';
         } else if (roll <= 91) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_31.png"></div><div class="mkj-textbox">The magikarp has the <b>Saucy Violet</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_31.png"></div><div class="mkj-textbox">It has a <b>Saucy Violet</b> pattern! The violet droplets running down its sides give it a sorrowful air.</div></div>';
         } else if (roll <= 94) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="hhttps://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_32.png"></div><div class="mkj-textbox">The magikarp has the <b>Violet Raindrops</b> pattern!</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="hhttps://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_32.png"></div><div class="mkj-textbox">It has a <b>Violet Raindrops</b> pattern! The eye-catching pattern on its back is popular with everyone.</div></div>';
         } else if (roll <= 97) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_02.png"></div><div class="mkj-textbox">This Magikarp is known for the spiny-looking white lines visible on it.</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_02.png"></div><div class="mkj-textbox">It has a <b>Skelly</b> pattern! This Magikarp is known for the spiny-looking white lines visible on it.</div></div>';
         } else if (roll <= 100) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_99.png"></div><div class="mkj-textbox">This rarely found Magikarp glitters like gold from front to tail fin.</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_99.png"></div><div class="mkj-textbox">You found a shiny Magikarp! Lucky you! This rarely found Magikarp glitters like gold from front to tail fin.</div></div>';
         } else {
             resultText = 'Something went wrong with the roll...';
         }
