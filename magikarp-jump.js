@@ -118,7 +118,7 @@ $(document).ready(function () {
                     <div class="mkj-magikarp">
                         <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
-                    <div class="mkj-textbox">That’s a tiny one! This Magikarp weighs only <b>5.0</b> kg <b>(XXXS)</b>!</div>
+                    <div class="mkj-textbox">That’s a tiny one! It seems <b>Rattled</b>. This Magikarp weighs only <b>5.0</b> kg <b>(XXXS)</b>!</div>
                 </div>`;
         } else if (roll >= 14 && roll <= 26) {
             resultText = `
@@ -126,7 +126,7 @@ $(document).ready(function () {
                     <div class="mkj-magikarp">
                         <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
-                    <div class="mkj-textbox">This is a small Magikarp that weighs <b>7.5</b> kg <b>(XXS)</b>.</div>
+                    <div class="mkj-textbox">This small Magikarp is going for a <b>Swift Swim</b>. It only weighs <b>7.5</b> kg <b>(XXS)</b>!</div>
                 </div>`;
         } else if (roll >= 27 && roll <= 39) {
             resultText = `
@@ -134,7 +134,7 @@ $(document).ready(function () {
                     <div class="mkj-magikarp">
                         <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
-                    <div class="mkj-textbox">Slightly small. It only weighs <b>9.0</b> kg <b>(XS)</b>.</div>
+                    <div class="mkj-textbox">Appears to be slightly small during its <b>Swift Swim</b>. It only weighs <b>9.0</b> kg <b>(XS)</b>!</div>
                 </div>`;
         } else if (roll >= 40 && roll <= 52) {
             resultText = `
@@ -142,7 +142,7 @@ $(document).ready(function () {
                     <div class="mkj-magikarp">
                         <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
-                    <div class="mkj-textbox">A standard catch! This one weighs <b>10.0</b> kg <b>(Normal)</b>.</div>
+                    <div class="mkj-textbox">A standard catch! This one’s rocking <b>Swift Swim</b> and weighs <b>10.0</b> kg <b>(Normal)</b>!</div>
                 </div>`;
         } else if (roll >= 53 && roll <= 65) {
             resultText = `
@@ -150,7 +150,7 @@ $(document).ready(function () {
                     <div class="mkj-magikarp">
                         <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
-                    <div class="mkj-textbox">Pretty hefty! This is a <b>11.0</b> kg <b>(XL)</b> Magikarp.</div>
+                    <div class="mkj-textbox">Pretty hefty! This <b>Swift Swim</b> Magikarp weighs <b>11.0</b> kg <b>(XL)</b>!</div>
                 </div>`;
         } else if (roll >= 66 && roll <= 78) {
             resultText = `
@@ -158,7 +158,7 @@ $(document).ready(function () {
                     <div class="mkj-magikarp">
                         <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
-                    <div class="mkj-textbox">It’s heavy! This Magikarp weighs <b>12.5</b> kg <b>(XXL)</b>!</div>
+                    <div class="mkj-textbox">It’s heavy! With its <b>Swift Swim</b>, this Magikarp weighs <b>12.5</b> kg <b>(XXL)</b>!</div>
                 </div>`;
         } else if (roll >= 79 && roll <= 90) {
             resultText = `
@@ -166,7 +166,7 @@ $(document).ready(function () {
                     <div class="mkj-magikarp">
                         <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
-                    <div class="mkj-textbox">Holy smokes! It’s huge! A whopping <b>15.0</b> kg <b>(XXXL)</b>!</div>
+                    <div class="mkj-textbox">Holy smokes! It’s huge! A whopping <b>15.0</b> kg <b>(XXXL)</b> and clearly <b>Rattled</b>!</div>
                 </div>`;
         } else if (roll >= 91 && roll <= 100) {
             resultText = `
