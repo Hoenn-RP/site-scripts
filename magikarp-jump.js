@@ -158,7 +158,7 @@ $(document).ready(function () {
                     <div class="mkj-magikarp">
                         <img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_01.png">
                     </div>
-                    <div class="mkj-textbox">It’s heavy! With its <b>Swift Swim</b>, this Magikarp weighs <b>12.5</b> kg <b>(XXL)</b>!</div>
+                    <div class="mkj-textbox">It’s heavy! With its <b>Swift Swim</b> ability, this Magikarp weighs <b>12.5</b> kg <b>(XXL)</b>!</div>
                 </div>`;
         } else if (roll >= 79 && roll <= 90) {
             resultText = `
