@@ -266,3 +266,20 @@ function runMagikarpJumpLogic() {
 $(document).ready(function () {
     runMagikarpJumpLogic();
 });
+
+// Debugging: track ProBoards-related events and pjax
+console.log("🔍 Magikarp Jump Debug: Script loaded.");
+
+// Watch for common ProBoards hooks
+["pageLoad", "afterPagination", "afterSearch", "afterPost"].forEach(event => {
+    if (typeof ProBoards !== "undefined" && ProBoards.on) {
+        ProBoards.on(event, () => {
+            console.log(`📡 ProBoards event fired: ${event}`);
+        });
+    }
+});
+
+// Watch for pjax:end
+$(document).on("pjax:end", () => {
+    console.log("🔁 pjax:end event fired");
+});
