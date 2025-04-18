@@ -267,19 +267,23 @@ $(document).ready(function () {
     runMagikarpJumpLogic();
 });
 
-// Debugging: track ProBoards-related events and pjax
-console.log("🔍 Magikarp Jump Debug: Script loaded.");
-
-// Watch for common ProBoards hooks
-["pageLoad", "afterPagination", "afterSearch", "afterPost"].forEach(event => {
-    if (typeof ProBoards !== "undefined" && ProBoards.on) {
-        ProBoards.on(event, () => {
-            console.log(`📡 ProBoards event fired: ${event}`);
-        });
+//debug
+const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+        if (mutation.type === "childList" && mutation.addedNodes.length) {
+            console.log("🧬 Mutation observed. Nodes added:");
+            mutation.addedNodes.forEach(node => {
+                if (node.nodeType === 1) { // Element node
+                    console.log("➕ Added node:", node);
+                }
+            });
+        }
     }
 });
 
-// Watch for pjax:end
-$(document).on("pjax:end", () => {
-    console.log("🔁 pjax:end event fired");
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
 });
+
+console.log("🔍 DOM mutation observer set up.");
