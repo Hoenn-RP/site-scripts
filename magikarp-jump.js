@@ -1,3 +1,4 @@
+function runMagikarpScript() {
 $(document).ready(function () {
     $('.magikarp-jump-1 .vdice-value').each(function () {
         const rollText = $(this).text().trim();
@@ -262,4 +263,32 @@ $(document).ready(function () {
         $(this).html(resultText);
     });
 
+});
+}
+
+// Initial run on full page load
+$(document).ready(runMagikarpScript);
+
+// Re-run when ProBoards dynamically loads new posts/pages
+const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+        if (mutation.addedNodes.length) {
+            // Check if new content includes dice roll elements
+            const hasDice = Array.from(mutation.addedNodes).some(node =>
+                node.nodeType === 1 &&
+                (node.querySelector('.vdice-value') || node.classList?.contains('vdice-value'))
+            );
+
+            if (hasDice) {
+                runMagikarpScript();
+                break;
+            }
+        }
+    }
+});
+
+// Start observing changes to the document body
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
 });
