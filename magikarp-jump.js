@@ -1,4 +1,4 @@
-$(window).on('load', function () {
+function runMagikarpDiceScript() {
     $('.magikarp-jump-1 .vdice-value').each(function () {
         const rollText = $(this).text().trim();
         const roll = parseInt(rollText, 10);
@@ -262,4 +262,7 @@ $(window).on('load', function () {
         $(this).html(resultText);
     });
 
-});
+}
+
+$(document).ready(function () {
+  runMagikarpDiceScript();
