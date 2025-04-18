@@ -263,8 +263,24 @@ function runMagikarpJumpLogic() {
     });
 }
 
+function observeMagikarpDiceContainers() {
+    const containers = document.querySelectorAll('.magikarp-jump-1, .magikarp-jump-2, .magikarp-jump-3');
+
+    containers.forEach(container => {
+        const observer = new MutationObserver(() => {
+            setTimeout(runMagikarpJumpLogic, 50);
+        });
+
+        observer.observe(container, {
+            childList: true,
+            subtree: true
+        });
+    });
+}
+
 function initMagikarpJumpScript() {
     runMagikarpJumpLogic();
+    observeMagikarpDiceContainers();
 
     // ProBoards hook
     if (typeof ProBoards !== "undefined" && ProBoards.on) {
