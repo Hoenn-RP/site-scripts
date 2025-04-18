@@ -263,40 +263,6 @@ function runMagikarpJumpLogic() {
     });
 }
 
-function observeMagikarpDiceContainers() {
-    const containers = document.querySelectorAll('.magikarp-jump-1, .magikarp-jump-2, .magikarp-jump-3');
-
-    containers.forEach(container => {
-        const observer = new MutationObserver(() => {
-            setTimeout(runMagikarpJumpLogic, 50);
-        });
-
-        observer.observe(container, {
-            childList: true,
-            subtree: true
-        });
-    });
-}
-
-function initMagikarpJumpScript() {
+$(document).ready(function () {
     runMagikarpJumpLogic();
-    observeMagikarpDiceContainers();
-
-    // ProBoards hook
-    if (typeof ProBoards !== "undefined" && ProBoards.on) {
-        ProBoards.on("afterSearch", runMagikarpJumpLogic);
-        ProBoards.on("afterPagination", runMagikarpJumpLogic);
-        ProBoards.on("afterPost", runMagikarpJumpLogic);
-        ProBoards.on("pageLoad", () => {
-            setTimeout(runMagikarpJumpLogic, 50);
-        });
-    }
-
-    // Fallback: listen for manual pjax:end
-    $(document).on("pjax:end", () => {
-        setTimeout(runMagikarpJumpLogic, 50);
-    });
-}
-
-$(initMagikarpJumpScript);
-
+});
