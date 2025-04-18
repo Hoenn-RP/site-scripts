@@ -268,10 +268,12 @@ $(document).ready(function () {
 });
 
 // Re-run on ProBoards page change (PJAX)
-$(document).on('pageUpdated.proboards', function () {
-    if (pb.data('page').name === 'thread') {
-        setTimeout(function () {
-            runMagikarpJumpLogic();
-        }, 50);
-    }
-});
+const postContainer = document.getElementById('posts');
+
+if (postContainer) {
+    const observer = new MutationObserver(function (mutations) {
+        runMagikarpJumpLogic();
+    });
+
+    observer.observe(postContainer, { childList: true, subtree: true });
+}
