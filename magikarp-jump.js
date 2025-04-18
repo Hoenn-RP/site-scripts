@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', function () {
+
 function runMagikarpJumpLogic() {
     $('.magikarp-jump-1 .vdice-value').each(function () {
         const rollText = $(this).text().trim();
@@ -263,29 +265,6 @@ function runMagikarpJumpLogic() {
     });
 }
 
-$(document).ready(function () {
-    runMagikarpJumpLogic();
+    document.addEventListener('DOMContentLoaded', runMagikarpJumpLogic);
 });
-
-//debug
-const observer = new MutationObserver((mutationsList) => {
-    for (const mutation of mutationsList) {
-        if (mutation.type === "childList" && mutation.addedNodes.length) {
-            mutation.addedNodes.forEach(node => {
-                if (node.nodeType === 1) { // Element node
-                    const el = node;
-                    // Show id or class to identify container
-                    console.log("➕ Added:", el.tagName, el.id ? `#${el.id}` : '', el.className);
-                }
-            });
-        }
-    }
-});
-
-observer.observe(document.body, {
-    childList: true,
-    subtree: true
-});
-
-console.log("🔍 DOM mutation observer set up.");
 
