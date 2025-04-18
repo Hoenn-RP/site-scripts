@@ -267,5 +267,5 @@ function runMagikarpJumpLogic() {
 document.addEventListener("DOMContentLoaded", runMagikarpJumpLogic);
 
 // ProBoards-specific: Hook into page changes
-$(document).on('pjax:end', runMagikarpJumpLogic);
+ProBoards.on("pageLoad", runMagikarpJumpLogic);
 
