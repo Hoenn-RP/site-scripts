@@ -266,14 +266,3 @@ function runMagikarpJumpLogic() {
 $(document).ready(function () {
     runMagikarpJumpLogic();
 });
-
-// Re-run on ProBoards page change (PJAX)
-const postContainer = document.getElementById('posts');
-
-if (postContainer) {
-    const observer = new MutationObserver(function (mutations) {
-        runMagikarpJumpLogic();
-    });
-
-    observer.observe(postContainer, { childList: true, subtree: true });
-}
