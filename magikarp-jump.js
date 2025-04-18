@@ -1,4 +1,4 @@
-$(document).ready(function () {
+function runMagikarpJumpLogic() {
     $('.magikarp-jump-1 .vdice-value').each(function () {
         const rollText = $(this).text().trim();
         const roll = parseInt(rollText, 10);
@@ -261,6 +261,14 @@ $(document).ready(function () {
 
         $(this).html(resultText);
     });
+}
 
+$(document).ready(function () {
+    runMagikarpJumpLogic();
+});
+
+// Re-run on ProBoards page change (PJAX)
+$(document).on('pjax:end', function () {
+    runMagikarpJumpLogic();
 });
 
