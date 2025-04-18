@@ -269,6 +269,9 @@ $(document).ready(function () {
 
 // Re-run on ProBoards page change (PJAX)
 $(document).on('pageUpdated.proboards', function () {
-    runMagikarpJumpLogic();
+    if (pb.data('page').name === 'thread') {
+        setTimeout(function () {
+            runMagikarpJumpLogic();
+        }, 50);
+    }
 });
-
