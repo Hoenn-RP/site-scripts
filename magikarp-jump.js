@@ -263,11 +263,9 @@ function runMagikarpJumpLogic() {
     });
 }
 
-$(document).ready(function () {
-    runMagikarpJumpLogic();
-    
-        // Re-run after ProBoards AJAX loads new page content
-    $(document).on('pjax:end', function () {
-        runMagikarpJumpLogic();
-    });
-});
+// Ensure the function runs after pagination or content update
+document.addEventListener("DOMContentLoaded", runMagikarpJumpLogic);
+
+// ProBoards-specific: Hook into page changes
+$(document).on('pjax:end', runMagikarpJumpLogic);
+
