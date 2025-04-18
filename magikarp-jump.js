@@ -1,3 +1,4 @@
+function MagikarpDice() {
 $(document).ready(function () {
     $('.magikarp-jump-1 .vdice-value').each(function () {
         const rollText = $(this).text().trim();
@@ -262,4 +263,20 @@ $(document).ready(function () {
         $(this).html(resultText);
     });
 
+});
+
+}
+
+$(document).ready(function () {
+    MagikarpDice();
+
+    // Observe .content for ProBoards page changes
+    const target = document.querySelector('.content');
+    if (target) {
+        const observer = new MutationObserver(() => {
+            MagikarpDice();
+        });
+
+        observer.observe(target, { childList: true, subtree: true });
+    }
 });
