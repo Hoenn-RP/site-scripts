@@ -1,4 +1,4 @@
-function magikarpDiceHandler() {
+$(document).ready(function () {
     $('.magikarp-jump-1 .vdice-value').each(function () {
         const rollText = $(this).text().trim();
         const roll = parseInt(rollText, 10);
@@ -264,11 +264,3 @@ function magikarpDiceHandler() {
 
 });
 
-}
-
-$(document).ready(magikarpDiceHandler);
-
-// Also run it on ProBoards content changes (like thread page jumps)
-if (typeof PB !== 'undefined' && PB.events) {
-    PB.events.on('contentChange', magikarpDiceHandler);
-}
