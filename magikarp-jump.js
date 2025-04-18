@@ -271,10 +271,11 @@ $(document).ready(function () {
 const observer = new MutationObserver((mutationsList) => {
     for (const mutation of mutationsList) {
         if (mutation.type === "childList" && mutation.addedNodes.length) {
-            console.log("🧬 Mutation observed. Nodes added:");
             mutation.addedNodes.forEach(node => {
                 if (node.nodeType === 1) { // Element node
-                    console.log("➕ Added node:", node);
+                    const el = node;
+                    // Show id or class to identify container
+                    console.log("➕ Added:", el.tagName, el.id ? `#${el.id}` : '', el.className);
                 }
             });
         }
@@ -287,3 +288,4 @@ observer.observe(document.body, {
 });
 
 console.log("🔍 DOM mutation observer set up.");
+
