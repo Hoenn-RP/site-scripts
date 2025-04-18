@@ -255,7 +255,7 @@ $(document).ready(function () {
         } else if (roll <= 97) {
             resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_02.png"></div><div class="mkj-textbox">It has a <b>Skelly</b> pattern! This Magikarp is known for the spiny-looking white lines visible on it.</div></div>';
         } else if (roll <= 100) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_99.png"></div><div class="mkj-textbox">You found a shiny Magikarp! Lucky you! This rarely found Magikarp glitters like gold from front to tail fin.</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_99.png"></div><div class="mkj-textbox">You found a <b>Shiny</b> Magikarp! Lucky you! This rarely found Magikarp glitters like gold from front to tail fin.</div></div>';
         } else {
             resultText = 'Something went wrong with the roll...';
         }
