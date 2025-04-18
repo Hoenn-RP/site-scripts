@@ -268,7 +268,7 @@ $(document).ready(function () {
 });
 
 // Re-run on ProBoards page change (PJAX)
-$(document).on('pjax:end', function () {
+$(document).on('pageUpdated.proboards', function () {
     runMagikarpJumpLogic();
 });
 
