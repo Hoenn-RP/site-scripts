@@ -263,9 +263,19 @@ function runMagikarpJumpLogic() {
     });
 }
 
-// Ensure the function runs after pagination or content update
-document.addEventListener("DOMContentLoaded", runMagikarpJumpLogic);
+function observeDiceChanges() {
+    const observer = new MutationObserver(() => {
+        runMagikarpJumpLogic();
+    });
 
-// ProBoards-specific: Hook into page changes
-ProBoards.on("pageLoad", runMagikarpJumpLogic);
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+    });
+
+    // Run once on initial load
+    runMagikarpJumpLogic();
+}
+
+document.addEventListener("DOMContentLoaded", observeDiceChanges);
 
