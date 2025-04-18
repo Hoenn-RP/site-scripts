@@ -262,4 +262,9 @@ $(document).ready(function () {
         $(this).html(resultText);
     });
 
+    $(document).on('click', '.pagination a', function (e) {
+        e.preventDefault();
+        setTimeout(transformDiceOutcome, 500);  // Delay to allow for page load
+    });
+
 });
