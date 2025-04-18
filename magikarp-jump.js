@@ -263,19 +263,24 @@ function runMagikarpJumpLogic() {
     });
 }
 
-function observeDiceChanges() {
-    const observer = new MutationObserver(() => {
-        runMagikarpJumpLogic();
-    });
-
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-    });
-
-    // Run once on initial load
+function initMagikarpJumpScript() {
     runMagikarpJumpLogic();
+
+    // ProBoards hook
+    if (typeof ProBoards !== "undefined" && ProBoards.on) {
+        ProBoards.on("afterSearch", runMagikarpJumpLogic);
+        ProBoards.on("afterPagination", runMagikarpJumpLogic);
+        ProBoards.on("afterPost", runMagikarpJumpLogic);
+        ProBoards.on("pageLoad", () => {
+            setTimeout(runMagikarpJumpLogic, 50);
+        });
+    }
+
+    // Fallback: listen for manual pjax:end
+    $(document).on("pjax:end", () => {
+        setTimeout(runMagikarpJumpLogic, 50);
+    });
 }
 
-document.addEventListener("DOMContentLoaded", observeDiceChanges);
+$(initMagikarpJumpScript);
 
