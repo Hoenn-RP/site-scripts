@@ -251,7 +251,7 @@ $(document).ready(function () {
         } else if (roll <= 91) {
             resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_31.png"></div><div class="mkj-textbox">It has a <b>Saucy Violet</b> pattern! The violet droplets running down its sides give it a sorrowful air.</div></div>';
         } else if (roll <= 94) {
-            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="hhttps://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_32.png"></div><div class="mkj-textbox">It has a <b>Violet Raindrops</b> pattern! The eye-catching pattern on its back is popular with everyone.</div></div>';
+            resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_32.png"></div><div class="mkj-textbox">It has a <b>Violet Raindrops</b> pattern! The eye-catching pattern on its back is popular with everyone.</div></div>';
         } else if (roll <= 97) {
             resultText = '<div class="mkj-wrapper"><div class="mkj-magikarp"><img src="https://file.garden/Zz6LAVCcyQejC5CU/Events/Magikarp/Magikarp_Jump_Pattern_02.png"></div><div class="mkj-textbox">It has a <b>Skelly</b> pattern! This Magikarp is known for the spiny-looking white lines visible on it.</div></div>';
         } else if (roll <= 100) {
