@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    console.log('Dungeon script loaded!');
     $('.dungeon-roll .vdice-value').each(function () {
         const roll = parseInt($(this).text().trim(), 10);
         if (isNaN(roll)) return;
