@@ -22,7 +22,7 @@ function CramomaticDice() {
         <div class="cramomatic-desc">The Cram-o-matic hacked up a Strange Mineral!</div>`;
       } else if (roll >= 31 && roll <= 40) {
         resultText = `
-        <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/evo-item/up-grade.png" title="disc of reuse - teaches a pokemon recycle regardless of if they can learn it or not">
+        <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/evo-item/up-grade.png" title="disc of reuse - teaches a pokemon Recycle, even if it can't normally learn it">
         <div class="cramomatic-desc">The Cram-o-matic ejected a Disc of Reuse!</div>`;
       } else if (roll >= 41 && roll <= 45) {
         resultText = `
