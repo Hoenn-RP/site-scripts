@@ -31,7 +31,7 @@ function CramomaticDice() {
       } else if (roll >= 46 && roll <= 50) {
         resultText = `
         <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/mega-stone/abomasite.png" title="mega stone">
-        <div class="cramomatic-desc">The Cram-o-matic barfed up a Mega Stone!</div>`;
+        <div class="cramomatic-desc">The Cram-o-matic tossed out a Mega Stone!</div>`;
       } else if (roll >= 51 && roll <= 55) {
         resultText = `
         <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/z-crystals/waterium-z--held.png" title="z-crystal">
