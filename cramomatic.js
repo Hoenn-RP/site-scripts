@@ -14,7 +14,7 @@ function CramomaticDice() {
         <div class="cramomatic-desc">The Cram-o-matic coughed up a Shiny Swap!</div>`;
       } else if (roll >= 11 && roll <= 20) {
         resultText = `
-        <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/incense/full.png" title="shiny incense - used in the beginning of a wild thread to make last pokemon shiny">
+        <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/incense/full.png" title="shiny incense - use at the start of a wild thread to make the last encountered pokemon shiny">
         <div class="cramomatic-desc">The Cram-o-matic billowed out a Shiny Incense!</div>`;
       } else if (roll >= 21 && roll <= 30) {
         resultText = `
