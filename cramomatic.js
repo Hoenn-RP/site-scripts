@@ -63,7 +63,7 @@ function CramomaticDice() {
       } else if (roll >= 86 && roll <= 90) {
         resultText = `
         <img src="https://file.garden/ZXZrnWMYuz15frfJ/SPRITES/crystabloomitemsprite%20by%20king.png" title="crystalbloom">
-        <div class="cramomatic-desc">The Cram-o-matic spewed a Crystalbloom!</div>`;
+        <div class="cramomatic-desc">The Cram-o-matic hacked up a Crystalbloom!</div>`;
       } else if (roll >= 91 && roll <= 92) {
         resultText = `
         <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/berry/occa.png" title="occa berry">
