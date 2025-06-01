@@ -79,7 +79,7 @@ function CramomaticDice() {
       } else if (roll === 97) {
         resultText = `
         <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/key-item/rule-book.png" title="extra move slot">
-        <div class="cramomatic-desc">The machined whirrled and dropped and Extra Move Slot!</div>`;
+        <div class="cramomatic-desc">The machined whirrled and dropped an Extra Move Slot!</div>`;
       } else if (roll === 98) {
         resultText = `
         <img src="https://i.imgur.com/oNiM0nd.png" title="three premium gachapon tickets">
@@ -90,7 +90,7 @@ function CramomaticDice() {
         <div class="cramomatic-desc">A Custom Pokemon Ticket fluttered out like a feather!</div>`;
       } else if (roll === 100) {
         resultText = `
-        <img src="https://file.garden/Zz6LAVCcyQejC5CU/Hoenn/Item%20Sprites/cramorant.png" title="crammed! award">
+        <img src="https://file.garden/Zz6LAVCcyQejC5CU/Hoenn/Item%20Sprites/cramorant.png" title="AWARD UNLOCKED OR 250 PD CLAIMABLE IN SHOP IF ALREADY OWNED ">
         <div class="cramomatic-desc">The Cram-o-matic chirped and released treasure from its mouth!</div>`;
       } else {
         resultText = `<img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/poke.png" title="what went wrong?">
