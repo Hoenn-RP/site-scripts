@@ -15,7 +15,7 @@ function CramomaticDice() {
       } else if (roll >= 11 && roll <= 20) {
         resultText = `
         <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/incense/full.png" title="shiny incense - used in the beginning of a wild thread to make last pokemon shiny">
-        <div class="cramomatic-desc">The Cram-o-matic tossed out a Shiny Incense!</div>`;
+        <div class="cramomatic-desc">The Cram-o-matic billowed out a Shiny Incense!</div>`;
       } else if (roll >= 21 && roll <= 30) {
         resultText = `
         <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/heavy.png" title="strange mineral - select an unevolved pokemon from the mineral egg group as a gacha pokemon ( claim in shop )">
