@@ -14,15 +14,15 @@ function CramomaticDice() {
         <div class="cramomatic-desc">The Cram-o-matic coughed up a Shiny Swap!</div>`;
       } else if (roll >= 11 && roll <= 20) {
         resultText = `
-        <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/incense/full.png" title="shiny incense">
+        <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/incense/full.png" title="shiny incense - used in the beginning of a wild thread to make last pokemon shiny">
         <div class="cramomatic-desc">A Shiny Incense blows smoke as it exits the machine!</div>`;
       } else if (roll >= 21 && roll <= 30) {
         resultText = `
-        <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/heavy.png" title="strange mineral">
+        <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/heavy.png" title="strange mineral - select an unevolved pokemon from the mineral egg group as a gacha pokemon ( claim in shop )">
         <div class="cramomatic-desc">A Strange Mineral clanked out of the chute!</div>`;
       } else if (roll >= 31 && roll <= 40) {
         resultText = `
-        <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/evo-item/up-grade.png" title="disc of reuse">
+        <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/evo-item/up-grade.png" title="disc of reuse - teaches a pokemon recycle regardless of if they can learn it or not">
         <div class="cramomatic-desc">A Disk of Reuse fired out from the machine's beak!</div>`;
       } else if (roll >= 41 && roll <= 45) {
         resultText = `
@@ -38,11 +38,11 @@ function CramomaticDice() {
         <div class="cramomatic-desc">A Z-Crystal gleamed as it dropped from the machine's beak.</div>`;
       } else if (roll >= 56 && roll <= 60) {
         resultText = `
-        <img src="https://file.garden/Zz6LAVCcyQejC5CU/Hoenn/Item%20Sprites/stellar%20tera%20shard%20sprite%20hoenn.png" title="tera shard">
+        <img src="https://file.garden/Zz6LAVCcyQejC5CU/Hoenn/Item%20Sprites/stellar%20tera%20shard%20sprite%20hoenn.png" title="tera shard of your choice">
         <div class="cramomatic-desc">A Tera Shard launched with a squawk!</div>`;
       } else if (roll >= 61 && roll <= 65) {
         resultText = `
-        <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/fossil/helix.png" title="fossil">
+        <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/fossil/helix.png" title="fossil - select an unevolved fossil pokemon as a gacha pokemon ( claim in shop )">
         <div class="cramomatic-desc">A dusty Fossil clattered onto the tray!</div>`;
       } else if (roll >= 66 && roll <= 70) {
         resultText = `
