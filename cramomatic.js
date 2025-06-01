@@ -91,7 +91,7 @@ function CramomaticDice() {
       } else if (roll === 100) {
         resultText = `
         <img src="https://file.garden/Zz6LAVCcyQejC5CU/Hoenn/Item%20Sprites/cramorant.png" title="AWARD UNLOCKED OR 250 PD CLAIMABLE IN SHOP IF ALREADY OWNED ">
-        <div class="cramomatic-desc">The Cram-o-matic released treasure from its mouth!</div>`;
+        <div class="cramomatic-desc">The Cram-o-matic released treasure from its beak!</div>`;
       } else {
         resultText = `<img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/poke.png" title="what went wrong?">
         <div class="cramomatic-desc">Something went wrong with the roll...</div>`;
