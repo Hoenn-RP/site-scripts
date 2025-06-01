@@ -47,7 +47,7 @@ function CramomaticDice() {
       } else if (roll >= 66 && roll <= 70) {
         resultText = `
         <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/exp-candy/xl.png" title="legendary candy">
-        <div class="cramomatic-desc">The Cram-o-matic shout out a Legendary Candy!</div>`;
+        <div class="cramomatic-desc">The Cram-o-matic spit out a Legendary Candy!</div>`;
       } else if (roll >= 71 && roll <= 75) {
         resultText = `
         <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/plate/iron.png" title="plate of your choice">
