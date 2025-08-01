@@ -5,7 +5,9 @@
   if (!user || !user.id) return;
 
   const userId = String(user.id);
-  const userRef = db.ref(`${backendPath}/users/${userId}`);
+  const userRef = db.ref(${backendPath}/users/${userId});
+
+  console.log([AMITY DEBUG] Firebase path: ${userRef.toString()});
 
   async function getUserData() {
     const snap = await userRef.get();
@@ -23,6 +25,7 @@
       data.earned.sprites = 0;
       data.earned.last_reset = now;
       await userRef.set(data);
+      console.log("[AMITY DEBUG] Reset daily caps");
     }
 
     return data;
@@ -46,24 +49,29 @@
     if (updated) {
       data.earned = earned;
       await userRef.set(data);
+      console.log([AMITY] +1 point for ${type} (total: ${data.points}));
       updateAllDisplays();
+    } else {
+      console.log([AMITY] Daily ${type} cap reached);
     }
   }
 
   async function updateAllDisplays() {
     const snapSelf = await userRef.get();
     const selfPoints = snapSelf.val()?.points ?? 0;
-    $(".amity-user-points").text(`${selfPoints}`);
+    $(".amity-user-points").text(${selfPoints});
 
     $(".amity-member-points[data-user-id]").each(async function () {
       const $el = $(this);
       const memberId = $el.data("user-id");
       if (!memberId) return;
 
-      const memberRef = db.ref(`${backendPath}/users/${memberId}`);
+      const memberRef = db.ref(${backendPath}/users/${memberId});
       const memberSnap = await memberRef.get();
       const memberPoints = memberSnap.val()?.points ?? 0;
-      $el.text(`${memberPoints}`);
+
+      console.log([AMITY DEBUG] Displaying user ${memberId}'s points: ${memberPoints});
+      $el.text(${memberPoints});
     });
   }
 
@@ -80,14 +88,15 @@
       $btn.show();
 
       $btn.on("click", async function () {
-        const $display = $(`.amity-member-points[data-user-id='${memberId}']`);
+        const $display = $(.amity-member-points[data-user-id='${memberId}']);
         const currentPoints = parseInt($display.text()) || 0;
-        const newPoints = prompt(`Set new Amity Points for User ID ${memberId}:`, currentPoints);
+        const newPoints = prompt(Set new Amity Points for User ID ${memberId}:, currentPoints);
 
         if (newPoints !== null && !isNaN(parseInt(newPoints))) {
-          const memberRef = db.ref(`${backendPath}/users/${memberId}`);
+          const memberRef = db.ref(${backendPath}/users/${memberId});
           const snap = await memberRef.get();
           const data = snap.val() || {};
+
           data.points = parseInt(newPoints);
           await memberRef.set(data);
           alert("Amity Points updated.");
@@ -98,12 +107,18 @@
   }
 
   function bindClickHandlers() {
+    console.log("[AMITY DEBUG] Binding click handlers directly...");
+
     $(".js-likes-button").each(function () {
       const $btn = $(this);
       if (!$btn.data("amity-bound")) {
         $btn.data("amity-bound", true);
         $btn.on("click", function () {
-          if ($btn.hasClass("liked")) return;
+          if ($btn.hasClass("liked")) {
+            console.log("[AMITY DEBUG] Like already exists, not awarding point.");
+            return;
+          }
+          console.log("[AMITY DEBUG] Direct click on like button");
           awardPoint("like");
         });
       }
@@ -114,6 +129,7 @@
       if (!$img.data("amity-bound")) {
         $img.data("amity-bound", true);
         $img.on("click", function () {
+          console.log("[AMITY DEBUG] Direct click on sprite");
           awardPoint("sprite");
         });
       }
@@ -131,8 +147,7 @@
   });
 
   $(document).on("pageChange", () => {
+    console.log("[AMITY DEBUG] Page change detected");
     setTimeout(initializeAmity, 300);
   });
 })();
-
-
