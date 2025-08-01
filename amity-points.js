@@ -7,8 +7,6 @@
   const userId = String(user.id);
   const userRef = db.ref(`${backendPath}/users/${userId}`);
 
-  console.log(`[AMITY DEBUG] Firebase path: ${userRef.toString()}`);
-
   async function getUserData() {
     const snap = await userRef.get();
     const now = Date.now();
@@ -25,7 +23,6 @@
       data.earned.sprites = 0;
       data.earned.last_reset = now;
       await userRef.set(data);
-      console.log("[AMITY DEBUG] Reset daily caps");
     }
 
     return data;
@@ -49,10 +46,7 @@
     if (updated) {
       data.earned = earned;
       await userRef.set(data);
-      console.log(`[AMITY] +1 point for ${type} (total: ${data.points})`);
       updateAllDisplays();
-    } else {
-      console.log(`[AMITY] Daily ${type} cap reached`);
     }
   }
 
@@ -69,8 +63,6 @@
       const memberRef = db.ref(`${backendPath}/users/${memberId}`);
       const memberSnap = await memberRef.get();
       const memberPoints = memberSnap.val()?.points ?? 0;
-
-      console.log(`[AMITY DEBUG] Displaying user ${memberId}'s points: ${memberPoints}`);
       $el.text(`${memberPoints}`);
     });
   }
@@ -96,7 +88,6 @@
           const memberRef = db.ref(`${backendPath}/users/${memberId}`);
           const snap = await memberRef.get();
           const data = snap.val() || {};
-
           data.points = parseInt(newPoints);
           await memberRef.set(data);
           alert("Amity Points updated.");
@@ -107,18 +98,12 @@
   }
 
   function bindClickHandlers() {
-    console.log("[AMITY DEBUG] Binding click handlers directly...");
-
     $(".js-likes-button").each(function () {
       const $btn = $(this);
       if (!$btn.data("amity-bound")) {
         $btn.data("amity-bound", true);
         $btn.on("click", function () {
-          if ($btn.hasClass("liked")) {
-            console.log("[AMITY DEBUG] Like already exists, not awarding point.");
-            return;
-          }
-          console.log("[AMITY DEBUG] Direct click on like button");
+          if ($btn.hasClass("liked")) return;
           awardPoint("like");
         });
       }
@@ -129,7 +114,6 @@
       if (!$img.data("amity-bound")) {
         $img.data("amity-bound", true);
         $img.on("click", function () {
-          console.log("[AMITY DEBUG] Direct click on sprite");
           awardPoint("sprite");
         });
       }
@@ -147,8 +131,8 @@
   });
 
   $(document).on("pageChange", () => {
-    console.log("[AMITY DEBUG] Page change detected");
     setTimeout(initializeAmity, 300);
   });
 })();
+
 
