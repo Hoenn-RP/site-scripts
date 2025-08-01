@@ -92,13 +92,15 @@
       $btn.on("click", async function () {
         const $display = $(`.amity-member-points[data-user-id='${memberId}']`);
         const currentPoints = parseInt($display.text()) || 0;
-        const newPoints = prompt(`Set new Amity Points for User ID ${memberId}:`, currentPoints);
+
+        const memberRef = db.ref(`${backendPath}/users/${memberId}`);
+        const snap = await memberRef.get();
+        const data = snap.val() || {};
+        const displayName = data.display_name ?? `User ${memberId}`;
+
+        const newPoints = prompt(`Set new Amity Points for ${displayName}:`, currentPoints);
 
         if (newPoints !== null && !isNaN(parseInt(newPoints))) {
-          const memberRef = db.ref(`${backendPath}/users/${memberId}`);
-          const snap = await memberRef.get();
-          const data = snap.val() || {};
-
           data.points = parseInt(newPoints);
           await memberRef.set(data);
           alert("Amity Points updated.");
@@ -153,6 +155,7 @@
     setTimeout(initializeAmity, 300);
   });
 })();
+
 
 
 
