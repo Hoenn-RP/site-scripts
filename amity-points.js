@@ -13,14 +13,16 @@
     const snap = await userRef.get();
     const now = Date.now();
 
-    let data = snap.exists() ? snap.val() : {
-      username: user.username,
-      display_name: user.name,
-      points: 0,
-      earned: { likes: 0, sprites: 0, last_reset: now }
-    };
+    let data = snap.exists() ? snap.val() : {};
+    data.username ??= user.username;
+    data.display_name ??= user.name;
+    data.points ??= 0;
+    data.earned ??= {};
+    data.earned.likes ??= 0;
+    data.earned.sprites ??= 0;
+    data.earned.last_reset ??= now;
 
-    if (now - (data.earned?.last_reset || 0) >= cooldownMs) {
+    if (now - data.earned.last_reset >= cooldownMs) {
       data.earned.likes = 0;
       data.earned.sprites = 0;
       data.earned.last_reset = now;
@@ -151,4 +153,6 @@
     setTimeout(initializeAmity, 300);
   });
 })();
+
+
 
