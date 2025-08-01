@@ -1,18 +1,3 @@
-// Initialize Firebase
-const firebaseConfig = {
-  databaseURL: "https://amitypoints-default-rtdb.firebaseio.com/",
-  apiKey: "AIzaSyDIUmD3dW0-1iDN_uIkQZtpwXreadSRpXo",
-  authDomain: "amitypoints.firebaseapp.com",
-  projectId: "amitypoints",
-  storageBucket: "amitypoints.firebasestorage.app",
-  messagingSenderId: "756229533159",
-  appId: "1:756229533159:web:85a2af7f605ce19cc02142",
-  measurementId: "G-XLZX4LSZB4"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
 (async () => {
   const cooldownMs = 23 * 60 * 60 * 1000;
   const backendPath = "amity";
@@ -166,3 +151,4 @@ const db = firebase.database();
     setTimeout(initializeAmity, 300);
   });
 })();
+
