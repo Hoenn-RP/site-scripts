@@ -1,16 +1,28 @@
 (async () => {
-  const backendPath = "amity";
+  const FIREBASE_BASE_URL = "https://amitypoints-default-rtdb.firebaseio.com/amity";
   const user = proboards.data("user");
   if (!user || !user.id) return;
 
   const userId = String(user.id);
-  const userRef = db.ref(`${backendPath}/users/${userId}`);
+
+  async function fetchData(path) {
+    const res = await fetch(`${FIREBASE_BASE_URL}/${path}.json`);
+    return await res.json();
+  }
+
+  async function setData(path, data) {
+    await fetch(`${FIREBASE_BASE_URL}/${path}.json`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+  }
 
   async function getUserData() {
-    const snap = await userRef.get();
+    let data = await fetchData(`users/${userId}`);
     const now = Date.now();
 
-    let data = snap.exists() ? snap.val() : {};
+    if (!data) data = {};
     data.username ??= user.username;
     data.display_name ??= user.name;
     data.points ??= 0;
@@ -19,7 +31,6 @@
     data.earned.sprites ??= 0;
     data.earned.last_reset ??= now;
 
-    // Calculate today’s midnight UTC timestamp
     const nowDate = new Date(now);
     const todayMidnightUTC = Date.UTC(
       nowDate.getUTCFullYear(),
@@ -31,7 +42,7 @@
       data.earned.likes = 0;
       data.earned.sprites = 0;
       data.earned.last_reset = now;
-      await userRef.set(data);
+      await setData(`users/${userId}`, data);
     }
 
     return data;
@@ -54,14 +65,14 @@
 
     if (updated) {
       data.earned = earned;
-      await userRef.set(data);
+      await setData(`users/${userId}`, data);
       updateAllDisplays();
     }
   }
 
   async function updateAllDisplays() {
-    const snapSelf = await userRef.get();
-    const selfPoints = snapSelf.val()?.points ?? 0;
+    const selfData = await fetchData(`users/${userId}`);
+    const selfPoints = selfData?.points ?? 0;
     $(".amity-user-points").text(`${selfPoints}`);
 
     $(".amity-member-points[data-user-id]").each(async function () {
@@ -69,9 +80,8 @@
       const memberId = $el.data("user-id");
       if (!memberId) return;
 
-      const memberRef = db.ref(`${backendPath}/users/${memberId}`);
-      const memberSnap = await memberRef.get();
-      const memberPoints = memberSnap.val()?.points ?? 0;
+      const memberData = await fetchData(`users/${memberId}`);
+      const memberPoints = memberData?.points ?? 0;
 
       $el.text(`${memberPoints}`);
     });
@@ -93,16 +103,13 @@
         const $display = $(`.amity-member-points[data-user-id='${memberId}']`);
         const currentPoints = parseInt($display.text()) || 0;
 
-        const memberRef = db.ref(`${backendPath}/users/${memberId}`);
-        const snap = await memberRef.get();
-        const data = snap.val() || {};
-        const displayName = data.display_name ?? `User ${memberId}`;
+        const memberData = await fetchData(`users/${memberId}`);
+        const displayName = memberData?.display_name ?? `User ${memberId}`;
 
         const newPoints = prompt(`Set new Amity Points for ${displayName}:`, currentPoints);
-
         if (newPoints !== null && !isNaN(parseInt(newPoints))) {
-          data.points = parseInt(newPoints);
-          await memberRef.set(data);
+          memberData.points = parseInt(newPoints);
+          await setData(`users/${memberId}`, memberData);
           alert("Amity Points updated.");
           updateAllDisplays();
         }
@@ -147,5 +154,7 @@
     setTimeout(initializeAmity, 300);
   });
 })();
+
+
 
 
