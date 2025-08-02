@@ -1,5 +1,4 @@
 (async () => {
-  const cooldownMs = 23 * 60 * 60 * 1000;
   const backendPath = "amity";
   const user = proboards.data("user");
   if (!user || !user.id) return;
@@ -20,7 +19,15 @@
     data.earned.sprites ??= 0;
     data.earned.last_reset ??= now;
 
-    if (now - data.earned.last_reset >= cooldownMs) {
+    // Calculate today’s midnight UTC timestamp
+    const nowDate = new Date(now);
+    const todayMidnightUTC = Date.UTC(
+      nowDate.getUTCFullYear(),
+      nowDate.getUTCMonth(),
+      nowDate.getUTCDate()
+    );
+
+    if (data.earned.last_reset < todayMidnightUTC) {
       data.earned.likes = 0;
       data.earned.sprites = 0;
       data.earned.last_reset = now;
@@ -140,3 +147,5 @@
     setTimeout(initializeAmity, 300);
   });
 })();
+
+
