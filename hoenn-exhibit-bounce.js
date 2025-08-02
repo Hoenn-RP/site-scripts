@@ -34,9 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     img.addEventListener('click', () => {
-      img.classList.remove('clicked');
+      img.classList.remove('.pkmnclicked');
       void img.offsetWidth;
-      img.classList.add('clicked');
+      img.classList.add('.pkmnclicked');
     });
   });
 
@@ -67,3 +67,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   animate();
 });
+
