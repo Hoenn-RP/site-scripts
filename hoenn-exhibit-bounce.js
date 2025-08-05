@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // === Editable Settings ===
   const speedMultiplier = 0.3;  // Lower is slower
-  const bounceHeight = 10;      // How high they jump on click
+  const bounceHeight = 5;      // How high they jump on click
   const visiblePadding = 35;    // How far they can go "offscreen"
   // =========================
 
@@ -80,4 +80,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   animate();
 });
+
 
