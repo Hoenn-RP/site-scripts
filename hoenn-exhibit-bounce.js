@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const sprites = Array.from(container.getElementsByTagName('img'));
 
   // === Editable Settings ===
-  const speedMultiplier = 0.05;  // Lower is slower
-  const bounceHeight = 2;      // How high they jump on click
+  const speedMultiplier = 0.1;  // Lower is slower
+  const bounceHeight = 1;      // How high they jump on click
   const visiblePadding = 35;    // How far they can go "offscreen"
   // =========================
 
@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   animate();
 });
+
 
 
 
