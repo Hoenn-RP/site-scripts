@@ -3,21 +3,28 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!container) return;
 
   const sprites = Array.from(container.getElementsByTagName('img'));
-  const spriteSize = 96;
 
   // === Editable Settings ===
   const speedMultiplier = 0.3;  // Lower is slower
-  const bounceHeight = 20;      // How high they jump on click
-  const visiblePadding = 50;    // How far they can go "offscreen"
+  const bounceHeight = 10;      // How high they jump on click
+  const visiblePadding = 25;    // How far they can go "offscreen"
   // =========================
 
-  const state = sprites.map(img => ({
-    x: Math.random() * (container.clientWidth - spriteSize),
-    y: Math.random() * (container.clientHeight - spriteSize),
-    dx: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? 1 : -1) * speedMultiplier,
-    dy: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? 1 : -1) * speedMultiplier,
-    paused: false,
-  }));
+  // Get initial state using actual image sizes
+  const state = sprites.map(img => {
+    const width = img.offsetWidth;
+    const height = img.offsetHeight;
+
+    return {
+      x: Math.random() * (container.clientWidth - width),
+      y: Math.random() * (container.clientHeight - height),
+      dx: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? 1 : -1) * speedMultiplier,
+      dy: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? 1 : -1) * speedMultiplier,
+      width,
+      height,
+      paused: false,
+    };
+  });
 
   sprites.forEach((img, i) => {
     img.style.left = state[i].x + 'px';
@@ -35,8 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     img.addEventListener('click', () => {
       img.classList.remove('pkmnclicked');
-      void img.offsetWidth;
+      void img.offsetWidth; // force reflow
       img.classList.add('pkmnclicked');
+    });
+
+    img.addEventListener('animationend', () => {
+      img.classList.remove('pkmnclicked');
     });
   });
 
@@ -49,14 +60,16 @@ document.addEventListener('DOMContentLoaded', () => {
     sprites.forEach((img, i) => {
       if (state[i].paused) return;
 
+      const { width, height } = state[i];
+
       state[i].x += state[i].dx;
       state[i].y += state[i].dy;
 
-      if (state[i].x <= min || state[i].x >= maxX - spriteSize) state[i].dx *= -1;
-      if (state[i].y <= min || state[i].y >= maxY - spriteSize) state[i].dy *= -1;
+      if (state[i].x <= min || state[i].x >= maxX - width) state[i].dx *= -1;
+      if (state[i].y <= min || state[i].y >= maxY - height) state[i].dy *= -1;
 
-      state[i].x = Math.max(min, Math.min(maxX - spriteSize, state[i].x));
-      state[i].y = Math.max(min, Math.min(maxY - spriteSize, state[i].y));
+      state[i].x = Math.max(min, Math.min(maxX - width, state[i].x));
+      state[i].y = Math.max(min, Math.min(maxY - height, state[i].y));
 
       img.style.left = state[i].x + 'px';
       img.style.top = state[i].y + 'px';
@@ -67,5 +80,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   animate();
 });
-
-
