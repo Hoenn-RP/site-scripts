@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // === Editable Settings ===
   const speedMultiplier = 0.3;  // Lower is slower
   const bounceHeight = 10;      // How high they jump on click
-  const visiblePadding = 25;    // How far they can go "offscreen"
+  const visiblePadding = 35;    // How far they can go "offscreen"
   // =========================
 
   // Get initial state using actual image sizes
@@ -80,3 +80,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   animate();
 });
+
