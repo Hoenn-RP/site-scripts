@@ -87,6 +87,46 @@
     });
   }
 
+  function createEditModal() {
+    if ($('#amity-edit-modal').length) return;
+
+    const modalHTML = `
+      <div id="amity-edit-modal" style="
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #222;
+        color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        z-index: 10000;
+        display: none;
+        width: 300px;
+        font-family: sans-serif;
+      ">
+        <h3 style="margin-top: 0; font-size: 16px;">Edit Amity Points</h3>
+        <label style="display: block; margin-bottom: 5px;">Set New Value:</label>
+        <input type="number" id="amity-set-value" style="width: 100%; margin-bottom: 10px; padding: 5px;" />
+        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+          <button id="amity-set-btn">Set</button>
+          <button id="amity-reset-btn">Reset</button>
+        </div>
+
+        <label style="display: block; margin-bottom: 5px;">Add or Remove:</label>
+        <input type="number" id="amity-change-value" style="width: 100%; margin-bottom: 10px; padding: 5px;" />
+        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+          <button id="amity-add-btn">Add</button>
+          <button id="amity-remove-btn">Remove</button>
+        </div>
+
+        <button id="amity-close-btn" style="width: 100%; padding: 5px;">Close</button>
+      </div>
+    `;
+    $('body').append(modalHTML);
+  }
+
   function setupStaffEditButtons() {
     const isStaff = !!proboards.data("user")?.is_staff;
     if (!isStaff) return;
@@ -100,19 +140,59 @@
       $btn.show();
 
       $btn.on("click", async function () {
+        createEditModal();
+        const $modal = $('#amity-edit-modal');
+        $modal.show();
+
         const $display = $(`.amity-member-points[data-user-id='${memberId}']`);
         const currentPoints = parseInt($display.text()) || 0;
 
         const memberData = await fetchData(`users/${memberId}`);
         const displayName = memberData?.display_name ?? `User ${memberId}`;
+        let currentValue = memberData.points ?? 0;
 
-        const newPoints = prompt(`Set new Amity Points for ${displayName}:`, currentPoints);
-        if (newPoints !== null && !isNaN(parseInt(newPoints))) {
-          memberData.points = parseInt(newPoints);
-          await setData(`users/${memberId}`, memberData);
-          alert("Amity Points updated.");
-          updateAllDisplays();
-        }
+        $('#amity-set-value').val(currentValue);
+        $('#amity-change-value').val('');
+
+        $('#amity-set-btn').off('click').on('click', async () => {
+          const newVal = parseInt($('#amity-set-value').val());
+          if (!isNaN(newVal)) {
+            memberData.points = newVal;
+            await setData(`users/${memberId}`, memberData);
+            alert(`Amity Points set to ${newVal}.`);
+            updateAllDisplays();
+          }
+        });
+
+        $('#amity-reset-btn').off('click').on('click', () => {
+          $('#amity-set-value').val(currentValue);
+          $('#amity-change-value').val('');
+        });
+
+        $('#amity-add-btn').off('click').on('click', async () => {
+          const addVal = parseInt($('#amity-change-value').val());
+          if (!isNaN(addVal)) {
+            memberData.points += addVal;
+            await setData(`users/${memberId}`, memberData);
+            alert(`${addVal} Amity Points added.`);
+            updateAllDisplays();
+          }
+        });
+
+        $('#amity-remove-btn').off('click').on('click', async () => {
+          const removeVal = parseInt($('#amity-change-value').val());
+          if (!isNaN(removeVal)) {
+            memberData.points -= removeVal;
+            if (memberData.points < 0) memberData.points = 0;
+            await setData(`users/${memberId}`, memberData);
+            alert(`${removeVal} Amity Points removed.`);
+            updateAllDisplays();
+          }
+        });
+
+        $('#amity-close-btn').off('click').on('click', () => {
+          $modal.hide();
+        });
       });
     });
   }
@@ -154,7 +234,3 @@
     setTimeout(initializeAmity, 300);
   });
 })();
-
-
-
-
