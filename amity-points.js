@@ -159,7 +159,6 @@
           if (!isNaN(newVal)) {
             memberData.points = newVal;
             await setData(`users/${memberId}`, memberData);
-            alert(`Amity Points set to ${newVal}.`);
             updateAllDisplays();
           }
         });
@@ -174,7 +173,6 @@
           if (!isNaN(addVal)) {
             memberData.points += addVal;
             await setData(`users/${memberId}`, memberData);
-            alert(`${addVal} Amity Points added.`);
             updateAllDisplays();
           }
         });
@@ -185,7 +183,6 @@
             memberData.points -= removeVal;
             if (memberData.points < 0) memberData.points = 0;
             await setData(`users/${memberId}`, memberData);
-            alert(`${removeVal} Amity Points removed.`);
             updateAllDisplays();
           }
         });
@@ -234,3 +231,4 @@
     setTimeout(initializeAmity, 300);
   });
 })();
+
