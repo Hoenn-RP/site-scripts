@@ -144,7 +144,6 @@
             border: 1px solid #232323;
             color: #aaa;
             border-radius: 3px;
-            width: 164px;
             overflow: hidden;
         }
     
@@ -172,7 +171,7 @@
             width: 100%;
             background: #232323;
             margin-left: 0px;
-            margin-top: -10px;
+            margin-top: -5px;
         }
     </style>
     
@@ -306,6 +305,7 @@
     setTimeout(initializeAmity, 300);
   });
 })();
+
 
 
 
