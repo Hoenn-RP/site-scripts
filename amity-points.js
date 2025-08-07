@@ -91,38 +91,111 @@
     if ($('#amity-edit-modal').length) return;
 
     const modalHTML = `
-      <div id="amity-edit-modal" style="
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #222;
-        color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        z-index: 10000;
-        display: none;
-        width: 300px;
-        font-family: sans-serif;
-      ">
-        <h3 style="margin-top: 0; font-size: 16px;">Edit Amity Points</h3>
-        <label style="display: block; margin-bottom: 5px;">Set New Value:</label>
-        <input type="number" id="amity-set-value" style="width: 100%; margin-bottom: 10px; padding: 5px;" />
-        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-          <button id="amity-set-btn">Set</button>
-          <button id="amity-reset-btn">Reset</button>
+    <style>
+        #amity-edit-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 320px;
+            background: #2b2b2b;
+            border: 1px solid #232323;
+            border-radius: 4px;
+            font-family: 'Roboto', sans-serif;
+            color: #fff;
+            z-index: 10000;
+        }
+    
+        #amity-edit-modal .title-bar {
+            background-color: #272727;
+            background-image: url(https://image.ibb.co/dMFuMc/flower.png);
+            background-repeat: no-repeat;
+            background-position: center right;
+            padding: 8px 12px;
+            border-bottom: 1px solid #232323;
+            font: bold 9px 'Quattrocento Sans', sans-serif;
+            color: #aaa !important;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    
+        #amity-edit-modal .modal-body {
+            padding: 12px;
+        }
+    
+        #amity-edit-modal label {
+            font: bold 9px Roboto;
+            letter-spacing: 2px;
+            color: #aaa;
+            text-transform: uppercase;
+            display: block;
+            margin-top: 10px;
+            margin-left: 2px;
+        }
+    
+        #amity-edit-modal input[type="number"] {
+            width: 100%;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            padding: 6px;
+            background: #303030;
+            border: 1px solid #232323;
+            color: #aaa;
+            border-radius: 3px;
+            width: 174px;
+            overflow: hidden;
+        }
+    
+        #amity-edit-modal .btn-group {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+    
+        #amity-edit-modal button {
+            border: 1px solid #232323;
+            border-radius: 3px;
+            background: #272727;
+            text-transform: uppercase;
+            font: bold 12px Roboto;
+            color: #aaa;
+            height: 29px;
+            margin-top: 5px;
+            line-height: 19px;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+    
+        #amity-edit-modal #amity-close-btn {
+            width: 100%;
+            background: #232323;
+        }
+    </style>
+    
+    <div id="amity-edit-modal" style="display:none;">
+        <div class="title-bar">
+            <span>Edit Amity Points</span>
         </div>
-
-        <label style="display: block; margin-bottom: 5px;">Add or Remove:</label>
-        <input type="number" id="amity-change-value" style="width: 100%; margin-bottom: 10px; padding: 5px;" />
-        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-          <button id="amity-add-btn">Add</button>
-          <button id="amity-remove-btn">Remove</button>
+        <div class="modal-body">
+            <label>Set New Value:</label>
+            <div class="btn-group">
+                <input type="number" id="amity-set-value" />
+                <button id="amity-set-btn">Set</button>
+                <button id="amity-reset-btn">Reset</button>
+            </div>
+    
+            <label>Add or Remove:</label>
+            <div class="btn-group">
+                <input type="number" id="amity-change-value" />
+                <button id="amity-add-btn">Add</button>
+                <button id="amity-remove-btn">Remove</button>
+            </div>
+    
+            <button id="amity-close-btn">Close</button>
         </div>
-
-        <button id="amity-close-btn" style="width: 100%; padding: 5px;">Close</button>
-      </div>
+    </div>
     `;
     $('body').append(modalHTML);
   }
@@ -231,4 +304,5 @@
     setTimeout(initializeAmity, 300);
   });
 })();
+
 
