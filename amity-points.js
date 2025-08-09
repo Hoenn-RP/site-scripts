@@ -53,8 +53,8 @@
     const earned = data.earned;
     let updated = false;
 
-    if (type === "like" && earned.likes < 4) {
-      data.points += 1;
+    if (type === "like" && earned.likes < 1) {
+      data.points += 4;
       earned.likes++;
       updated = true;
     } else if (type === "sprite" && earned.sprites < 6) {
@@ -305,6 +305,7 @@
     setTimeout(initializeAmity, 300);
   });
 })();
+
 
 
 
