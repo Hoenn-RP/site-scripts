@@ -11,4 +11,5 @@ document.addEventListener("click", function(e) {
     if (alt) bbcode += ` alt="${alt}"`;
     bbcode += `]`;
 
+    navigator.clipboard.writeText(bbcode).catch(() => {});
 });
