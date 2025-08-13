@@ -1,22 +1,22 @@
 function InSitu1() {
-  $(document).ready(function () {
-    $('.insitu-01 .vdice-value').each(function () {
-      const rollText = $(this).text().trim();
-      const roll = parseInt(rollText, 10);
+    $(document).ready(function () {
+        $('.insitu-01 .vdice-value').each(function () {
+            const rollText = $(this).text().trim();
+            const roll = parseInt(rollText, 10);
 
-      if (isNaN(roll)) return;
+            if (isNaN(roll)) return;
 
-      let resultText = '';
+            let resultText = '';
 
-      if (roll >= 1 && roll <= 2) {
-        resultText = `<blockquote>
+            if (roll >= 1 && roll <= 2) {
+                resultText = `<blockquote>
     <h1>RKS SIMULATION: SUPER LUCK</h1>
     <h2>STAT CHECK STAGE</h2>
     Before you and your Pokemon, a Togepi chirps. It is happy to see you. With a waving finger of Metronome, a shower of
     digital currency clatters onto you and the ground before dissipating into pixelated confetti.
-
+<br><br>
     Great joy fills your spirits as the simulation moves you to the next stage.
-
+<br><br>
     <b>CONGRATULATIONS ON YOUR LUCK!</b>
     You earn <b>100 RKS POINTS</b> or a <b>CURIO</b>.
     <quote>You automatically pass this stat check.</quote>
@@ -25,16 +25,16 @@ function InSitu1() {
             style="margin-top:25px;float:none;border:none;box-shadow:none;"></div>
     </blockquote>
     `;
-      } else if (roll >= 9 && roll <= 14) {
-        resultText = `<blockquote>
+            } else if (roll >= 9 && roll <= 14) {
+                resultText = `<blockquote>
         <h1>RKS SIMULATION: CLUB OLYMPUS</h1>
         <h2>STAT CHECK STAGE</h2>
         You find yourself attempting to enter Club Olympus, a lavish hostess club in Mauville City. However, you
         misplaced your ticket somewhere on the way here.
-
+<br><br>
         The bouncer has rebuked you several times so far. Your chances of entering this fancy establishment filled with
         fine drink and even finer people seems to be slipping through your fingers...
-
+<br><br>
         <b>WHAT WILL YOU DO?</b>
         Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
         <quote><b>↳ MIND</b> - Charm or seduce them.
@@ -47,14 +47,14 @@ function InSitu1() {
                 src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/love.png"></div>
         </blockquote>
         `;
-      } else if (roll >= 15 && roll <= 20) {
-        resultText = `<blockquote>
+            } else if (roll >= 15 && roll <= 20) {
+                resultText = `<blockquote>
             <h1>RKS SIMULATION: ROGUE MEGAS</h1>
             <h2>STAT CHECK STAGE</h2>
             An unseen source or energy is forcing Pokemon to mega evolve all around you. Curiously, this energy is now
             being focused on <i>you</i>. You feel your organs and bones crushing together or bending against your will;
             the pain isoverwhelming. As your Pokemon attempt to protect you, attempt to survive the influence.
-
+<br><br>
             <b>WHAT WILL YOU DO?</b>
             Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
             <quote><b>↳ MIND</b> - Using your knowledge of mega evolution, find a way to resist.<break>
@@ -65,21 +65,21 @@ function InSitu1() {
                     src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/mega-stone/absolite.png"
                     style="float:none;box-shadow:none;border:none;"></div>
             </blockquote>`;
-      } else if (roll >= 3 && roll <= 8) {
-        resultText = `<blockquote>
+            } else if (roll >= 3 && roll <= 8) {
+                resultText = `<blockquote>
                 <h1>RKS SIMULATION: SPEAR PILLAR</h1>
                 <h2>STAT CHECK STAGE</h2>
                 You find yourself in the middle of a grand temple. Those familiar with Sinnoh would realize that this is
                 the peak of Mount Coronet. However, curiously, this temple is not in ruin. Rather, it is pristine and
                 intact. Nearby, Magnezone and Nosepass wander about, attracted by the special magnetic field found here.
-
+<br><br>
                 Before you, a Dialga can be seen in the middle of this grand sanctuary and in chains. Red chains float
                 about its dark blue body, though the simulation occasionally glitches to change these chains into
                 parades of Unown.
-
+<br><br>
                 The Deity of Time screeches as it transforms in retaliation. Around you, the pillars collapse as Dialga
                 assumes its Origin Forme before attacking.
-
+<br><br>
                 <b>WHAT WILL YOU DO?</b>
                 Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                 <quote><b>↳ SKILL</b> - Battle Dialga.
@@ -90,14 +90,14 @@ function InSitu1() {
                         src="https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/dialga-origin.png"
                         style="box-shadow:none;border:none;float:none;"></div>
                 </blockquote>`;
-      } else if (roll >= 21 && roll <= 26) {
-        resultText = `<blockquote>
+            } else if (roll >= 21 && roll <= 26) {
+                resultText = `<blockquote>
                     <h1>RKS SIMULATION: EMERGENCY CARE</h1>
                     <h2>STAT CHECK STAGE</h2>
                     You're in the middle of rushing a Pokemon to emergency care whether it is in a hospital or the
                     battlefield. Gasping and in pain, the poor creature has been injured in battle and requires
                     lifesaving attention.
-
+<br><br>
                     <b>WHAT WILL YOU DO?</b>
                     Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                     <quote><b>↳ MIND</b> - You can identify the problem and proper procedure needed.
@@ -110,20 +110,20 @@ function InSitu1() {
                             src="https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/chansey.png">
                     </div>
                     </blockquote>`;
-      } else if (roll >= 27 && roll <= 33) {
-        resultText = `<blockquote>
+            } else if (roll >= 27 && roll <= 33) {
+                resultText = `<blockquote>
                         <h1>RKS SIMULATION: THE TRUTH</h1>
                         <h2>STAT CHECK STAGE</h2>
                         You dip beneath the bright yellow of crime scene tape. You've been called here to investigate a
                         death. Curiously, there is no body. However, there is an outline of a body on the ground... one
                         not drawn by chalk. Instead, the outline is of ash and charcoal, as if the corpse had been
                         burned to a crisp.
-
+<br><br>
                         Nearby, there are the tatters of a Ranger's armband, several large white feathers, and a shaken
                         witness. There are no body parts to be found, no hair strand or nail. The Chief Investigator
                         asks you for your evidence.
 
-
+<br><br>
                         <b>WHAT WILL YOU DO?</b>
                         Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                         <quote><b>↳ MIND</b> - Question the witness.
@@ -134,17 +134,17 @@ function InSitu1() {
                                 src="https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/reshiram.png"
                                 style="box-shadow:none;border:none;float:none;"></div>
                         </blockquote>`;
-      } else if (roll >= 34 && roll <= 39) {
-        resultText = `<blockquote>
+            } else if (roll >= 34 && roll <= 39) {
+                resultText = `<blockquote>
                             <h1>RKS SIMULATION: SEALING SHRINE</h1>
                             <h2>STAT CHECK STAGE</h2>
                             A foul beast must be sealed in the special shrine. It hisses at you; though it is a vague,
                             indiscernible shape within the darkness of the burrow. Something crunches beneath your feet.
                             You can not tell if you have stepped on ice, leaves, charred stone or earthen crumb.
-
+<br><br>
                             Several stakes and a circular seal must be used to conceal this destructive Pokemon before
                             it is too late.
-
+<br><br>
                             <b>WHAT WILL YOU DO?</b>
                             Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                             <quote><b>↳ MIND</b> - Resist the ruinous feelings.
@@ -158,17 +158,17 @@ function InSitu1() {
                                     style="float:none;border:none;box-shadow:none;"></div>
                             </blockquote>
                             `;
-      } else if (roll >= 40 && roll <= 45) {
-        resultText = `<blockquote>
+            } else if (roll >= 40 && roll <= 45) {
+                resultText = `<blockquote>
                                 <h1>RKS SIMULATION: EATING CONTEST</h1>
                                 <h2>STAT CHECK STAGE</h2>
                                 You've been invited to an eating contest. The stakes of this contest can range from high
                                 (death) to low (it's a free meal, I guess). Regardless, you're here now with your
                                 partner and your Pokemon. You must find a way to reach the bottom of your plate of food
                                 with the swiftness.
-
+<br><br>
                                 Just hope that the food isn't in the shape of your favorite Pokemon...
-
+<br><br>
                                 <b>WHAT WILL YOU DO?</b>
                                 Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                                 <quote><b>↳ SKILL</b> - You're a pro gobbler.<break>
@@ -179,18 +179,18 @@ function InSitu1() {
                                         src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/curry-ingredient/large-leek.png"
                                         style="float:none;box-shadow:none;border:none;"></div>
                                 </blockquote>`;
-      } else if (roll >= 46 && roll <= 51) {
-        resultText = `<blockquote>
+            } else if (roll >= 46 && roll <= 51) {
+                resultText = `<blockquote>
                                     <h1>RKS SIMULATION: INFILTRATE ROCKET</h1>
                                     <h2>STAT CHECK STAGE</h2>
                                     You are attempting to infiltrate Rocket Headquarters: a vast submarine that sails
                                     from undocumented port to undocumented port. Sootopolis City was once its main site
                                     of mooring, but ever since the League made a deal with the Rocket Boss to neutrally
                                     occupy the place, it seldom comes.
-
+<br><br>
                                     Infiltrating the submarine can be done via sea or when it is docked. How will you
                                     attempt this?
-
+<br><br>
                                     <b>WHAT WILL YOU DO?</b>
                                     Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                                     <quote><b>↳ MIND</b> - Infiltrate via faked identity.<break>
@@ -203,17 +203,17 @@ function InSitu1() {
                                             src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/key-item/card-key.png">
                                     </div>
                                     </blockquote>`;
-      } else if (roll >= 52 && roll <= 57) {
-        resultText = `<blockquote>
+            } else if (roll >= 52 && roll <= 57) {
+                resultText = `<blockquote>
                                         <h1>RKS SIMULATION: ERUPTION</h1>
                                         <h2>STAT CHECK STAGE</h2>
                                         Mt. Chimney is erupting and you are caught within the blast radius. Around you,
                                         the Kindlers, a group of fire-type specialists dedicated to upholding the
                                         time-honored traditions of this mountain, are quick to act. They attempt to save
                                         both human and Pokemon from the debris and scalding smoke.
-
+<br><br>
                                         How do you survive this catastrophe?
-
+<br><br>
                                         <b>WHAT WILL YOU DO?</b>
                                         Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                                         <quote><b>↳ MIND</b> - Compose yourself for a Kindler to rescue you.
@@ -228,24 +228,24 @@ function InSitu1() {
                                                 src="https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/torkoal.png">
                                         </div>
                                         </blockquote>`;
-      } else if (roll >= 58 && roll <= 64) {
-        resultText = `<blockquote>
+            } else if (roll >= 58 && roll <= 64) {
+                resultText = `<blockquote>
                                             <h1>RKS SIMULATION: DISTORTION WORLD</h1>
                                             <h2>STAT CHECK STAGE</h2>
                                             You are lost in the Distortion World. It is said that time does not flow
                                             here, but you can not help but question how long the vague shadowy mound
                                             beside (it most likely a corpse, you believe) has been here.
-
+<br><br>
                                             Other Pokemon have never lived here—until recently. Whether Giratina views
                                             them as pests or intruders is unknown. However, the ghost-type Pokemon that
                                             linger in this reversed realm wander as lost souls.
-
+<br><br>
                                             However, the Giratina in its Origin Forme finally finds you. Shrieking, it
                                             attempts to excise you from its world. Rifts emerge haphazardly around
                                             you—but the Giratina does not shift into shadow near these rifts, lest it
                                             accidentally merge the Distortion World with the real world with destructive
                                             consequence.
-
+<br><br>
                                             <b>WHAT WILL YOU DO?</b>
                                             Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                                             <quote><b>↳ MIND</b> - Offer yourself as Giratina's worthy vessel.
@@ -260,8 +260,8 @@ function InSitu1() {
                                             </div>
                                             </blockquote>
                                             `;
-      } else if (roll >= 65 && roll <= 70) {
-        resultText = `<blockquote>
+            } else if (roll >= 65 && roll <= 70) {
+                resultText = `<blockquote>
                                                 <h1>RKS SIMULATION: TEACUPS</h1>
                                                 <h2>STAT CHECK STAGE</h2>
                                                 You have been tasked by a museum curator or tea master to discern
@@ -271,11 +271,11 @@ function InSitu1() {
                                                 respectively. Socialites and particularly picky trainers often desire
                                                 Poltchageist and Sinistcha in these cups, rendering them remarkably
                                                 valuable.
-
+<br><br>
                                                 However, you must be careful. Apart from accidentally damaging the cups,
                                                 a hiding Poltchageist may scatter its life-draining matcha powder on
                                                 you.
-
+<br><br>
                                                 <b>WHAT WILL YOU DO?</b>
                                                 Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                                                 <quote><b>↳ SKILL</b> - Use your knowledge and keen eye.
@@ -288,17 +288,17 @@ function InSitu1() {
                                                 </div>
                                                 </blockquote>
                                                 `;
-      } else if (roll >= 71 && roll <= 76) {
-        resultText = `<blockquote>
+            } else if (roll >= 71 && roll <= 76) {
+                resultText = `<blockquote>
                                                     <h1>RKS SIMULATION: POP QUIZ</h1>
                                                     <h2>STAT CHECK STAGE</h2>
                                                     You are a student in Hoenn's prestigious Pokemon Trainer's School or
                                                     Unova's innovative Blueberry Academy. In class, you are suddenly
                                                     bestowed a pop quiz by your teacher. The subject can be decided by
                                                     you, for there are multiple quizzes available to choose from.
-
+<br><br>
                                                     How will you past this course?
-
+<br><br>
                                                     <b>WHAT WILL YOU DO?</b>
                                                     Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                                                     <quote><b>↳ MIND</b> - You've already studied/know this subject
@@ -315,8 +315,8 @@ function InSitu1() {
                                                     </div>
                                                     </blockquote>
                                                     `;
-      } else if (roll >= 77 && roll <= 82) {
-        resultText = `<blockquote>
+            } else if (roll >= 77 && roll <= 82) {
+                resultText = `<blockquote>
                                                         <h1>RKS SIMULATION: STORM THE LEAGUE</h1>
                                                         <h2>STAT CHECK STAGE</h2>
                                                         You are storming the Pokemon League as a member of Team Rocket.
@@ -325,10 +325,10 @@ function InSitu1() {
                                                         reinforcements. Their rejuvenated numbers are not the only issue
                                                         facing your syndicate. Some of their reserves are trainers who
                                                         bear immense expertise and/or power.
-
+<br><br>
                                                         It is not guaranteed that the League will fall today, but you
                                                         may be the key to Team Rocket's success...
-
+<br><br>
                                                         <b>WHAT WILL YOU DO?</b>
                                                         Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                                                         <quote><b>↳ MIND</b> - You were a plant.
@@ -343,8 +343,8 @@ function InSitu1() {
                                                         </div>
                                                         </blockquote>
                                                         `;
-      } else if (roll >= 83 && roll <= 89) {
-        resultText = `<blockquote>
+            } else if (roll >= 83 && roll <= 89) {
+                resultText = `<blockquote>
                                                             <h1>RKS SIMULATION: PERFORMANCE</h1>
                                                             <h2>STAT CHECK STAGE</h2>
                                                             For whatever reason, you must perform. It may be to distract
@@ -353,11 +353,11 @@ function InSitu1() {
                                                             tough one... and they are as stone-faced as any Geodude. The
                                                             stage lights swing toward you. They're so hot they sear like
                                                             a Groudon's Drought.
-
+<br><br>
                                                             Whether you are singing, dancing, executing Pokemon Contest
                                                             choreography, or charming the crowd in some other fashion,
                                                             do your best.
-
+<br><br>
                                                             <b>WHAT WILL YOU DO?</b>
                                                             Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                                                             <quote><b>↳ MIND</b> - Your people skills help you connect
@@ -374,8 +374,8 @@ function InSitu1() {
                                                             </div>
                                                             </blockquote>
                                                             `;
-      } else if (roll >= 90 && roll <= 95) {
-        resultText = `<blockquote>
+            } else if (roll >= 90 && roll <= 95) {
+                resultText = `<blockquote>
                                                                 <h1>RKS SIMULATION: PSYCHIC TORTURE</h1>
                                                                 <h2>STAT CHECK STAGE</h2>
                                                                 Around you, swarms of Unown cycle around you and your
@@ -383,12 +383,12 @@ function InSitu1() {
                                                                 if you have the means to. A muffled voice commands them,
                                                                 out of your vision, past the sea of black and white
                                                                 cyclopes.
-
+<br><br>
                                                                 Suddenly, these psychic-type Pokemon begin to exert
                                                                 their powers against you. They begin to distort your
                                                                 reality, twisting your dreams and desires, forcing
                                                                 hallucinations and horrid memories into your mind...
-
+<br><br>
                                                                 <b>WHAT WILL YOU DO?</b>
                                                                 Success will grant <b>100 RKS POINTS</b> or a
                                                                 <b>CURIO</b>.
@@ -405,8 +405,8 @@ function InSitu1() {
                                                                 </div>
                                                                 </blockquote>
                                                                 `;
-      } else if (roll >= 96 && roll <= 100) {
-        resultText = `<blockquote>
+            } else if (roll >= 96 && roll <= 100) {
+                resultText = `<blockquote>
                                                                     <h1>RKS SIMULATION: ARCHERY</h1>
                                                                     <h2>STAT CHECK STAGE</h2>
                                                                     You find yourself alongside the ranks of Decidueye.
@@ -414,10 +414,10 @@ function InSitu1() {
                                                                     battle, you must steady your breath for urgent
                                                                     accuracy. Your Pokemon may help you—but in the end,
                                                                     you are the one wielding the bow and arrow.
-
+<br><br>
                                                                     Will you hit a bullseye—or will your shot miss its
                                                                     mark?
-
+<br><br>
                                                                     <b>WHAT WILL YOU DO?</b>
                                                                     Success will grant <b>100 RKS POINTS</b> or a
                                                                     <b>CURIO</b>.
@@ -435,31 +435,31 @@ function InSitu1() {
                                                                     </div>
                                                                     </blockquote>
                                                                     `;
-      } else {
-        resultText = `<img
+            } else {
+                resultText = `<img
                                                                         src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/poke.png"
                                                                         title="what went wrong?">
                                                                     <div class="insitu-desc">Something went wrong with
                                                                         the roll...</div>`;
-      }
+            }
 
-      $(this).html(resultText);
+            $(this).html(resultText);
+        });
     });
-  });
 }
 
 $(document).ready(function () {
-  InSitu1();
+    InSitu1();
 
-  const target = document.querySelector('.content');
-  if (target) {
-    const observer = new MutationObserver(() => {
-      InSitu1();
-    });
+    const target = document.querySelector('.content');
+    if (target) {
+        const observer = new MutationObserver(() => {
+            InSitu1();
+        });
 
-    observer.observe(target, {
-      childList: true, subtree:
-        true
-    });
-  }
+        observer.observe(target, {
+            childList: true, subtree:
+                true
+        });
+    }
 });
