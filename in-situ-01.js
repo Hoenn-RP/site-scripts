@@ -17,7 +17,7 @@ function InSitu1() {
 <br><br>
     Great joy fills your spirits as the simulation moves you to the next stage.
 <br><br>
-    <b>CONGRATULATIONS ON YOUR LUCK!</b>
+    <b>CONGRATULATIONS ON YOUR LUCK!</b><br>
     You earn <b>100 RKS POINTS</b> or a <b>CURIO</b>.
     <quote>You automatically pass this stat check.</quote>
     <div align="center"><img
@@ -55,7 +55,7 @@ function InSitu1() {
             being focused on <i>you</i>. You feel your organs and bones crushing together or bending against your will;
             the pain isoverwhelming. As your Pokemon attempt to protect you, attempt to survive the influence.
 <br><br>
-            <b>WHAT WILL YOU DO?</b>
+            <b>WHAT WILL YOU DO?</b><br>
             Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
             <quote><b>↳ MIND</b> - Using your knowledge of mega evolution, find a way to resist.<break>
                     60 or higher.</quote>
@@ -80,7 +80,7 @@ function InSitu1() {
                 The Deity of Time screeches as it transforms in retaliation. Around you, the pillars collapse as Dialga
                 assumes its Origin Forme before attacking.
 <br><br>
-                <b>WHAT WILL YOU DO?</b>
+                <b>WHAT WILL YOU DO?</b><br>
                 Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                 <quote><b>↳ SKILL</b> - Battle Dialga.
                     75 or higher.</quote>
@@ -98,7 +98,7 @@ function InSitu1() {
                     battlefield. Gasping and in pain, the poor creature has been injured in battle and requires
                     lifesaving attention.
 <br><br>
-                    <b>WHAT WILL YOU DO?</b>
+                    <b>WHAT WILL YOU DO?</b><br>
                     Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                     <quote><b>↳ MIND</b> - You can identify the problem and proper procedure needed.
                         65 or higher.</quote>
@@ -124,7 +124,7 @@ function InSitu1() {
                         asks you for your evidence.
 
 <br><br>
-                        <b>WHAT WILL YOU DO?</b>
+                        <b>WHAT WILL YOU DO?</b><br>
                         Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                         <quote><b>↳ MIND</b> - Question the witness.
                             75 or higher.</quote>
@@ -145,7 +145,7 @@ function InSitu1() {
                             Several stakes and a circular seal must be used to conceal this destructive Pokemon before
                             it is too late.
 <br><br>
-                            <b>WHAT WILL YOU DO?</b>
+                            <b>WHAT WILL YOU DO?</b><br>
                             Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                             <quote><b>↳ MIND</b> - Resist the ruinous feelings.
                                 60 or higher.</quote>
@@ -169,7 +169,7 @@ function InSitu1() {
 <br><br>
                                 Just hope that the food isn't in the shape of your favorite Pokemon...
 <br><br>
-                                <b>WHAT WILL YOU DO?</b>
+                                <b>WHAT WILL YOU DO?</b><br>
                                 Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                                 <quote><b>↳ SKILL</b> - You're a pro gobbler.<break>
                                         75 or higher.</quote>
@@ -191,7 +191,7 @@ function InSitu1() {
                                     Infiltrating the submarine can be done via sea or when it is docked. How will you
                                     attempt this?
 <br><br>
-                                    <b>WHAT WILL YOU DO?</b>
+                                    <b>WHAT WILL YOU DO?</b><br>
                                     Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                                     <quote><b>↳ MIND</b> - Infiltrate via faked identity.<break>
                                             75 or higher.</quote>
@@ -214,7 +214,7 @@ function InSitu1() {
 <br><br>
                                         How do you survive this catastrophe?
 <br><br>
-                                        <b>WHAT WILL YOU DO?</b>
+                                        <b>WHAT WILL YOU DO?</b><br>
                                         Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                                         <quote><b>↳ MIND</b> - Compose yourself for a Kindler to rescue you.
                                             75 or higher.</quote>
@@ -246,7 +246,7 @@ function InSitu1() {
                                             accidentally merge the Distortion World with the real world with destructive
                                             consequence.
 <br><br>
-                                            <b>WHAT WILL YOU DO?</b>
+                                            <b>WHAT WILL YOU DO?</b><br>
                                             Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                                             <quote><b>↳ MIND</b> - Offer yourself as Giratina's worthy vessel.
                                                 60 or higher.</quote>
@@ -276,7 +276,7 @@ function InSitu1() {
                                                 a hiding Poltchageist may scatter its life-draining matcha powder on
                                                 you.
 <br><br>
-                                                <b>WHAT WILL YOU DO?</b>
+                                                <b>WHAT WILL YOU DO?</b><br>
                                                 Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                                                 <quote><b>↳ SKILL</b> - Use your knowledge and keen eye.
                                                     40 or higher.</quote>
@@ -299,7 +299,7 @@ function InSitu1() {
 <br><br>
                                                     How will you past this course?
 <br><br>
-                                                    <b>WHAT WILL YOU DO?</b>
+                                                    <b>WHAT WILL YOU DO?</b><br>
                                                     Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                                                     <quote><b>↳ MIND</b> - You've already studied/know this subject
                                                         well.
@@ -329,7 +329,7 @@ function InSitu1() {
                                                         It is not guaranteed that the League will fall today, but you
                                                         may be the key to Team Rocket's success...
 <br><br>
-                                                        <b>WHAT WILL YOU DO?</b>
+                                                        <b>WHAT WILL YOU DO?</b><br>
                                                         Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                                                         <quote><b>↳ MIND</b> - You were a plant.
                                                             75 or higher.</quote>
@@ -358,7 +358,7 @@ function InSitu1() {
                                                             choreography, or charming the crowd in some other fashion,
                                                             do your best.
 <br><br>
-                                                            <b>WHAT WILL YOU DO?</b>
+                                                            <b>WHAT WILL YOU DO?</b><br>
                                                             Success will grant <b>100 RKS POINTS</b> or a <b>CURIO</b>.
                                                             <quote><b>↳ MIND</b> - Your people skills help you connect
                                                                 with the audience.
@@ -389,7 +389,7 @@ function InSitu1() {
                                                                 reality, twisting your dreams and desires, forcing
                                                                 hallucinations and horrid memories into your mind...
 <br><br>
-                                                                <b>WHAT WILL YOU DO?</b>
+                                                                <b>WHAT WILL YOU DO?</b><br>
                                                                 Success will grant <b>100 RKS POINTS</b> or a
                                                                 <b>CURIO</b>.
                                                                 <quote><b>↳ MIND</b> - Steel your mind.
@@ -418,7 +418,7 @@ function InSitu1() {
                                                                     Will you hit a bullseye—or will your shot miss its
                                                                     mark?
 <br><br>
-                                                                    <b>WHAT WILL YOU DO?</b>
+                                                                    <b>WHAT WILL YOU DO?</b><br>
                                                                     Success will grant <b>100 RKS POINTS</b> or a
                                                                     <b>CURIO</b>.
                                                                     <quote><b>↳ MIND</b> - Calculate the physics.
@@ -436,11 +436,9 @@ function InSitu1() {
                                                                     </blockquote>
                                                                     `;
             } else {
-                resultText = `<img
-                                                                        src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/poke.png"
-                                                                        title="what went wrong?">
-                                                                    <div class="insitu-desc">Something went wrong with
-                                                                        the roll...</div>`;
+                resultText = `
+                                                                    <blockquote">Something went wrong with
+                                                                        the roll...</blockquote>`;
             }
 
             $(this).html(resultText);
@@ -463,3 +461,4 @@ $(document).ready(function () {
         });
     }
 });
+
