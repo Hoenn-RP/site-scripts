@@ -18,7 +18,12 @@
     });
   }
 
-  async function getUserData() {
+  // Cache current user's data to reduce requests
+  let cachedUserData = null;
+
+  async function getUserData(forceRefresh = false) {
+    if (!forceRefresh && cachedUserData) return cachedUserData;
+
     let data = await fetchData(`users/${userId}`);
     const now = Date.now();
 
@@ -45,6 +50,7 @@
       await setData(`users/${userId}`, data);
     }
 
+    cachedUserData = data;
     return data;
   }
 
@@ -65,24 +71,24 @@
 
     if (updated) {
       data.earned = earned;
+      cachedUserData = data; // update cache immediately
       await setData(`users/${userId}`, data);
       updateAllDisplays();
     }
   }
 
   async function updateAllDisplays() {
-    const selfData = await fetchData(`users/${userId}`);
-    const selfPoints = selfData?.points ?? 0;
+    const allUsers = await fetchData("users") || {};
+
+    // update self
+    const selfPoints = allUsers?.[userId]?.points ?? 0;
     $(".amity-user-points").text(`${selfPoints}`);
 
-    $(".amity-member-points[data-user-id]").each(async function () {
+    // update members
+    $(".amity-member-points[data-user-id]").each(function () {
       const $el = $(this);
-      const memberId = $el.data("user-id");
-      if (!memberId) return;
-
-      const memberData = await fetchData(`users/${memberId}`);
-      const memberPoints = memberData?.points ?? 0;
-
+      const memberId = String($el.data("user-id"));
+      const memberPoints = allUsers?.[memberId]?.points ?? 0;
       $el.text(`${memberPoints}`);
     });
   }
@@ -305,8 +311,3 @@
     setTimeout(initializeAmity, 300);
   });
 })();
-
-
-
-
-
