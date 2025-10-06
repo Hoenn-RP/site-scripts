@@ -50,14 +50,14 @@
     if (!points || points <= 0) return;
     const data = await getUserData();
     data.points += points;
-    data.rank_points += points; // separate counter for rank progress
+    data.rank_points += points;
     await setData(`users/${userId}`, data);
     updateAllDisplays();
   }
 
   // === RANK LOGIC ===
   function getRankFromPoints(points) {
-    const ranks = "ZYXWVUTSRQPONMLKJIHGFEDCBA".split(""); // Z → A
+    const ranks = "ZYXWVUTSRQPONMLKJIHGFEDCBA".split("");
     const capped = Math.min(points, 50);
     const index = Math.floor(capped / 2);
     return ranks[index] || "Z";
@@ -72,11 +72,11 @@
       await setData(`users/${id}`, data);
     }
     console.log("✅ Global rank reset complete");
+    alert("All user ranks have been reset successfully!");
   }
 
   // === DISPLAY UPDATES ===
   async function updateAllDisplays() {
-    // Update the logged-in user's display
     const selfData = await fetchData(`users/${userId}`);
     const selfPoints = selfData?.points ?? 0;
     const selfRankPoints = selfData?.rank_points ?? 0;
@@ -85,7 +85,6 @@
     $(".battle-user-points").text(`${selfPoints}`);
     $(".battle-user-rank").text(`${selfRank}`);
 
-    // Update all member Battle Points and Ranks
     $(".battle-member-points[data-user-id]").each(async function () {
       const $el = $(this);
       const memberId = $el.data("user-id");
@@ -117,7 +116,6 @@
 
   // === EVENT DETECTION ===
   function setupThreadAndPostListeners() {
-    // --- Detect new thread creation ---
     const threadBtns = $('input[type="submit"]').filter((_, el) => {
       const val = $(el).val()?.toLowerCase() || "";
       return val.includes("create thread") || val.includes("post thread") || val.includes("new thread");
@@ -131,14 +129,10 @@
       $btn.on("click", async function () {
         const subject = $('input[name="subject"]').val() || "";
         const reward = getTagValueFromSubject(subject);
-        console.log("Awarding BP for thread:", reward, "subject:", subject);
-        if (reward > 0) {
-          await awardBattlePoints(reward, "thread_creation");
-        }
+        if (reward > 0) await awardBattlePoints(reward, "thread_creation");
       });
     });
 
-    // --- Detect post replies (includes Quick Reply) ---
     const postBtns = $('input[type="submit"], button[type="submit"]').filter((_, el) => {
       const val = $(el).val()?.toLowerCase() || $(el).text()?.toLowerCase() || "";
       return val.includes("post reply") || val.includes("create post") || val.includes("reply") || val.includes("quick reply");
@@ -151,26 +145,20 @@
 
       $btn.on("click", async function () {
         let threadTitle =
-          $('#thread-title').text().trim() ||
-          $('input[name="subject"]').val()?.trim() ||
-          $('#navigation-tree a[href*="/thread/"]').last().text().trim() ||
-          document.title.split(" | ")[0].trim() ||
-          "";
+          ($('#thread-title').text() || "").trim() ||
+          ($('input[name="subject"]').val() || "").trim() ||
+          ($('#navigation-tree a[href*="/thread/"]').last().text() || "").trim() ||
+          (document.title.split(" | ")[0] || "").trim() || "";
 
         const reward = getTagValueFromSubject(threadTitle);
-        console.log("Awarding BP for reply:", reward, "thread:", threadTitle);
-        if (reward > 0) {
-          await awardBattlePoints(reward, "post_reply");
-        }
+        if (reward > 0) await awardBattlePoints(reward, "post_reply");
       });
     });
   }
 
-  console.log("Battle Points: post detection initialized");
-
   // === STAFF EDITING MODAL ===
   function createEditModal() {
-    if ($('#bp-edit-modal').length) return;
+    if ($('#battle-edit-modal').length) return;
 
     const modalHTML = `
     <style>
@@ -226,7 +214,6 @@
         border: 1px solid #232323;
         color: #aaa;
         border-radius: 3px;
-        overflow: hidden;
     }
 
     #battle-edit-modal .btn-group {
@@ -249,11 +236,24 @@
         cursor: pointer;
     }
 
-    #battle-edit-modal #battle-close-btn {
+    #battle-close-btn, #battle-reset-all-btn {
         width: 100%;
-        background: #232323;
         margin-left: 0px;
         margin-top: -5px;
+    }
+
+    #battle-close-btn {
+        background: #232323;
+    }
+
+    #battle-reset-all-btn {
+        background: #8b0000;
+        border-color: #700000;
+        color: #fff;
+        margin-top: 8px;
+    }
+    #battle-reset-all-btn:hover {
+        background: #a00000;
     }
 </style>
 
@@ -277,6 +277,7 @@
         </div>
 
         <button id="battle-close-btn">Close</button>
+        <button id="battle-reset-all-btn">Reset Ranks</button>
     </div>
 </div>`;
     $('body').append(modalHTML);
@@ -295,47 +296,70 @@
 
       $btn.on("click", async function () {
         createEditModal();
-        const $modal = $('#bp-edit-modal');
+        const $modal = $('#battle-edit-modal');
         $modal.show();
 
         const memberData = await fetchData(`users/${memberId}`);
         memberData.points ??= 0;
-        $('#bp-set-value').val(memberData.points);
+        memberData.rank_points ??= 0;
 
-        $('#bp-set-btn').off('click').on('click', async () => {
-          const newVal = parseInt($('#bp-set-value').val());
+        $('#battle-set-value').val(memberData.points);
+        $('#battle-change-value').val('');
+
+        $('#battle-set-btn').off('click').on('click', async () => {
+          const newVal = parseInt($('#battle-set-value').val());
           if (!isNaN(newVal)) {
             memberData.points = newVal;
             await setData(`users/${memberId}`, memberData);
             updateAllDisplays();
+            $modal.hide();
           }
         });
 
-        $('#bp-add-btn').off('click').on('click', async () => {
-          const addVal = parseInt($('#bp-change-value').val());
+        $('#battle-reset-btn').off('click').on('click', async () => {
+          if (!confirm("Reset this user's rank progress?")) return;
+          memberData.rank_points = 0;
+          await setData(`users/${memberId}`, memberData);
+          updateAllDisplays();
+          $modal.hide();
+        });
+
+        $('#battle-add-btn').off('click').on('click', async () => {
+          const addVal = parseInt($('#battle-change-value').val());
           if (!isNaN(addVal)) {
             memberData.points += addVal;
+            memberData.rank_points += addVal;
             await setData(`users/${memberId}`, memberData);
             updateAllDisplays();
+            $modal.hide();
           }
         });
 
-        $('#bp-remove-btn').off('click').on('click', async () => {
-          const removeVal = parseInt($('#bp-change-value').val());
+        $('#battle-remove-btn').off('click').on('click', async () => {
+          const removeVal = parseInt($('#battle-change-value').val());
           if (!isNaN(removeVal)) {
-            memberData.points -= removeVal;
-            if (memberData.points < 0) memberData.points = 0;
+            memberData.points = Math.max(0, memberData.points - removeVal);
+            memberData.rank_points = Math.max(0, memberData.rank_points - removeVal);
             await setData(`users/${memberId}`, memberData);
             updateAllDisplays();
+            $modal.hide();
           }
         });
 
-        $('#bp-close-btn').off('click').on('click', () => $modal.hide());
+        $('#battle-close-btn').off('click').on('click', () => $modal.hide());
+
+        // NEW: Global Reset Button
+        $('#battle-reset-all-btn').off('click').on('click', async () => {
+          const confirmReset = confirm("Are you sure you want to reset all user ranks globally? This will not affect total Battle Points.");
+          if (!confirmReset) return;
+          await globalRankReset();
+          updateAllDisplays();
+          $modal.hide();
+        });
       });
     });
   }
 
-  // === INITIALIZATION ===
   function initializeBattlePoints() {
     setupThreadAndPostListeners();
     updateAllDisplays();
@@ -345,6 +369,5 @@
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
-
 
 
