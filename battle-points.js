@@ -1,5 +1,8 @@
+// Debug/robust Battle Points script
 (async function () {
-  // === FIREBASE INITIALIZATION ===
+  const DEBUG = true; // set false later when confirmed working
+
+  // --- Firebase config (use your DB) ---
   const firebaseConfig = {
     apiKey: "AIzaSyA6P4vttMoSJvBAFvrv06jq2E1VGnGTYcA",
     authDomain: "battlepoints-e44ae.firebaseapp.com",
@@ -11,69 +14,112 @@
     measurementId: "G-4P60SDR786"
   };
 
+  // Load firebase compat libs if missing
   if (typeof firebase === "undefined") {
-    const script = document.createElement("script");
-    script.src = "https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js";
-    document.head.appendChild(script);
-    await new Promise((r) => (script.onload = r));
-    const dbscript = document.createElement("script");
-    dbscript.src = "https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js";
-    document.head.appendChild(dbscript);
-    await new Promise((r) => (dbscript.onload = r));
+    if (DEBUG) console.log("[BP] loading firebase compat libs...");
+    const s1 = document.createElement("script");
+    s1.src = "https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js";
+    document.head.appendChild(s1);
+    await new Promise(r => s1.onload = r);
+    const s2 = document.createElement("script");
+    s2.src = "https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js";
+    document.head.appendChild(s2);
+    await new Promise(r => s2.onload = r);
+    if (DEBUG) console.log("[BP] firebase libs loaded");
   }
 
-  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-  const database = firebase.database();
+  if (!firebase.apps.length) {
+    try {
+      firebase.initializeApp(firebaseConfig);
+      if (DEBUG) console.log("[BP] firebase.initializeApp() OK");
+    } catch (e) {
+      console.error("[BP] firebase init error", e);
+    }
+  } else {
+    if (DEBUG) console.log("[BP] firebase already initialized");
+  }
 
-  // === BASIC HELPERS ===
-  const siteKey = "battle";
-  const ref = (p) => database.ref(`${siteKey}/${p}`);
-  const fetchData = async (p) => (await ref(p).get()).val();
-  const setData = async (p, d) => ref(p).set(d);
-  const updateData = async (p, d) => ref(p).update(d);
+  const db = firebase.database();
+  const SITE_PREFIX = "battle";
 
+  // DB wrappers with logging
+  const ref = (p) => db.ref(`${SITE_PREFIX}/${p}`);
+  async function fetchData(p) {
+    try {
+      const val = (await ref(p).get()).val();
+      if (DEBUG) console.log(`[BP] fetchData ${p} ->`, val);
+      return val;
+    } catch (e) {
+      console.error("[BP] fetchData error", p, e);
+      return null;
+    }
+  }
+  async function setData(p, d) {
+    try {
+      await ref(p).set(d);
+      if (DEBUG) console.log(`[BP] setData ${p} <=`, d);
+      return true;
+    } catch (e) {
+      console.error("[BP] setData error", p, e);
+      return false;
+    }
+  }
+  async function updateData(p, d) {
+    try {
+      await ref(p).update(d);
+      if (DEBUG) console.log(`[BP] updateData ${p} <=`, d);
+      return true;
+    } catch (e) {
+      console.error("[BP] updateData error", p, e);
+      return false;
+    }
+  }
+
+  // --- user detection (ProBoards) ---
   const userObj = (typeof proboards !== "undefined" && proboards.data)
     ? proboards.data("user")
     : (typeof pb !== "undefined" && pb.data)
       ? pb.data("user")
       : null;
 
-  if (!userObj || !userObj.id) return;
+  if (!userObj || !userObj.id) {
+    console.warn("[BP] no proboards user detected — script will not run for guests.");
+    return;
+  }
   const currentUserId = String(userObj.id);
   const isStaff = !!userObj.is_staff;
+  if (DEBUG) console.log("[BP] currentUserId:", currentUserId, "isStaff:", isStaff);
 
-  // === TAGS AND VALUES ===
+  // --- tag config (per-tag values) ---
   const POST_TAG_VALUES = {
     "[PVP]": 2,
     "[BATTLE]": 1,
-    "[TRAINING]": 3,   // add more tags with values as you like
-    "[CONTEST]": 2
+    // add more here
   };
+  if (DEBUG) console.log("[BP] POST_TAG_VALUES:", POST_TAG_VALUES);
 
+  // --- rank reset flag (if used) ---
   let battleResetFlag = false;
-  const resetFlagRef = "rank_reset_flag";
-
   async function loadResetFlag() {
-    const flag = await fetchData(resetFlagRef);
-    battleResetFlag = !!flag;
+    const f = await fetchData("rank_reset_flag");
+    battleResetFlag = !!f;
+    if (DEBUG) console.log("[BP] loaded rank_reset_flag:", battleResetFlag);
   }
 
-  // === RANK CALCULATION ===
+  // --- helper: calculate rank ---
   function calculateRank(points) {
     if (battleResetFlag) return "Z";
-    const step = Math.floor(points / 2); // every 2 points = next rank
-    let rankCode = 90 - step; // 90 = Z ASCII
-    if (rankCode < 65) rankCode = 65; // stop at A
-    return String.fromCharCode(rankCode);
+    const step = Math.floor(points / 2);
+    let code = 90 - step;
+    if (code < 65) code = 65;
+    return String.fromCharCode(code);
   }
 
-  // === DOM HELPERS ===
+  // --- display helpers ---
   function idFromElement($el) {
     let id = $el.attr("data-user-id") ?? $el.data("user-id");
     return id ? String(id) : null;
   }
-
-  // === DISPLAY UPDATES ===
   async function updateAllDisplays() {
     const all = (await fetchData("users")) || {};
     $(".battle-member-points[data-user-id]").each(function () {
@@ -88,190 +134,179 @@
       if (!id) return;
       $el.text(calculateRank(all[id]?.points ?? 0));
     });
+    if (DEBUG) console.log("[BP] updateAllDisplays done");
   }
 
-  window.updateBattleDisplays = updateAllDisplays;
-
-  // === AWARD POINTS ===
-  async function awardBattlePoints(uid, points = 1) {
+  // --- award function with confirmation readback ---
+  async function awardBattlePoints(uid, pts = 1) {
+    if (!uid) { console.error("[BP] awardBattlePoints called without uid"); return; }
     const key = `users/${String(uid)}`;
     const cur = (await fetchData(key)) || { points: 0, posts: 0 };
-    cur.points = (cur.points || 0) + points;
+    cur.points = (cur.points || 0) + Number(pts || 0);
     cur.posts = (cur.posts || 0) + 1;
-    await setData(key, cur);
+    const ok = await setData(key, cur);
+    if (!ok) { console.error("[BP] failed to write award to firebase"); return; }
+    const verify = await fetchData(key);
+    if (DEBUG) console.log(`[BP] awarded ${pts} to ${uid} — verify:`, verify);
     await updateAllDisplays();
   }
 
-  // === SUBJECT DETECTION ===
+  // --- subject detection (simplified for your forum) ---
   function getThreadSubject() {
-    // On ProBoards, thread title appears like "Example [PVP] | BoardName"
-    const t = document.title || "";
-    return t.split("|")[0].trim();
+    // Use document.title, strip trailing " | " board name if present
+    let t = document.title || "";
+    if (!t) return "";
+    const parts = t.split("|");
+    return parts[0].trim();
   }
 
-  async function handleNewPost() {
-    await new Promise((r) => setTimeout(r, 800)); // wait for post submit
+  // --- event handling: robust & debug logging ---
+  async function handleNewPostEvent() {
+    // give the page a little time to settle
+    await new Promise(r => setTimeout(r, 1000));
     const subject = getThreadSubject();
-    if (!subject) return;
+    if (DEBUG) console.log("[BP] handleNewPostEvent -> subject:", subject);
+    if (!subject) { if (DEBUG) console.log("[BP] no subject found"); return; }
 
+    // find first matching tag
     let matchedValue = null;
+    let matchedTag = null;
+    const upper = subject.toUpperCase();
     for (const [tag, val] of Object.entries(POST_TAG_VALUES)) {
-      if (subject.toUpperCase().includes(tag.toUpperCase())) {
+      if (upper.includes(tag.toUpperCase())) {
         matchedValue = Number(val) || 1;
-        console.log(`[BattlePoints] Matched ${tag} => ${matchedValue}`);
+        matchedTag = tag;
         break;
       }
     }
+    if (!matchedValue) { if (DEBUG) console.log("[BP] no tag matched in subject"); return; }
 
-    if (!matchedValue) return;
+    // get post author id if ProBoards exposed it; otherwise default to current user
+    let postAuthorId = null;
+    try {
+      const p = (typeof proboards !== "undefined" && proboards.data) ? proboards.data("post") : null;
+      if (p && (p.user_id || p.author_id)) { postAuthorId = String(p.user_id || p.author_id); }
+    } catch (e) { }
+    try {
+      if (!postAuthorId && typeof pb !== "undefined" && pb.data) {
+        const pp = pb.data("post");
+        if (pp && (pp.user_id || pp.author_id)) postAuthorId = String(pp.user_id || pp.author_id);
+      }
+    } catch (e) { }
+    if (!postAuthorId) postAuthorId = currentUserId;
 
-    const postAuthorId = currentUserId;
+    if (DEBUG) console.log(`[BP] matched tag ${matchedTag} (${matchedValue} pts). awarding to ${postAuthorId}`);
     await awardBattlePoints(postAuthorId, matchedValue);
   }
 
-  // === STAFF EDIT MODAL ===
-  function createBattleEditModal() {
-    if ($("#battle-edit-modal").length) return;
-    const modalHTML = `
-    <style>
-      #battle-edit-modal {
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 320px;
-          background: #2b2b2b;
-          border: 1px solid #232323;
-          border-radius: 4px;
-          font-family: 'Roboto', sans-serif;
-          color: #fff;
-          z-index: 10000;
-      }
-      #battle-edit-modal .title-bar {
-          background-color: #272727;
-          background-image: url(https://image.ibb.co/dMFuMc/flower.png);
-          background-repeat: no-repeat;
-          background-position: center right;
-          padding: 8px 12px;
-          border-bottom: 1px solid #232323;
-          font: bold 9px 'Quattrocento Sans', sans-serif;
-          color: #aaa !important;
-          text-transform: uppercase;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-      }
-      #battle-edit-modal .modal-body { padding: 12px; }
-      #battle-edit-modal label { font: bold 9px Roboto; letter-spacing: 2px; color: #aaa; text-transform: uppercase; display:block; margin-top:10px; margin-left:2px; }
-      #battle-edit-modal input[type="number"] { width:100%; margin-top:5px; margin-bottom:10px; padding:6px; background:#303030; border:1px solid #232323; color:#aaa; border-radius:3px; overflow:hidden; }
-      #battle-edit-modal .btn-group { display:flex; gap:6px; margin-bottom:10px; }
-      #battle-edit-modal button { border:1px solid #232323; border-radius:3px; background:#272727; text-transform:uppercase; font:bold 12px Roboto; color:#aaa; height:29px; margin-top:5px; line-height:19px; letter-spacing:1px; cursor:pointer; }
-      #battle-edit-modal #battle-close-btn { width:100%; background:#232323; margin-left:0px; margin-top:-5px; }
-    </style>
+  // --- event hook setup ---
+  function setupEventHooks() {
+    if (typeof pb !== "undefined" && pb.events) {
+      try {
+        if (DEBUG) console.log("[BP] hooking pb.events listeners");
+        try { pb.events.on("post.create", ev => { if (DEBUG) console.log("[BP] pb.events: post.create"); setTimeout(handleNewPostEvent, 1200); }); } catch(e){}
+        try { pb.events.on("post.new", ev => { if (DEBUG) console.log("[BP] pb.events: post.new"); setTimeout(handleNewPostEvent, 1200); }); } catch(e){}
+        try { pb.events.on("afterPost", ev => { if (DEBUG) console.log("[BP] pb.events: afterPost"); setTimeout(handleNewPostEvent, 1200); }); } catch(e){}
+      } catch (e) { console.warn("[BP] pb.events hook error", e); }
+    } else {
+      if (DEBUG) console.log("[BP] pb.events not available");
+    }
 
-    <div id="battle-edit-modal" style="display:none;">
-      <div class="title-bar"><span>Edit Battle Points</span></div>
-      <div class="modal-body">
-        <label>Set New Value:</label>
-        <div class="btn-group">
-          <input type="number" id="battle-set-value" />
-          <button id="battle-set-btn">Set</button>
-          <button id="battle-reset-btn">Reset</button>
-        </div>
-        <label>Add or Remove:</label>
-        <div class="btn-group">
-          <input type="number" id="battle-change-value" />
-          <button id="battle-add-btn">Add</button>
-          <button id="battle-remove-btn">Remove</button>
-        </div>
-        <label style="color:red;">⚠️ Global Reset will reset ALL ranks to Z!</label>
-        <button id="battle-global-reset-btn" style="background:#900;">Global Reset Ranks</button>
-        <button id="battle-close-btn">Close</button>
-      </div>
-    </div>`;
-    $("body").append(modalHTML);
+    // old / common hook used by many forums
+    try {
+      $(document).on("ajax_success", function (event, data, status, xhr) {
+        const url = xhr?.responseURL || "";
+        if (DEBUG) console.log("[BP] ajax_success fired; url:", url);
+        if (url.includes("/post/") || url.includes("/thread/") || url.includes("/post/create") || url.includes("/reply/")) {
+          setTimeout(handleNewPostEvent, 1500);
+        }
+      });
+    } catch (e) {
+      if (DEBUG) console.log("[BP] ajax_success hook not available", e);
+    }
+
+    // jQuery's ajaxSuccess as an extra fallback
+    try {
+      $(document).ajaxSuccess(function (event, xhr, settings) {
+        const url = settings?.url || "";
+        if (DEBUG) console.log("[BP] jQuery ajaxSuccess; url:", url);
+        if (url.includes("/post/") || url.includes("/thread/") || url.includes("/post/create") || url.includes("/reply/")) {
+          setTimeout(handleNewPostEvent, 1500);
+        }
+      });
+    } catch (e) { if (DEBUG) console.log("[BP] ajaxSuccess hook error", e); }
+
+    // MutationObserver fallback (detect DOM insertion of new post)
+    try {
+      const mo = new MutationObserver((mutations) => {
+        for (const m of mutations) {
+          for (const n of Array.from(m.addedNodes || [])) {
+            if (n.nodeType !== 1) continue;
+            const el = n;
+            if (el.matches && (el.matches(".post") || el.querySelector && el.querySelector(".post"))) {
+              if (DEBUG) console.log("[BP] MutationObserver detected post DOM insertion");
+              setTimeout(handleNewPostEvent, 1200);
+              return;
+            }
+          }
+        }
+      });
+      mo.observe(document.body, { childList: true, subtree: true });
+      if (DEBUG) console.log("[BP] MutationObserver watching document.body");
+    } catch (e) { if (DEBUG) console.log("[BP] MutationObserver error", e); }
   }
 
-  function setupBattleStaffEditButtons() {
+  // --- staff quick edit buttons (very small) ---
+  function setupStaffButtons() {
     if (!isStaff) return;
     $(".battle-edit-btn").each(function () {
       const $btn = $(this);
-      const bound = $btn.data("bound");
+      if ($btn.data("bound")) { $btn.show(); return; }
       const id = idFromElement($btn) || $btn.attr("data-user-id");
       if (!id) return;
-      if (bound) return;
       $btn.data("bound", true).show().off("click").on("click", async function () {
-        createBattleEditModal();
-        const $modal = $("#battle-edit-modal");
-        $modal.show();
-        let data = (await fetchData(`users/${id}`)) || { points: 0, posts: 0 };
-        $("#battle-set-value").val(data.points);
-        $("#battle-change-value").val("");
-
-        $("#battle-set-btn").off().on("click", async () => {
-          const v = parseInt($("#battle-set-value").val());
-          if (!isNaN(v)) {
-            data.points = v;
-            await setData(`users/${id}`, data);
-            updateAllDisplays();
-          }
-        });
-        $("#battle-reset-btn").off().on("click", async () => {
-          data = { points: 0, posts: 0 };
-          await setData(`users/${id}`, data);
-          updateAllDisplays();
-        });
-        $("#battle-add-btn").off().on("click", async () => {
-          const add = parseInt($("#battle-change-value").val());
-          if (!isNaN(add)) {
-            data.points = (data.points || 0) + add;
-            await setData(`users/${id}`, data);
-            updateAllDisplays();
-          }
-        });
-        $("#battle-remove-btn").off().on("click", async () => {
-          const rem = parseInt($("#battle-change-value").val());
-          if (!isNaN(rem)) {
-            data.points = Math.max(0, (data.points || 0) - rem);
-            await setData(`users/${id}`, data);
-            updateAllDisplays();
-          }
-        });
-        $("#battle-global-reset-btn").off().on("click", async () => {
-          if (!confirm("⚠️ This will reset ALL ranks to Z for every user. Continue?")) return;
-          await setData(resetFlagRef, true);
-          battleResetFlag = true;
-          updateAllDisplays();
-        });
-        $("#battle-close-btn").off().on("click", () => $modal.hide());
+        const cur = (await fetchData(`users/${id}`)) || { points: 0 };
+        const v = prompt("Set Battle Points for user " + id, String(cur.points || 0));
+        if (v === null) return;
+        const nv = parseInt(v);
+        if (!isNaN(nv)) {
+          cur.points = nv;
+          await setData(`users/${id}`, cur);
+          await updateAllDisplays();
+        }
       });
     });
   }
 
-  // === OBSERVER FOR PROFILE DISPLAYS ===
-  const mo = new MutationObserver(() => {
-    setTimeout(() => {
-      updateAllDisplays();
-      setupBattleStaffEditButtons();
-    }, 80);
-  });
-  mo.observe(document.body, { childList: true, subtree: true });
+  // --- expose debug helpers on window for manual testing ---
+  window.BattleDebug = {
+    testSubject: () => {
+      const s = getThreadSubject();
+      console.log("[BP] testSubject ->", s);
+      return s;
+    },
+    manualAward: async (uid, pts=1) => {
+      console.log(`[BP] manualAward ${pts} to ${uid}`);
+      await awardBattlePoints(uid, pts);
+    },
+    printProboardsThreadData: () => {
+      try { console.log("proboards.data('thread'):", (typeof proboards !== 'undefined' && proboards.data) ? proboards.data('thread') : null); } catch(e){console.log(e);}
+      try { console.log("pb.data('thread'):", (typeof pb !== 'undefined' && pb.data) ? pb.data('thread') : null); } catch(e){console.log(e);}
+    }
+  };
 
-  // === INITIALIZE ===
+  // --- initialize script ---
   async function initialize() {
+    if (DEBUG) console.log("[BP] initialize start");
     await loadResetFlag();
-    updateAllDisplays();
-    setupBattleStaffEditButtons();
-
-    // Detect new posts
-    $(document).on("ajax_success", function (event, data, status, xhr) {
-      const url = xhr?.responseURL || "";
-      if (url.includes("/post/") || url.includes("/thread/") || url.includes("/post/create")) {
-        handleNewPost();
-      }
-    });
+    await updateAllDisplays();
+    setupEventHooks();
+    setupStaffButtons();
+    if (DEBUG) console.log("[BP] initialization complete — listening for new posts");
   }
 
   $(document).ready(() => setTimeout(initialize, 300));
   $(document).on("pageChange", () => setTimeout(initialize, 300));
 })();
+
+
