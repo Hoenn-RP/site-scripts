@@ -236,14 +236,14 @@
         cursor: pointer;
     }
 
-        #amity-edit-modal #amity-close-btn {
+        #battle-edit-modal #battle-close-btn {
             width: 100%;
             background: #232323;
             margin-left: 0px;
             margin-top: -5px;
         }
 
-       #amity-edit-modal #amity-reset-all-btn {
+       #battle-edit-modal #battle-reset-all-btn {
             width: 100%;
             background: #f2495d;
             margin-left: 0px;
@@ -363,6 +363,7 @@
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
+
 
 
 
