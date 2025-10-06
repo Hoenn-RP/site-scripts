@@ -236,19 +236,22 @@
         cursor: pointer;
     }
 
+    #battle-close-btn, #battle-close-btn {
+        width: 100%;
+        margin-left: 0px;
+        margin-top: -5px;
+        background: #272727;
+    }
+
     #battle-close-btn, #battle-reset-all-btn {
         width: 100%;
         margin-left: 0px;
         margin-top: -5px;
-    }
-
-    #battle-close-btn {
-        background: #232323;
+        background: #f2495d;
     }
 
     #battle-reset-all-btn {
-        background: #8b0000;
-        border-color: #700000;
+        border-color: #232323;
         color: #fff;
         margin-top: 8px;
     }
@@ -369,5 +372,6 @@
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
+
 
 
