@@ -10,9 +10,6 @@
     "[PVP]": 2,
     "[BATTLE]": 2,
     "[BP]": 2,
-    // Add more tags here if you want custom rewards
-    // "[TOURNAMENT]": 3,
-    // "[TRAINING]": 1,
   };
 
   // === FIREBASE HELPERS ===
@@ -44,6 +41,7 @@
     data.username ??= user.username;
     data.display_name ??= user.name;
     data.points ??= 0;
+    data.rank_points ??= 0;
     data.earned ??= {};
     return data;
   }
@@ -52,18 +50,42 @@
     if (!points || points <= 0) return;
     const data = await getUserData();
     data.points += points;
+    data.rank_points += points; // separate counter for rank progress
     await setData(`users/${userId}`, data);
     updateAllDisplays();
   }
 
+  // === RANK LOGIC ===
+  function getRankFromPoints(points) {
+    const ranks = "ZYXWVUTSRQPONMLKJIHGFEDCBA".split(""); // Z → A
+    const capped = Math.min(points, 50);
+    const index = Math.floor(capped / 2);
+    return ranks[index] || "Z";
+  }
+
+  // === GLOBAL RANK RESET ===
+  async function globalRankReset() {
+    const users = await fetchData("users");
+    if (!users) return;
+    for (const [id, data] of Object.entries(users)) {
+      data.rank_points = 0;
+      await setData(`users/${id}`, data);
+    }
+    console.log("✅ Global rank reset complete");
+  }
+
   // === DISPLAY UPDATES ===
   async function updateAllDisplays() {
-    // Update the logged-in user's display (if shown anywhere)
+    // Update the logged-in user's display
     const selfData = await fetchData(`users/${userId}`);
     const selfPoints = selfData?.points ?? 0;
-    $(".battle-user-points").text(`${selfPoints}`);
+    const selfRankPoints = selfData?.rank_points ?? 0;
+    const selfRank = getRankFromPoints(selfRankPoints);
 
-    // Update all member Battle Points displays
+    $(".battle-user-points").text(`${selfPoints}`);
+    $(".battle-user-rank").text(`${selfRank}`);
+
+    // Update all member Battle Points and Ranks
     $(".battle-member-points[data-user-id]").each(async function () {
       const $el = $(this);
       const memberId = $el.data("user-id");
@@ -71,6 +93,16 @@
       const memberData = await fetchData(`users/${memberId}`);
       const memberPoints = memberData?.points ?? 0;
       $el.text(`${memberPoints}`);
+    });
+
+    $(".battle-member-rank[data-user-id]").each(async function () {
+      const $el = $(this);
+      const memberId = $el.data("user-id");
+      if (!memberId) return;
+      const memberData = await fetchData(`users/${memberId}`);
+      const memberRankPoints = memberData?.rank_points ?? 0;
+      const memberRank = getRankFromPoints(memberRankPoints);
+      $el.text(`${memberRank}`);
     });
   }
 
@@ -112,31 +144,29 @@
       return val.includes("post reply") || val.includes("create post") || val.includes("reply") || val.includes("quick reply");
     });
 
-postBtns.each(function () {
-  const $btn = $(this);
-  if ($btn.data("bp-bound")) return;
-  $btn.data("bp-bound", true);
+    postBtns.each(function () {
+      const $btn = $(this);
+      if ($btn.data("bp-bound")) return;
+      $btn.data("bp-bound", true);
 
-  $btn.on("click", async function () {
-    // Grab thread title reliably
-    let threadTitle =
-      $('#thread-title').text().trim() ||
-      $('input[name="subject"]').val()?.trim() ||
-      $('#navigation-tree a[href*="/thread/"]').last().text().trim() ||
-      document.title.split(" | ")[0].trim() ||
-      "";
+      $btn.on("click", async function () {
+        let threadTitle =
+          $('#thread-title').text().trim() ||
+          $('input[name="subject"]').val()?.trim() ||
+          $('#navigation-tree a[href*="/thread/"]').last().text().trim() ||
+          document.title.split(" | ")[0].trim() ||
+          "";
 
-    const reward = getTagValueFromSubject(threadTitle);
-    console.log("Awarding BP for reply:", reward, "thread:", threadTitle);
-    if (reward > 0) {
-      await awardBattlePoints(reward, "post_reply");
-    }
-  });
-});
-
-
-    console.log("Battle Points: post detection initialized");
+        const reward = getTagValueFromSubject(threadTitle);
+        console.log("Awarding BP for reply:", reward, "thread:", threadTitle);
+        if (reward > 0) {
+          await awardBattlePoints(reward, "post_reply");
+        }
+      });
+    });
   }
+
+  console.log("Battle Points: post detection initialized");
 
   // === STAFF EDITING MODAL ===
   function createEditModal() {
@@ -290,5 +320,3 @@ postBtns.each(function () {
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
-
-
