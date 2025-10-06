@@ -236,28 +236,19 @@
         cursor: pointer;
     }
 
-    #battle-close-btn, #battle-close-btn {
-        width: 100%;
-        margin-left: 0px;
-        margin-top: -5px;
-        background: #272727;
-    }
+        #amity-edit-modal #amity-close-btn {
+            width: 100%;
+            background: #232323;
+            margin-left: 0px;
+            margin-top: -5px;
+        }
 
-    #battle-close-btn, #battle-reset-all-btn {
-        width: 100%;
-        margin-left: 0px;
-        margin-top: -5px;
-        background: #f2495d;
-    }
-
-    #battle-reset-all-btn {
-        border-color: #232323;
-        color: #fff;
-        margin-top: 8px;
-    }
-    #battle-reset-all-btn:hover {
-        background: #a00000;
-    }
+       #amity-edit-modal #amity-reset-all-btn {
+            width: 100%;
+            background: #f2495d;
+            margin-left: 0px;
+            margin-top: -5px;
+        }
 </style>
 
 <div id="battle-edit-modal" style="display:none;">
@@ -372,6 +363,7 @@
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
+
 
 
 
