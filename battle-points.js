@@ -1,4 +1,5 @@
 (async function () {
+  // === FIREBASE INITIALIZATION ===
   const firebaseConfig = {
     apiKey: "AIzaSyA6P4vttMoSJvBAFvrv06jq2E1VGnGTYcA",
     authDomain: "battlepoints-e44ae.firebaseapp.com",
@@ -14,19 +15,20 @@
     const script = document.createElement("script");
     script.src = "https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js";
     document.head.appendChild(script);
-    await new Promise(r => (script.onload = r));
+    await new Promise((r) => (script.onload = r));
     const dbscript = document.createElement("script");
     dbscript.src = "https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js";
     document.head.appendChild(dbscript);
-    await new Promise(r => (dbscript.onload = r));
+    await new Promise((r) => (dbscript.onload = r));
   }
 
   if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
   const siteKey = "battle";
-  const ref = p => database.ref(`${siteKey}/${p}`);
-  const fetchData = async p => (await ref(p).get()).val();
+  const ref = (p) => database.ref(`${siteKey}/${p}`);
+  const fetchData = async (p) => (await ref(p).get()).val();
   const setData = async (p, d) => ref(p).set(d);
+  const updateData = async (p, d) => ref(p).update(d);
 
   const userObj = (typeof proboards !== "undefined" && proboards.data) ? proboards.data("user") :
                   (typeof pb !== "undefined" && pb.data) ? pb.data("user") : null;
@@ -34,21 +36,32 @@
   const currentUserId = String(userObj.id);
   const isStaff = !!userObj.is_staff;
 
+  const POST_TAGS = ["[PVP]", "[BATTLE]"];
   const POINTS_PER_POST = 2;
 
+  let battleResetFlag = false;
+  const resetFlagRef = "rank_reset_flag";
+
+  async function loadResetFlag() {
+    const flag = await fetchData(resetFlagRef);
+    battleResetFlag = !!flag;
+  }
+
+  // Rank calculation backwards: Z → A every 2 points
   function calculateRank(points) {
+    if (battleResetFlag) return "Z";
     const step = Math.floor(points / 2);
-    let n = 25 - step;
-    if (n < 0) n = 0;
-    return String.fromCharCode(65 + n);
+    let rankCode = 90 - step; // 90 = Z ASCII
+    if (rankCode < 65) rankCode = 65; // don't go before A
+    return String.fromCharCode(rankCode);
   }
 
   function idFromElement($el) {
-    let id = $el.attr("data-user-id") ?? $el.attr("data-battle-points") ?? $el.attr("data-battle-id") ?? $el.attr("data-battle-user");
+    let id = $el.attr("data-user-id") ?? $el.attr("data-battle-points") ?? $el.attr("data-battle-id");
     if (!id) {
-      id = $el.data("user-id") ?? $el.data("userid") ?? $el.data("userId") ?? $el.data("battle-points") ?? $el.data("battlePoints");
+      id = $el.data("user-id") ?? $el.data("userid") ?? $el.data("userId") ?? $el.data("battle-points");
     }
-    return id ? String(id) : null;
+    return id != null ? String(id) : null;
   }
 
   async function updateAllDisplays() {
@@ -66,6 +79,8 @@
       $el.text(calculateRank(all[id]?.points ?? 0));
     });
   }
+
+  window.updateBattleDisplays = updateAllDisplays;
 
   async function awardBattlePoints(uid, points = POINTS_PER_POST) {
     const key = `users/${String(uid)}`;
@@ -86,12 +101,19 @@
   }
 
   async function handleNewPost() {
-    const $title = $("h1.thread-title a");
-    if (!$title.length) return;
-    const titleText = $title.text().trim().toUpperCase();
-    if (titleText.includes("[PVP]") || titleText.includes("[BATTLE]")) {
-      await awardBattlePoints(currentUserId, POINTS_PER_POST);
+    let subject = "";
+    const threadData = (typeof proboards !== "undefined" && proboards.data) ? proboards.data("thread") : null;
+    if (threadData && threadData.subject) {
+      subject = threadData.subject.toUpperCase();
+    } else {
+      const $title = $("h1.thread-title a");
+      subject = $title.length ? $title.text().trim().toUpperCase() : "";
     }
+    const matched = POST_TAGS.some(tag => subject.includes(tag));
+    if (!matched) return;
+
+    const postAuthorId = (typeof proboards !== "undefined" && proboards.data("post")) ? String(proboards.data("post").author_id || proboards.data("post").user_id) : currentUserId;
+    if (postAuthorId) await awardBattlePoints(postAuthorId, POINTS_PER_POST);
   }
 
   function createBattleEditModal() {
@@ -148,24 +170,12 @@
           <button id="battle-add-btn">Add</button>
           <button id="battle-remove-btn">Remove</button>
         </div>
-        <label>Global Rank Reset:</label>
-        <div class="btn-group">
-          <button id="battle-global-reset-btn" style="background:#a00;">Reset All Ranks to Z</button>
-        </div>
+        <label style="color:red;">⚠️ Global Reset will reset ALL ranks to Z!</label>
+        <button id="battle-global-reset-btn" style="background:#900;">Global Reset Ranks</button>
         <button id="battle-close-btn">Close</button>
       </div>
     </div>`;
     $("body").append(modalHTML);
-
-    $("#battle-global-reset-btn").on("click", async () => {
-      if (!confirm("WARNING: This will reset ALL users' ranks to Z. This cannot be undone.")) return;
-      const allUsers = (await fetchData("users")) || {};
-      for (const uid in allUsers) {
-        allUsers[uid].rank = "Z";
-      }
-      await setData("users", allUsers);
-      updateAllDisplays();
-    });
   }
 
   function setupBattleStaffEditButtons() {
@@ -173,7 +183,7 @@
     $(".battle-edit-btn").each(function () {
       const $btn = $(this);
       const bound = $btn.data("bound");
-      const id = idFromElement($btn) || $btn.attr("data-user-id") || $btn.data("userId") || $btn.attr("data-userid");
+      const id = idFromElement($btn) || $btn.attr("data-user-id");
       if (!id) return;
       if (bound) {
         $btn.show();
@@ -216,12 +226,42 @@
             updateAllDisplays();
           }
         });
+        $("#battle-global-reset-btn").off().on("click", async () => {
+          if (!confirm("⚠️ This will reset ALL ranks to Z for every user. Continue?")) return;
+          await setData(resetFlagRef, true);
+          battleResetFlag = true;
+          updateAllDisplays();
+        });
         $("#battle-close-btn").off().on("click", () => $modal.hide());
       });
     });
   }
 
-  function initialize() {
+  const mo = new MutationObserver((mutations) => {
+    let added = false;
+    for (const m of mutations) {
+      for (const n of Array.from(m.addedNodes || [])) {
+        if (n.nodeType !== 1) continue;
+        try {
+          if (n.matches && (n.matches(".battle-member-points") || n.matches(".battle-member-rank") || n.matches(".battle-edit-btn"))) {
+            added = true;
+            break;
+          }
+        } catch (e) {}
+      }
+      if (added) break;
+    }
+    if (added) {
+      setTimeout(() => {
+        updateAllDisplays();
+        setupBattleStaffEditButtons();
+      }, 60);
+    }
+  });
+  mo.observe(document.body, { childList: true, subtree: true });
+
+  async function initialize() {
+    await loadResetFlag();
     updateAllDisplays();
     setupBattleStaffEditButtons();
     setupPostListener();
@@ -230,4 +270,3 @@
   $(document).ready(() => setTimeout(initialize, 300));
   $(document).on("pageChange", () => setTimeout(initialize, 300));
 })();
-
