@@ -112,26 +112,28 @@
       return val.includes("post reply") || val.includes("create post") || val.includes("reply") || val.includes("quick reply");
     });
 
-    postBtns.each(function () {
-      const $btn = $(this);
-      if ($btn.data("bp-bound")) return;
-      $btn.data("bp-bound", true);
+postBtns.each(function () {
+  const $btn = $(this);
+  if ($btn.data("bp-bound")) return;
+  $btn.data("bp-bound", true);
 
-      $btn.on("click", async function () {
-        // Grab thread title (from breadcrumbs or topic title)
-        const threadTitle =
-          $('#thread-title').text() ||
-          $('#subject').val() ||
-          $('#navigation-tree span[itemprop="name"]').last().text() ||
-          "";
+  $btn.on("click", async function () {
+    // Grab thread title reliably
+    let threadTitle =
+      $('#thread-title').text().trim() ||
+      $('input[name="subject"]').val()?.trim() ||
+      $('#navigation-tree a[href*="/thread/"]').last().text().trim() ||
+      document.title.split(" | ")[0].trim() ||
+      "";
 
-        const reward = getTagValueFromSubject(threadTitle);
-        console.log("Awarding BP for reply:", reward, "thread:", threadTitle);
-        if (reward > 0) {
-          await awardBattlePoints(reward, "post_reply");
-        }
-      });
-    });
+    const reward = getTagValueFromSubject(threadTitle);
+    console.log("Awarding BP for reply:", reward, "thread:", threadTitle);
+    if (reward > 0) {
+      await awardBattlePoints(reward, "post_reply");
+    }
+  });
+});
+
 
     console.log("Battle Points: post detection initialized");
   }
@@ -288,4 +290,5 @@
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
+
 
