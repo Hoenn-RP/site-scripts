@@ -84,56 +84,57 @@
   }
 
   // === EVENT DETECTION ===
-function setupThreadAndPostListeners() {
-  // --- Detect new thread creation ---
-  const threadBtns = $('input[type="submit"]').filter((_, el) => {
-    const val = $(el).val()?.toLowerCase() || "";
-    return val.includes("create thread") || val.includes("post thread") || val.includes("new thread");
-  });
-
-  threadBtns.each(function () {
-    const $btn = $(this);
-    if ($btn.data("bp-bound")) return;
-    $btn.data("bp-bound", true);
-
-    $btn.on("click", async function () {
-      const subject = $('input[name="subject"]').val() || "";
-      const reward = getTagValueFromSubject(subject);
-      if (reward > 0) {
-        await awardBattlePoints(reward, "thread_creation");
-      }
+  function setupThreadAndPostListeners() {
+    // --- Detect new thread creation ---
+    const threadBtns = $('input[type="submit"]').filter((_, el) => {
+      const val = $(el).val()?.toLowerCase() || "";
+      return val.includes("create thread") || val.includes("post thread") || val.includes("new thread");
     });
-  });
 
-  // --- Detect post replies (includes Quick Reply) ---
-  const postBtns = $('input[type="submit"], button[type="submit"]').filter((_, el) => {
-    const val = $(el).val()?.toLowerCase() || $(el).text()?.toLowerCase() || "";
-    return val.includes("post reply") || val.includes("create post") || val.includes("reply") || val.includes("quick reply");
-  });
+    threadBtns.each(function () {
+      const $btn = $(this);
+      if ($btn.data("bp-bound")) return;
+      $btn.data("bp-bound", true);
 
-  postBtns.each(function () {
-    const $btn = $(this);
-    if ($btn.data("bp-bound")) return;
-    $btn.data("bp-bound", true);
-
-    $btn.on("click", async function () {
-      // Grab thread title (from breadcrumbs or topic title)
-      const threadTitle =
-        $('#thread-title').text() ||
-        $('#subject').val() ||
-        $('#navigation-tree span[itemprop="name"]').last().text() ||
-        "";
-
-      const reward = getTagValueFromSubject(threadTitle);
-      if (reward > 0) {
-        await awardBattlePoints(reward, "post_reply");
-      }
+      $btn.on("click", async function () {
+        const subject = $('input[name="subject"]').val() || "";
+        const reward = getTagValueFromSubject(subject);
+        console.log("Awarding BP for thread:", reward, "subject:", subject);
+        if (reward > 0) {
+          await awardBattlePoints(reward, "thread_creation");
+        }
+      });
     });
-  });
-}
 
-  console.log("Battle Points: post detection initialized");
-  console.log("Awarding BP for:", reward, "subject:", subject || threadTitle);
+    // --- Detect post replies (includes Quick Reply) ---
+    const postBtns = $('input[type="submit"], button[type="submit"]').filter((_, el) => {
+      const val = $(el).val()?.toLowerCase() || $(el).text()?.toLowerCase() || "";
+      return val.includes("post reply") || val.includes("create post") || val.includes("reply") || val.includes("quick reply");
+    });
+
+    postBtns.each(function () {
+      const $btn = $(this);
+      if ($btn.data("bp-bound")) return;
+      $btn.data("bp-bound", true);
+
+      $btn.on("click", async function () {
+        // Grab thread title (from breadcrumbs or topic title)
+        const threadTitle =
+          $('#thread-title').text() ||
+          $('#subject').val() ||
+          $('#navigation-tree span[itemprop="name"]').last().text() ||
+          "";
+
+        const reward = getTagValueFromSubject(threadTitle);
+        console.log("Awarding BP for reply:", reward, "thread:", threadTitle);
+        if (reward > 0) {
+          await awardBattlePoints(reward, "post_reply");
+        }
+      });
+    });
+
+    console.log("Battle Points: post detection initialized");
+  }
 
   // === STAFF EDITING MODAL ===
   function createEditModal() {
@@ -287,6 +288,4 @@ function setupThreadAndPostListeners() {
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
-
-
 
