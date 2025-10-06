@@ -22,77 +22,79 @@
     await new Promise((r) => (dbscript.onload = r));
   }
 
-  firebase.initializeApp(firebaseConfig);
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
+  const siteKey = "battle";
+  const ref = (p) => database.ref(`${siteKey}/${p}`);
+  const fetchData = async (p) => (await ref(p).get()).val();
+  const setData = async (p, d) => ref(p).set(d);
+  const updateData = async (p, d) => ref(p).update(d);
 
-  const ref = (path) => database.ref(`battle/${path}`);
-  const fetchData = async (path) => (await ref(path).get()).val();
-  const setData = async (path, data) => ref(path).set(data);
-  const updateData = async (path, data) => ref(path).update(data);
+  const userObj = (typeof proboards !== "undefined" && proboards.data) ? proboards.data("user") :
+                  (typeof pb !== "undefined" && pb.data) ? pb.data("user") : null;
+  if (!userObj || !userObj.id) return;
+  const currentUserId = String(userObj.id);
+  const isStaff = !!userObj.is_staff;
 
-  const user = proboards.data("user");
-  if (!user || !user.id) return;
-  const currentUserId = String(user.id);
-  const isStaff = !!user.is_staff;
+  let POST_TAGS = await fetchData("tags") || { "[PVP]": 2, "[BATTLE]": 2 };
 
-  const POST_TAGS = ["[PVP]", "[BATTLE]"];
-  const POINTS_PER_POST_DEFAULT = 2;
-
-  // === HELPERS ===
-  function calculateRank(pointsSinceReset) {
-    const steps = Math.floor(pointsSinceReset / 2);
-    let charCode = 90 - steps;
-    if (charCode < 65) charCode = 65; // stops at "A"
-    return String.fromCharCode(charCode);
+  // --- rank calculation Z→A ---
+  function calculateRank(points) {
+    const maxPoints = 50;
+    if (points >= maxPoints) return "A";
+    const totalRanks = 25; // Z→A
+    const rankIndex = Math.floor(points / (maxPoints / totalRanks));
+    return String.fromCharCode(90 - rankIndex); // Z=90, Y=89...
   }
 
-  async function initSettings() {
-    let settings = await fetchData("settings");
-    if (!settings) {
-      settings = { threadTags: { "[PVP]": POINTS_PER_POST_DEFAULT, "[BATTLE]": POINTS_PER_POST_DEFAULT }, lastReset: Date.now() };
-      await setData("settings", settings);
-    }
-    return settings;
-  }
-
-  async function getUserData(userId) {
-    let data = await fetchData(`users/${userId}`);
-    if (!data) data = { points: 0, pointsSinceReset: 0 };
-    data.username ??= user.username;
-    data.display_name ??= user.name;
-    return data;
-  }
-
-  async function awardPoints(points) {
-    const data = await getUserData(currentUserId);
-    data.points += points;
-    data.pointsSinceReset += points;
-    data.rank = calculateRank(data.pointsSinceReset);
-    await setData(`users/${currentUserId}`, data);
-    updateAllDisplays();
+  function idFromElement($el) {
+    let id = $el.attr("data-user-id") ?? $el.data("user-id");
+    if (!id) id = $el.data("battle-points");
+    return id ? String(id) : null;
   }
 
   async function updateAllDisplays() {
-    const allUsers = await fetchData("users") || {};
-    $(".battle-member-points").each(function () {
-      const userId = $(this).data("user-id");
-      const val = allUsers?.[userId]?.points ?? 0;
-      $(this).text(val);
+    const all = (await fetchData("users")) || {};
+    $(".battle-member-points[data-user-id]").each(function () {
+      const id = idFromElement($(this));
+      if (!id) return;
+      $(this).text(all[id]?.points || 0);
     });
-    $(".battle-member-rank").each(function () {
-      const userId = $(this).data("user-id");
-      const val = allUsers?.[userId]?.rank ?? "Z";
-      $(this).text(val);
+    $(".battle-member-rank[data-user-id]").each(function () {
+      const id = idFromElement($(this));
+      if (!id) return;
+      $(this).text(calculateRank(all[id]?.points || 0));
     });
   }
 
+  async function awardBattlePoints(uid, points = 2) {
+    const key = `users/${String(uid)}`;
+    const cur = (await fetchData(key)) || { points: 0, posts: 0 };
+    cur.points = (cur.points || 0) + points;
+    cur.posts = (cur.posts || 0) + 1;
+    await setData(key, cur);
+    await updateAllDisplays();
+  }
+
+  function setupPostListener() {
+    $(document).on("ajax_success", function (event, data, status, xhr) {
+      const url = xhr?.responseURL || "";
+      if (url.includes("/post/") || url.includes("/thread/") || url.includes("/post/create")) {
+        setTimeout(handleNewPost, 800);
+      }
+    });
+    $(document).on("pageChange", () => setTimeout(init, 300));
+  }
+
   async function handleNewPost() {
-    const title = $("h1.thread-title a").text().toUpperCase() || "";
-    const settings = await initSettings();
-    const matchedTag = Object.keys(settings.threadTags).find(tag => title.includes(tag));
-    if (!matchedTag) return;
-    const pointsToAdd = settings.threadTags[matchedTag] || POINTS_PER_POST_DEFAULT;
-    await awardPoints(pointsToAdd);
+    const titleText = $("h1.thread-title a").text().trim().toUpperCase();
+    for (let tag in POST_TAGS) {
+      if (titleText.includes(tag)) {
+        await awardBattlePoints(currentUserId, POST_TAGS[tag]);
+        console.log(`[BattlePoints] awarded ${POST_TAGS[tag]} points for ${tag}`);
+        return;
+      }
+    }
   }
 
   function createBattleEditModal() {
@@ -136,12 +138,22 @@
     <div id="battle-edit-modal" style="display:none;">
       <div class="title-bar"><span>Battle Point Menu</span></div>
       <div class="modal-body">
-        <label>Tags & Values:</label>
-        <div id="battle-tag-list"></div>
-        <button id="battle-add-tag">Add New Tag</button>
-        <button id="battle-save-tags">Save Tags</button>
-        <label style="color:red;">⚠ Global Reset will reset ranks to Z</label>
-        <button id="battle-reset-ranks">Global Reset Ranks</button>
+        <label>Set New Value:</label>
+        <div class="btn-group">
+          <input type="number" id="battle-set-value" />
+          <button id="battle-set-btn">Set</button>
+          <button id="battle-reset-btn">Reset</button>
+        </div>
+        <label>Add or Remove:</label>
+        <div class="btn-group">
+          <input type="number" id="battle-change-value" />
+          <button id="battle-add-btn">Add</button>
+          <button id="battle-remove-btn">Remove</button>
+        </div>
+        <label>Global Rank Reset & Tag Points</label>
+        <div class="btn-group">
+          <button id="battle-global-reset-btn">Global Reset Ranks</button>
+        </div>
         <button id="battle-close-btn">Close</button>
       </div>
     </div>`;
@@ -150,73 +162,76 @@
 
   function setupBattleStaffEditButtons() {
     if (!isStaff) return;
-    $(".battle-edit-btn[data-user-id]").each(function () {
+    $(".battle-edit-btn").each(function () {
       const $btn = $(this);
-      const memberId = $btn.data("user-id");
-      if (!$btn.data("bound")) {
-        $btn.data("bound", true).show();
-        $btn.on("click", async function () {
-          createBattleEditModal();
-          const $modal = $("#battle-edit-modal");
-          $modal.show();
-
-          const settings = await initSettings();
-          const tagList = $("#battle-tag-list");
-          tagList.empty();
-          for (const [tag, val] of Object.entries(settings.threadTags)) {
-            tagList.append(`<div><input class="battle-tag" value="${tag}" /> <input type="number" class="battle-tag-value" value="${val}" /></div>`);
-          }
-
-          $("#battle-add-tag").off().on("click", () => {
-            tagList.append(`<div><input class="battle-tag" value="[NEW]" /> <input type="number" class="battle-tag-value" value="1" /></div>`);
-          });
-
-          $("#battle-save-tags").off().on("click", async () => {
-            const newTags = {};
-            tagList.find("div").each(function () {
-              const tag = $(this).find(".battle-tag").val().trim();
-              const val = parseInt($(this).find(".battle-tag-value").val()) || POINTS_PER_POST_DEFAULT;
-              if (tag) newTags[tag] = val;
-            });
-            await updateData("settings", { threadTags: newTags });
-            alert("Tags saved!");
-            $modal.hide();
-          });
-
-          $("#battle-reset-ranks").off().on("click", async () => {
-            if (!confirm("⚠ Are you sure? This will reset all ranks to Z!")) return;
-            const allUsers = await fetchData("users");
-            for (const id in allUsers) {
-              await updateData(`users/${id}`, { pointsSinceReset: 0, rank: "Z" });
-            }
-            await updateData("settings", { lastReset: Date.now() });
+      const bound = $btn.data("bound");
+      const id = idFromElement($btn);
+      if (!id) return;
+      if (bound) {
+        $btn.show();
+        return;
+      }
+      $btn.data("bound", true).show();
+      $btn.off("click").on("click", async function () {
+        createBattleEditModal();
+        const $modal = $("#battle-edit-modal");
+        $modal.show();
+        let data = (await fetchData(`users/${id}`)) || { points: 0, posts: 0 };
+        $("#battle-set-value").val(data.points);
+        $("#battle-change-value").val("");
+        $("#battle-set-btn").off().on("click", async () => {
+          const v = parseInt($("#battle-set-value").val());
+          if (!isNaN(v)) {
+            data.points = v;
+            await setData(`users/${id}`, data);
             updateAllDisplays();
-            alert("Ranks reset!");
-            $modal.hide();
-          });
-
-          $("#battle-close-btn").off().on("click", () => $modal.hide());
+          }
         });
-      }
+        $("#battle-reset-btn").off().on("click", async () => {
+          data = { points: 0, posts: 0 };
+          await setData(`users/${id}`, data);
+          updateAllDisplays();
+        });
+        $("#battle-add-btn").off().on("click", async () => {
+          const add = parseInt($("#battle-change-value").val());
+          if (!isNaN(add)) {
+            data.points = (data.points || 0) + add;
+            await setData(`users/${id}`, data);
+            updateAllDisplays();
+          }
+        });
+        $("#battle-remove-btn").off().on("click", async () => {
+          const rem = parseInt($("#battle-change-value").val());
+          if (!isNaN(rem)) {
+            data.points = Math.max(0, (data.points || 0) - rem);
+            await setData(`users/${id}`, data);
+            updateAllDisplays();
+          }
+        });
+        $("#battle-global-reset-btn").off().on("click", async () => {
+          if (!confirm("⚠️ This will reset all ranks to Z for all users. Proceed?")) return;
+          await setData("ranksReset", Date.now());
+          updateAllDisplays();
+        });
+        $("#battle-close-btn").off().on("click", () => $modal.hide());
+      });
     });
   }
 
-  function setupPostListener() {
-    $(document).on("ajax_success", function (event, data, status, xhr) {
-      const url = xhr?.responseURL || "";
-      if (url.includes("/post/") || url.includes("/thread/")) {
-        setTimeout(handleNewPost, 500);
-      }
-    });
-  }
+  const mo = new MutationObserver(() => {
+    updateAllDisplays();
+    setupBattleStaffEditButtons();
+  });
+  mo.observe(document.body, { childList: true, subtree: true });
 
-  async function initBattle() {
-    await initSettings();
-    await updateAllDisplays();
+  async function init() {
+    POST_TAGS = await fetchData("tags") || { "[PVP]": 2, "[BATTLE]": 2 };
+    updateAllDisplays();
     setupBattleStaffEditButtons();
     setupPostListener();
   }
 
-  $(document).ready(() => setTimeout(initBattle, 300));
-  $(document).on("pageChange", () => setTimeout(initBattle, 300));
+  $(document).ready(() => setTimeout(init, 300));
 })();
+
+
