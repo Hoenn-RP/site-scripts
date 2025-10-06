@@ -132,6 +132,9 @@ function setupThreadAndPostListeners() {
   });
 }
 
+  console.log("Battle Points: post detection initialized");
+  console.log("Awarding BP for:", reward, "subject:", subject || threadTitle);
+
   // === STAFF EDITING MODAL ===
   function createEditModal() {
     if ($('#bp-edit-modal').length) return;
@@ -284,5 +287,6 @@ function setupThreadAndPostListeners() {
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
+
 
 
