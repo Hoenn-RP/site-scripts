@@ -15,18 +15,18 @@
     const script = document.createElement("script");
     script.src = "https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js";
     document.head.appendChild(script);
-    await new Promise((r) => (script.onload = r));
+    await new Promise(r => (script.onload = r));
     const dbscript = document.createElement("script");
     dbscript.src = "https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js";
     document.head.appendChild(dbscript);
-    await new Promise((r) => (dbscript.onload = r));
+    await new Promise(r => (dbscript.onload = r));
   }
 
   if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
   const siteKey = "battle";
-  const ref = (p) => database.ref(`${siteKey}/${p}`);
-  const fetchData = async (p) => (await ref(p).get()).val();
+  const ref = p => database.ref(`${siteKey}/${p}`);
+  const fetchData = async p => (await ref(p).get()).val();
   const setData = async (p, d) => ref(p).set(d);
   const updateData = async (p, d) => ref(p).update(d);
 
@@ -39,29 +39,23 @@
   const POST_TAGS = ["[PVP]", "[BATTLE]"];
   const POINTS_PER_POST = 2;
 
-  let battleResetFlag = false;
-  const resetFlagRef = "rank_reset_flag";
-
-  async function loadResetFlag() {
-    const flag = await fetchData(resetFlagRef);
-    battleResetFlag = !!flag;
-  }
-
-  // Rank calculation backwards: Z → A every 2 points
   function calculateRank(points) {
-    if (battleResetFlag) return "Z";
     const step = Math.floor(points / 2);
-    let rankCode = 90 - step; // 90 = Z ASCII
-    if (rankCode < 65) rankCode = 65; // don't go before A
-    return String.fromCharCode(rankCode);
+    let rank = "";
+    let n = step;
+    do {
+      rank = String.fromCharCode(90 - (n % 26)) + rank; // Starts at Z
+      n = Math.floor(n / 26) - 1;
+    } while (n >= 0);
+    return rank || "Z";
   }
 
   function idFromElement($el) {
-    let id = $el.attr("data-user-id") ?? $el.attr("data-battle-points") ?? $el.attr("data-battle-id");
+    let id = $el.attr("data-user-id") ?? $el.attr("data-battle-points") ?? $el.attr("data-battle-id") ?? $el.attr("data-battle-user");
     if (!id) {
-      id = $el.data("user-id") ?? $el.data("userid") ?? $el.data("userId") ?? $el.data("battle-points");
+      id = $el.data("user-id") ?? $el.data("userid") ?? $el.data("userId") ?? $el.data("battle-points") ?? $el.data("battlePoints");
     }
-    return id != null ? String(id) : null;
+    return id == null ? null : String(id);
   }
 
   async function updateAllDisplays() {
@@ -70,17 +64,17 @@
       const $el = $(this);
       const id = idFromElement($el);
       if (!id) return;
-      $el.text(all[id]?.points ?? 0);
+      const pts = all[id]?.points ?? 0;
+      $el.text(pts);
     });
     $(".battle-member-rank[data-user-id]").each(function () {
       const $el = $(this);
       const id = idFromElement($el);
       if (!id) return;
-      $el.text(calculateRank(all[id]?.points ?? 0));
+      const pts = all[id]?.points ?? 0;
+      $el.text(calculateRank(pts));
     });
   }
-
-  window.updateBattleDisplays = updateAllDisplays;
 
   async function awardBattlePoints(uid, points = POINTS_PER_POST) {
     const key = `users/${String(uid)}`;
@@ -88,7 +82,7 @@
     cur.points = (cur.points || 0) + points;
     cur.posts = (cur.posts || 0) + 1;
     await setData(key, cur);
-    await updateAllDisplays();
+    updateAllDisplays();
   }
 
   function setupPostListener() {
@@ -98,6 +92,12 @@
         setTimeout(handleNewPost, 800);
       }
     });
+    $(document).on("pageChange", function () {
+      setTimeout(() => {
+        updateAllDisplays();
+        setupBattleStaffEditButtons();
+      }, 250);
+    });
   }
 
   async function handleNewPost() {
@@ -106,14 +106,22 @@
     if (threadData && threadData.subject) {
       subject = threadData.subject.toUpperCase();
     } else {
-      const $title = $("h1.thread-title a");
+      const $title = $("h1.thread-title, .thread-title");
       subject = $title.length ? $title.text().trim().toUpperCase() : "";
     }
+
     const matched = POST_TAGS.some(tag => subject.includes(tag));
     if (!matched) return;
 
-    const postAuthorId = (typeof proboards !== "undefined" && proboards.data("post")) ? String(proboards.data("post").author_id || proboards.data("post").user_id) : currentUserId;
-    if (postAuthorId) await awardBattlePoints(postAuthorId, POINTS_PER_POST);
+    let postAuthorId = currentUserId;
+    if (typeof proboards !== "undefined" && proboards.data("post")) {
+      postAuthorId = String(proboards.data("post").author_id || proboards.data("post").user_id || currentUserId);
+    }
+
+    if (postAuthorId) {
+      await awardBattlePoints(postAuthorId, POINTS_PER_POST);
+      console.log(`[BattlePoints] Awarded ${POINTS_PER_POST} points for posting in: ${subject}`);
+    }
   }
 
   function createBattleEditModal() {
@@ -170,8 +178,8 @@
           <button id="battle-add-btn">Add</button>
           <button id="battle-remove-btn">Remove</button>
         </div>
-        <label style="color:red;">⚠️ Global Reset will reset ALL ranks to Z!</label>
-        <button id="battle-global-reset-btn" style="background:#900;">Global Reset Ranks</button>
+        <label style="color:red;">⚠ Global Reset will reset everyone's rank to Z without touching points</label>
+        <button id="battle-global-reset-btn" style="background:red;color:white;">Global Reset Ranks</button>
         <button id="battle-close-btn">Close</button>
       </div>
     </div>`;
@@ -183,7 +191,7 @@
     $(".battle-edit-btn").each(function () {
       const $btn = $(this);
       const bound = $btn.data("bound");
-      const id = idFromElement($btn) || $btn.attr("data-user-id");
+      const id = idFromElement($btn) || $btn.attr("data-user-id") || $btn.data("userId") || $btn.attr("data-userid");
       if (!id) return;
       if (bound) {
         $btn.show();
@@ -197,6 +205,7 @@
         let data = (await fetchData(`users/${id}`)) || { points: 0, posts: 0 };
         $("#battle-set-value").val(data.points);
         $("#battle-change-value").val("");
+
         $("#battle-set-btn").off().on("click", async () => {
           const v = parseInt($("#battle-set-value").val());
           if (!isNaN(v)) {
@@ -205,11 +214,13 @@
             updateAllDisplays();
           }
         });
+
         $("#battle-reset-btn").off().on("click", async () => {
           data = { points: 0, posts: 0 };
           await setData(`users/${id}`, data);
           updateAllDisplays();
         });
+
         $("#battle-add-btn").off().on("click", async () => {
           const add = parseInt($("#battle-change-value").val());
           if (!isNaN(add)) {
@@ -218,6 +229,7 @@
             updateAllDisplays();
           }
         });
+
         $("#battle-remove-btn").off().on("click", async () => {
           const rem = parseInt($("#battle-change-value").val());
           if (!isNaN(rem)) {
@@ -226,24 +238,30 @@
             updateAllDisplays();
           }
         });
+
         $("#battle-global-reset-btn").off().on("click", async () => {
-          if (!confirm("⚠️ This will reset ALL ranks to Z for every user. Continue?")) return;
-          await setData(resetFlagRef, true);
-          battleResetFlag = true;
+          if (!confirm("⚠ This will reset EVERYONE'S rank to Z. Are you sure?")) return;
+          const allUsers = await fetchData("users") || {};
+          for (const uid in allUsers) {
+            await updateData(`users/${uid}`, { rank: "Z" });
+          }
           updateAllDisplays();
+          alert("Ranks have been reset to Z for all users.");
         });
+
         $("#battle-close-btn").off().on("click", () => $modal.hide());
       });
     });
   }
 
-  const mo = new MutationObserver((mutations) => {
+  const mo = new MutationObserver(mutations => {
     let added = false;
     for (const m of mutations) {
       for (const n of Array.from(m.addedNodes || [])) {
         if (n.nodeType !== 1) continue;
         try {
-          if (n.matches && (n.matches(".battle-member-points") || n.matches(".battle-member-rank") || n.matches(".battle-edit-btn"))) {
+          if (n.matches && (n.matches(".battle-member-points") || n.matches(".battle-member-rank") || n.matches(".battle-edit-btn") ||
+              n.querySelector(".battle-member-points") || n.querySelector(".battle-member-rank") || n.querySelector(".battle-edit-btn") )) {
             added = true;
             break;
           }
@@ -260,8 +278,7 @@
   });
   mo.observe(document.body, { childList: true, subtree: true });
 
-  async function initialize() {
-    await loadResetFlag();
+  function initialize() {
     updateAllDisplays();
     setupBattleStaffEditButtons();
     setupPostListener();
@@ -270,3 +287,4 @@
   $(document).ready(() => setTimeout(initialize, 300));
   $(document).on("pageChange", () => setTimeout(initialize, 300));
 })();
+
