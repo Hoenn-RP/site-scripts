@@ -22,21 +22,25 @@
     await new Promise((r) => (dbscript.onload = r));
   }
 
-  firebase.initializeApp(firebaseConfig);
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
-
   const siteKey = "battle";
-  const ref = (path) => database.ref(`${siteKey}/${path}`);
-  const fetchData = async (path) => (await ref(path).get()).val();
-  const setData = async (path, data) => ref(path).set(data);
+  const ref = (p) => database.ref(`${siteKey}/${p}`);
+  const fetchData = async (p) => (await ref(p).get()).val();
+  const setData = async (p, d) => ref(p).set(d);
+  const updateData = async (p, d) => ref(p).update(d);
 
-  const isStaff = pb.data("user").is_staff;
-  const currentUserId = pb.data("user").id;
+  // Robust user detection (proboards or pb)
+  const userObj = (typeof proboards !== "undefined" && proboards.data) ? proboards.data("user") :
+                  (typeof pb !== "undefined" && pb.data) ? pb.data("user") : null;
+  if (!userObj || !userObj.id) return;
+  const currentUserId = String(userObj.id);
+  const isStaff = !!userObj.is_staff;
 
   const POST_TAGS = ["[PVP]", "[BATTLE]"];
   const POINTS_PER_POST = 2;
 
-  // === RANK CALCULATION ===
+  // --- rank calculation (every 2 points -> next letter, supports beyond Z like AA) ---
   function calculateRank(points) {
     const step = Math.floor(points / 2);
     let rank = "";
@@ -48,120 +52,204 @@
     return rank || "A";
   }
 
-  async function initBattle() {
-    await updateAllDisplays();
-    setupBattleStaffEditButtons();
-    setupPostListener();
+  // --- normalize IDs pulled from DOM elements ---
+  function idFromElement($el) {
+    // check common attribute names used in various snippets
+    let id = $el.attr("data-user-id") ?? $el.attr("data-battle-points") ?? $el.attr("data-battle-id") ?? $el.attr("data-battle-user");
+    if (!id) {
+      // jQuery .data may have converted names
+      id = $el.data("user-id") ?? $el.data("userid") ?? $el.data("userId") ?? $el.data("battle-points") ?? $el.data("battlePoints");
+    }
+    if (id == null) return null;
+    return String(id);
   }
 
-  // === POST DETECTION ===
+  // --- update displays robustly (handles multiple attribute name patterns) ---
+  async function updateAllDisplays() {
+    try {
+      const all = (await fetchData("users")) || {};
+
+      // 1) Elements with class .battle-member-points (Amity-style)
+      $(".battle-member-points[data-user-id]").each(function () {
+        const $el = $(this);
+        const id = idFromElement($el);
+        if (!id) return;
+        const pts = all[id]?.points ?? 0;
+        $el.text(pts);
+      });
+
+      // 2) Also handle elements using attribute data-battle-points (alternate)
+      $("[data-battle-points]").each(function () {
+        const $el = $(this);
+        // attribute might store id directly
+        const idAttr = $el.attr("data-battle-points");
+        const id = idAttr ? String(idAttr) : idFromElement($el);
+        if (!id) return;
+        const pts = all[id]?.points ?? 0;
+        $el.text(pts);
+      });
+
+      // 3) Rank displays - Amity-style rank element
+      $(".battle-member-rank[data-user-id]").each(function () {
+        const $el = $(this);
+        const id = idFromElement($el);
+        if (!id) return;
+        const pts = all[id]?.points ?? 0;
+        $el.text(calculateRank(pts));
+      });
+
+      // 4) Alternate rank attribute
+      $("[data-battle-rank]").each(function () {
+        const $el = $(this);
+        const idAttr = $el.attr("data-battle-rank");
+        const id = idAttr ? String(idAttr) : idFromElement($el);
+        if (!id) return;
+        const pts = all[id]?.points ?? 0;
+        $el.text(calculateRank(pts));
+      });
+
+      // Also update short current-user displays if you use them:
+      $(".battle-user-points").each(function () {
+        const $el = $(this);
+        const pts = all[currentUserId]?.points ?? 0;
+        $el.text(pts);
+      });
+      $(".battle-rank").each(function () {
+        const $el = $(this);
+        const rank = calculateRank(all[currentUserId]?.points ?? 0);
+        $el.text(rank);
+      });
+    } catch (err) {
+      console.error("[BattlePoints] updateAllDisplays error:", err);
+    }
+  }
+
+  // expose helper for debugging
+  window.updateBattleDisplays = updateAllDisplays;
+
+  // --- award function (no cooldown) ---
+  async function awardBattlePoints(uid, points = POINTS_PER_POST) {
+    const key = `users/${String(uid)}`;
+    const cur = (await fetchData(key)) || { points: 0, posts: 0 };
+    cur.points = (cur.points || 0) + points;
+    cur.posts = (cur.posts || 0) + 1;
+    await setData(key, cur);
+    await updateAllDisplays();
+  }
+
+  // --- post detection (ProBoards AJAX) ---
   function setupPostListener() {
     $(document).on("ajax_success", function (event, data, status, xhr) {
-      const url = xhr?.responseURL || "";
-      if (url.includes("/post/") || url.includes("/thread/")) {
-        setTimeout(handleNewPost, 1000);
+      try {
+        const url = xhr?.responseURL || "";
+        if (url.includes("/post/") || url.includes("/thread/") || url.includes("/post/create")) {
+          setTimeout(handleNewPost, 800);
+        }
+      } catch (e) {
+        console.error("[BattlePoints] ajax_success handler error", e);
       }
+    });
+
+    // also update displays on pageChange (ProBoards)
+    $(document).on("pageChange", function () {
+      setTimeout(() => {
+        updateAllDisplays();
+        setupBattleStaffEditButtons();
+      }, 250);
     });
   }
 
   async function handleNewPost() {
     const $title = $("h1.thread-title a");
     if (!$title.length) return;
-
     const titleText = $title.text().trim().toUpperCase();
-    const matchedTag = POST_TAGS.find((tag) => titleText.includes(tag));
-    if (!matchedTag) return;
-
-    const userRef = `users/${currentUserId}`;
-    let userData = (await fetchData(userRef)) || { points: 0, posts: 0 };
-    userData.points += POINTS_PER_POST;
-    userData.posts += 1;
-
-    await setData(userRef, userData);
-    console.log(`[Battle Points] +${POINTS_PER_POST} for ${matchedTag} thread!`);
-    updateAllDisplays();
+    const matched = POST_TAGS.find(t => titleText.includes(t));
+    if (!matched) return;
+    await awardBattlePoints(currentUserId, POINTS_PER_POST);
+    console.log(`[BattlePoints] awarded ${POINTS_PER_POST} for posting in ${matched}`);
   }
 
-  // === DISPLAY ===
-  async function updateAllDisplays() {
-    const all = await fetchData("users");
-    if (!all) return;
-
-    $(".battle-member-points[data-user-id]").each(function () {
-      const $el = $(this);
-      const id = $el.data("user-id");
-      const val = all?.[id]?.points ?? 0;
-      $el.text(val);
-    });
-
-    $(".battle-member-rank[data-user-id]").each(function () {
-      const $el = $(this);
-      const id = $el.data("user-id");
-      const val = all?.[id]?.points ?? 0;
-      const rank = calculateRank(val);
-      $el.text(rank);
-    });
-  }
-
-  // === STAFF EDITING (with Amity-style modal) ===
+  // --- Staff edit modal (Amity-styled) ---
   function createBattleEditModal() {
     if ($("#battle-edit-modal").length) return;
     const modalHTML = `
-      <div id="battle-edit-modal" style="
-        position: fixed;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        background: #1e1e1e;
-        color: #eee;
-        border-radius: 12px;
-        padding: 20px 25px;
-        box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
-        font-family: 'Roboto', sans-serif;
-        font-size: 14px;
-        z-index: 9999;
-        display: none;
-        max-width: 320px;
-      ">
-        <div style="font-weight:700; font-size:18px; margin-bottom:12px; text-align:center; color:#90caf9;">Edit Battle Points</div>
-        <label style="font-weight:600;">Set New Value:</label><br>
-        <input type="number" id="battle-set-value" style="width:100%; margin-bottom:8px; padding:5px; border:1px solid #444; background:#2a2a2a; color:#fff; border-radius:6px;">
-        <div style="text-align:center; margin-bottom:10px;">
-          <button id="battle-set-btn" style="margin:3px; padding:5px 12px; background:#388e3c; color:#fff; border:none; border-radius:6px; cursor:pointer;">Set</button>
-          <button id="battle-reset-btn" style="margin:3px; padding:5px 12px; background:#c62828; color:#fff; border:none; border-radius:6px; cursor:pointer;">Reset</button>
-        </div>
+    <style>
+      #battle-edit-modal {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 320px;
+          background: #2b2b2b;
+          border: 1px solid #232323;
+          border-radius: 4px;
+          font-family: 'Roboto', sans-serif;
+          color: #fff;
+          z-index: 10000;
+      }
+      #battle-edit-modal .title-bar {
+          background-color: #272727;
+          background-image: url(https://image.ibb.co/dMFuMc/flower.png);
+          background-repeat: no-repeat;
+          background-position: center right;
+          padding: 8px 12px;
+          border-bottom: 1px solid #232323;
+          font: bold 9px 'Quattrocento Sans', sans-serif;
+          color: #aaa !important;
+          text-transform: uppercase;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+      }
+      #battle-edit-modal .modal-body { padding: 12px; }
+      #battle-edit-modal label { font: bold 9px Roboto; letter-spacing: 2px; color: #aaa; text-transform: uppercase; display:block; margin-top:10px; margin-left:2px; }
+      #battle-edit-modal input[type="number"] { width:100%; margin-top:5px; margin-bottom:10px; padding:6px; background:#303030; border:1px solid #232323; color:#aaa; border-radius:3px; overflow:hidden; }
+      #battle-edit-modal .btn-group { display:flex; gap:6px; margin-bottom:10px; }
+      #battle-edit-modal button { border:1px solid #232323; border-radius:3px; background:#272727; text-transform:uppercase; font:bold 12px Roboto; color:#aaa; height:29px; margin-top:5px; line-height:19px; letter-spacing:1px; cursor:pointer; }
+      #battle-edit-modal #battle-close-btn { width:100%; background:#232323; margin-left:0px; margin-top:-5px; }
+    </style>
 
-        <label style="font-weight:600;">Modify Points:</label><br>
-        <input type="number" id="battle-change-value" style="width:100%; margin-bottom:8px; padding:5px; border:1px solid #444; background:#2a2a2a; color:#fff; border-radius:6px;">
-        <div style="text-align:center; margin-bottom:10px;">
-          <button id="battle-add-btn" style="margin:3px; padding:5px 12px; background:#1976d2; color:#fff; border:none; border-radius:6px; cursor:pointer;">Add</button>
-          <button id="battle-remove-btn" style="margin:3px; padding:5px 12px; background:#f57c00; color:#fff; border:none; border-radius:6px; cursor:pointer;">Remove</button>
+    <div id="battle-edit-modal" style="display:none;">
+      <div class="title-bar"><span>Edit Battle Points</span></div>
+      <div class="modal-body">
+        <label>Set New Value:</label>
+        <div class="btn-group">
+          <input type="number" id="battle-set-value" />
+          <button id="battle-set-btn">Set</button>
+          <button id="battle-reset-btn">Reset</button>
         </div>
-
-        <div style="text-align:center;">
-          <button id="battle-close-btn" style="margin-top:5px; padding:6px 12px; width:100%; background:#555; color:#fff; border:none; border-radius:6px; cursor:pointer;">Close</button>
+        <label>Add or Remove:</label>
+        <div class="btn-group">
+          <input type="number" id="battle-change-value" />
+          <button id="battle-add-btn">Add</button>
+          <button id="battle-remove-btn">Remove</button>
         </div>
-      </div>`;
+        <button id="battle-close-btn">Close</button>
+      </div>
+    </div>`;
     $("body").append(modalHTML);
   }
 
+  // --- Staff edit buttons (shows only for staff, matches Amity markup) ---
   function setupBattleStaffEditButtons() {
     if (!isStaff) return;
-
-    $(".battle-edit-btn[data-user-id]").each(function () {
+    $(".battle-edit-btn").each(function () {
       const $btn = $(this);
-      const id = $btn.data("user-id");
-      if ($btn.data("bound")) return;
+      const bound = $btn.data("bound");
+      const id = idFromElement($btn) || $btn.attr("data-user-id") || $btn.data("userId") || $btn.attr("data-userid");
+      if (!id) return;
+      if (bound) {
+        $btn.show();
+        return;
+      }
       $btn.data("bound", true).show();
-
-      $btn.on("click", async function () {
+      $btn.off("click").on("click", async function () {
         createBattleEditModal();
         const $modal = $("#battle-edit-modal");
         $modal.show();
-
-        let data = (await fetchData(`users/${id}`)) || { points: 0 };
+        let data = (await fetchData(`users/${id}`)) || { points: 0, posts: 0 };
         $("#battle-set-value").val(data.points);
         $("#battle-change-value").val("");
-
         $("#battle-set-btn").off().on("click", async () => {
           const v = parseInt($("#battle-set-value").val());
           if (!isNaN(v)) {
@@ -170,36 +258,66 @@
             updateAllDisplays();
           }
         });
-
-        $("#battle-add-btn").off().on("click", async () => {
-          const add = parseInt($("#battle-change-value").val());
-          if (!isNaN(add)) {
-            data.points += add;
-            await setData(`users/${id}`, data);
-            updateAllDisplays();
-          }
-        });
-
-        $("#battle-remove-btn").off().on("click", async () => {
-          const rem = parseInt($("#battle-change-value").val());
-          if (!isNaN(rem)) {
-            data.points -= rem;
-            if (data.points < 0) data.points = 0;
-            await setData(`users/${id}`, data);
-            updateAllDisplays();
-          }
-        });
-
         $("#battle-reset-btn").off().on("click", async () => {
           data = { points: 0, posts: 0 };
           await setData(`users/${id}`, data);
           updateAllDisplays();
         });
-
+        $("#battle-add-btn").off().on("click", async () => {
+          const add = parseInt($("#battle-change-value").val());
+          if (!isNaN(add)) {
+            data.points = (data.points || 0) + add;
+            await setData(`users/${id}`, data);
+            updateAllDisplays();
+          }
+        });
+        $("#battle-remove-btn").off().on("click", async () => {
+          const rem = parseInt($("#battle-change-value").val());
+          if (!isNaN(rem)) {
+            data.points = Math.max(0, (data.points || 0) - rem);
+            await setData(`users/${id}`, data);
+            updateAllDisplays();
+          }
+        });
         $("#battle-close-btn").off().on("click", () => $modal.hide());
       });
     });
   }
 
-  initBattle();
+  // --- MutationObserver to catch late-inserted profile elements ---
+  const mo = new MutationObserver((mutations) => {
+    let added = false;
+    for (const m of mutations) {
+      for (const n of Array.from(m.addedNodes || [])) {
+        if (n.nodeType !== 1) continue;
+        try {
+          if (n.matches && (n.matches(".battle-member-points") || n.matches(".battle-member-rank") || n.matches(".battle-edit-btn") ||
+              n.querySelector(".battle-member-points") || n.querySelector(".battle-member-rank") || n.querySelector(".battle-edit-btn") )) {
+            added = true;
+            break;
+          }
+        } catch(e) {}
+      }
+      if (added) break;
+    }
+    if (added) {
+      setTimeout(() => {
+        updateAllDisplays();
+        setupBattleStaffEditButtons();
+      }, 60);
+    }
+  });
+  mo.observe(document.body, { childList: true, subtree: true });
+
+  // --- init ---
+  function initialize() {
+    updateAllDisplays();
+    setupBattleStaffEditButtons();
+    setupPostListener();
+  }
+
+  $(document).ready(() => setTimeout(initialize, 300));
+  // also re-init when ProBoards changes page
+  $(document).on("pageChange", () => setTimeout(initialize, 300));
 })();
+
