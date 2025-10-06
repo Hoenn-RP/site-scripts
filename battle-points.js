@@ -1,5 +1,4 @@
 (async function () {
-  // === FIREBASE INITIALIZATION ===
   const firebaseConfig = {
     apiKey: "AIzaSyA6P4vttMoSJvBAFvrv06jq2E1VGnGTYcA",
     authDomain: "battlepoints-e44ae.firebaseapp.com",
@@ -44,7 +43,7 @@
     let rank = "";
     let n = step;
     do {
-      rank = String.fromCharCode(90 - (n % 26)) + rank; // Starts at Z
+      rank = String.fromCharCode(90 - (n % 26)) + rank;
       n = Math.floor(n / 26) - 1;
     } while (n >= 0);
     return rank || "Z";
@@ -86,81 +85,52 @@
   }
 
   function setupPostListener() {
-    $(document).on("ajax_success", function (event, data, status, xhr) {
+    $(document).on("ajax_success", async (event, data, status, xhr) => {
       const url = xhr?.responseURL || "";
       if (url.includes("/post/") || url.includes("/thread/") || url.includes("/post/create")) {
         setTimeout(handleNewPost, 800);
       }
     });
-    $(document).on("pageChange", function () {
-      setTimeout(() => {
-        updateAllDisplays();
-        setupBattleStaffEditButtons();
-      }, 250);
-    });
+    $(document).on("pageChange", () => setTimeout(() => {
+      updateAllDisplays();
+      setupBattleStaffEditButtons();
+    }, 250));
   }
 
   async function handleNewPost() {
-    let subject = "";
-    const threadData = (typeof proboards !== "undefined" && proboards.data) ? proboards.data("thread") : null;
-    if (threadData && threadData.subject) {
-      subject = threadData.subject.toUpperCase();
-    } else {
+    let threadSubject = "";
+    try {
+      threadSubject = proboards.data("thread")?.subject?.toUpperCase() || "";
+    } catch(e) {}
+    if (!threadSubject) {
       const $title = $("h1.thread-title, .thread-title");
-      subject = $title.length ? $title.text().trim().toUpperCase() : "";
+      if ($title.length) threadSubject = $title.text().trim().toUpperCase();
     }
-
-    const matched = POST_TAGS.some(tag => subject.includes(tag));
+    const matched = POST_TAGS.some(tag => threadSubject.includes(tag));
     if (!matched) return;
 
     let postAuthorId = currentUserId;
-    if (typeof proboards !== "undefined" && proboards.data("post")) {
-      postAuthorId = String(proboards.data("post").author_id || proboards.data("post").user_id || currentUserId);
-    }
+    try {
+      postAuthorId = String(proboards.data("post")?.author_id || proboards.data("post")?.user_id || currentUserId);
+    } catch(e) {}
+    if (!postAuthorId) return;
 
-    if (postAuthorId) {
-      await awardBattlePoints(postAuthorId, POINTS_PER_POST);
-      console.log(`[BattlePoints] Awarded ${POINTS_PER_POST} points for posting in: ${subject}`);
-    }
+    await awardBattlePoints(postAuthorId, POINTS_PER_POST);
+    console.log(`[BattlePoints] Awarded ${POINTS_PER_POST} points for posting in: ${threadSubject}`);
   }
 
   function createBattleEditModal() {
     if ($("#battle-edit-modal").length) return;
     const modalHTML = `
     <style>
-      #battle-edit-modal {
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 320px;
-          background: #2b2b2b;
-          border: 1px solid #232323;
-          border-radius: 4px;
-          font-family: 'Roboto', sans-serif;
-          color: #fff;
-          z-index: 10000;
-      }
-      #battle-edit-modal .title-bar {
-          background-color: #272727;
-          background-image: url(https://image.ibb.co/dMFuMc/flower.png);
-          background-repeat: no-repeat;
-          background-position: center right;
-          padding: 8px 12px;
-          border-bottom: 1px solid #232323;
-          font: bold 9px 'Quattrocento Sans', sans-serif;
-          color: #aaa !important;
-          text-transform: uppercase;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-      }
-      #battle-edit-modal .modal-body { padding: 12px; }
-      #battle-edit-modal label { font: bold 9px Roboto; letter-spacing: 2px; color: #aaa; text-transform: uppercase; display:block; margin-top:10px; margin-left:2px; }
-      #battle-edit-modal input[type="number"] { width:100%; margin-top:5px; margin-bottom:10px; padding:6px; background:#303030; border:1px solid #232323; color:#aaa; border-radius:3px; overflow:hidden; }
-      #battle-edit-modal .btn-group { display:flex; gap:6px; margin-bottom:10px; }
-      #battle-edit-modal button { border:1px solid #232323; border-radius:3px; background:#272727; text-transform:uppercase; font:bold 12px Roboto; color:#aaa; height:29px; margin-top:5px; line-height:19px; letter-spacing:1px; cursor:pointer; }
-      #battle-edit-modal #battle-close-btn { width:100%; background:#232323; margin-left:0px; margin-top:-5px; }
+      #battle-edit-modal {position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);width: 320px;background: #2b2b2b;border: 1px solid #232323;border-radius: 4px;font-family: 'Roboto', sans-serif;color: #fff;z-index: 10000;}
+      #battle-edit-modal .title-bar {background-color: #272727;background-image: url(https://image.ibb.co/dMFuMc/flower.png);background-repeat: no-repeat;background-position: center right;padding: 8px 12px;border-bottom: 1px solid #232323;font: bold 9px 'Quattrocento Sans', sans-serif;color: #aaa !important;text-transform: uppercase;display: flex;justify-content: space-between;align-items: center;}
+      #battle-edit-modal .modal-body {padding: 12px;}
+      #battle-edit-modal label {font: bold 9px Roboto;letter-spacing: 2px;color: #aaa;text-transform: uppercase;display:block;margin-top:10px;margin-left:2px;}
+      #battle-edit-modal input[type="number"] {width:100%;margin-top:5px;margin-bottom:10px;padding:6px;background:#303030;border:1px solid #232323;color:#aaa;border-radius:3px;overflow:hidden;}
+      #battle-edit-modal .btn-group {display:flex;gap:6px;margin-bottom:10px;}
+      #battle-edit-modal button {border:1px solid #232323;border-radius:3px;background:#272727;text-transform:uppercase;font:bold 12px Roboto;color:#aaa;height:29px;margin-top:5px;line-height:19px;letter-spacing:1px;cursor:pointer;}
+      #battle-edit-modal #battle-close-btn {width:100%;background:#232323;margin-left:0px;margin-top:-5px;}
     </style>
 
     <div id="battle-edit-modal" style="display:none;">
@@ -178,7 +148,7 @@
           <button id="battle-add-btn">Add</button>
           <button id="battle-remove-btn">Remove</button>
         </div>
-        <label style="color:red;">⚠ Global Reset will reset everyone's rank to Z without touching points</label>
+        <label style="color:red;">⚠ This will reset EVERYONE'S rank to Z without touching points</label>
         <button id="battle-global-reset-btn" style="background:red;color:white;">Global Reset Ranks</button>
         <button id="battle-close-btn">Close</button>
       </div>
@@ -287,4 +257,3 @@
   $(document).ready(() => setTimeout(initialize, 300));
   $(document).on("pageChange", () => setTimeout(initialize, 300));
 })();
-
