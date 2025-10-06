@@ -84,36 +84,53 @@
   }
 
   // === EVENT DETECTION ===
-  function setupThreadAndPostListeners() {
-    // Detect new thread creation
-    const threadBtn = $('input[type="submit"][value="Create Thread"]');
-    if (threadBtn.length && !threadBtn.data("bp-bound")) {
-      threadBtn.data("bp-bound", true);
+function setupThreadAndPostListeners() {
+  // --- Detect new thread creation ---
+  const threadBtns = $('input[type="submit"]').filter((_, el) => {
+    const val = $(el).val()?.toLowerCase() || "";
+    return val.includes("create thread") || val.includes("post thread") || val.includes("new thread");
+  });
 
-      threadBtn.on("click", async function () {
-        const subject = $('input[name="subject"]').val() || "";
-        const value = getTagValueFromSubject(subject);
-        if (value > 0) {
-          await awardBattlePoints(value, "thread_creation");
-        }
-      });
-    }
+  threadBtns.each(function () {
+    const $btn = $(this);
+    if ($btn.data("bp-bound")) return;
+    $btn.data("bp-bound", true);
 
-    // Detect new post creation (not edits)
-    const postBtn = $('input[type="submit"][value="Create Post"]');
-    if (postBtn.length && !postBtn.data("bp-bound")) {
-      postBtn.data("bp-bound", true);
+    $btn.on("click", async function () {
+      const subject = $('input[name="subject"]').val() || "";
+      const reward = getTagValueFromSubject(subject);
+      if (reward > 0) {
+        await awardBattlePoints(reward, "thread_creation");
+      }
+    });
+  });
 
-      postBtn.on("click", async function () {
-        // Grab the thread title from the navbar
-        const threadTitle = $('#navigation-tree span[itemprop="name"]').last().text() || "";
-        const value = getTagValueFromSubject(threadTitle);
-        if (value > 0) {
-          await awardBattlePoints(value, "post_reply");
-        }
-      });
-    }
-  }
+  // --- Detect post replies (includes Quick Reply) ---
+  const postBtns = $('input[type="submit"], button[type="submit"]').filter((_, el) => {
+    const val = $(el).val()?.toLowerCase() || $(el).text()?.toLowerCase() || "";
+    return val.includes("post reply") || val.includes("create post") || val.includes("reply") || val.includes("quick reply");
+  });
+
+  postBtns.each(function () {
+    const $btn = $(this);
+    if ($btn.data("bp-bound")) return;
+    $btn.data("bp-bound", true);
+
+    $btn.on("click", async function () {
+      // Grab thread title (from breadcrumbs or topic title)
+      const threadTitle =
+        $('#thread-title').text() ||
+        $('#subject').val() ||
+        $('#navigation-tree span[itemprop="name"]').last().text() ||
+        "";
+
+      const reward = getTagValueFromSubject(threadTitle);
+      if (reward > 0) {
+        await awardBattlePoints(reward, "post_reply");
+      }
+    });
+  });
+}
 
   // === STAFF EDITING MODAL ===
   function createEditModal() {
@@ -267,4 +284,5 @@
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
+
 
