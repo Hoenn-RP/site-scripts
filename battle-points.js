@@ -1,14 +1,14 @@
 (async function () {
   // === FIREBASE INITIALIZATION ===
   const firebaseConfig = {
-  apiKey: "AIzaSyA6P4vttMoSJvBAFvrv06jq2E1VGnGTYcA",
-  authDomain: "battlepoints-e44ae.firebaseapp.com",
-  databaseURL: "https://battlepoints-e44ae-default-rtdb.firebaseio.com",
-  projectId: "battlepoints-e44ae",
-  storageBucket: "battlepoints-e44ae.firebasestorage.app",
-  messagingSenderId: "399195500755",
-  appId: "1:399195500755:web:1ec2d2bbed078b23876426",
-  measurementId: "G-4P60SDR786"
+    apiKey: "AIzaSyA6P4vttMoSJvBAFvrv06jq2E1VGnGTYcA",
+    authDomain: "battlepoints-e44ae.firebaseapp.com",
+    databaseURL: "https://battlepoints-e44ae-default-rtdb.firebaseio.com/",
+    projectId: "battlepoints-e44ae",
+    storageBucket: "battlepoints-e44ae.appspot.com",
+    messagingSenderId: "399195500755",
+    appId: "1:399195500755:web:1ec2d2bbed078b23876426",
+    measurementId: "G-4P60SDR786"
   };
 
   if (typeof firebase === "undefined") {
@@ -203,6 +203,7 @@
   // === INIT ===
   initBattle();
 })();
+
 
 
 
