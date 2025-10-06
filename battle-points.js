@@ -1,13 +1,14 @@
 (async function () {
   // === FIREBASE INITIALIZATION ===
   const firebaseConfig = {
-    apiKey: "AIzaSyDc2kM7-vPYLkEynYvItRkRyOamBmtRx1h",
-    authDomain: "hoenn-amity.firebaseapp.com",
-    databaseURL: "https://hoenn-amity-default-rtdb.firebaseio.com/",
-    projectId: "hoenn-amity",
-    storageBucket: "hoenn-amity.appspot.com",
-    messagingSenderId: "1088882615750",
-    appId: "1:1088882615750:web:10ed12d30850f3e20da5d3",
+  apiKey: "AIzaSyA6P4vttMoSJvBAFvrv06jq2E1VGnGTYcA",
+  authDomain: "battlepoints-e44ae.firebaseapp.com",
+  databaseURL: "https://battlepoints-e44ae-default-rtdb.firebaseio.com",
+  projectId: "battlepoints-e44ae",
+  storageBucket: "battlepoints-e44ae.firebasestorage.app",
+  messagingSenderId: "399195500755",
+  appId: "1:399195500755:web:1ec2d2bbed078b23876426",
+  measurementId: "G-4P60SDR786"
   };
 
   if (typeof firebase === "undefined") {
@@ -202,6 +203,7 @@
   // === INIT ===
   initBattle();
 })();
+
 
 
 
