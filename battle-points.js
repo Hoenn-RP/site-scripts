@@ -27,7 +27,7 @@
     });
   }
 
-  // Initialize default settings if no other settings are found
+  // Initialize default settings if missing
   async function initSettings() {
     const settings = await fetchData("settings");
     if (!settings) {
@@ -107,18 +107,11 @@
     });
   }
 
-  function threadHasValidTag(title, tags) {
-    if (!title || !tags) return false;
-    return Object.keys(tags).some(tag => title.includes(tag));
-  }
-
   async function handleNewPost() {
-    const $threadTitle = $(".thread-title, h1.thread-title");
-    const title = $threadTitle.text() || "";
     const settings = await initSettings();
-
+    const title = $("h1.thread-title a").text().trim().toUpperCase();
     const matchingTag = Object.keys(settings.threadTags).find(tag =>
-      title.includes(tag)
+      title.includes(tag.toUpperCase())
     );
 
     if (matchingTag) {
@@ -127,7 +120,9 @@
     }
   }
 
-  // Staff modal for tag management + global reset
+  // -------------------------------
+  // STAFF SETTINGS MODAL (for tags)
+  // -------------------------------
   function createBattleSettingsModal() {
     if ($("#battle-settings-modal").length) return;
 
@@ -149,6 +144,9 @@
       }
       #battle-settings-modal .title-bar {
         background-color: #272727;
+        background-image: url(https://image.ibb.co/dMFuMc/flower.png);
+        background-repeat: no-repeat;
+        background-position: center right;
         padding: 8px 12px;
         border-bottom: 1px solid #232323;
         font: bold 9px 'Quattrocento Sans', sans-serif;
@@ -261,19 +259,165 @@
     $("#battle-close-btn").off().on("click", () => $modal.hide());
   }
 
+  // -------------------------------
+  // STAFF USER EDIT MODAL
+  // -------------------------------
+  function createBattleEditModal() {
+    if ($('#battle-edit-modal').length) return;
+
+    const modalHTML = `
+    <style>
+      #battle-edit-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 320px;
+        background: #2b2b2b;
+        border: 1px solid #232323;
+        border-radius: 4px;
+        font-family: 'Roboto', sans-serif;
+        color: #fff;
+        z-index: 10000;
+      }
+      #battle-edit-modal .title-bar {
+        background-color: #272727;
+        background-image: url(https://image.ibb.co/dMFuMc/flower.png);
+        background-repeat: no-repeat;
+        background-position: center right;
+        padding: 8px 12px;
+        border-bottom: 1px solid #232323;
+        font: bold 9px 'Quattrocento Sans', sans-serif;
+        color: #aaa;
+        text-transform: uppercase;
+      }
+      #battle-edit-modal .modal-body {
+        padding: 12px;
+      }
+      #battle-edit-modal label {
+        font: bold 9px Roboto;
+        letter-spacing: 2px;
+        color: #aaa;
+        text-transform: uppercase;
+        display: block;
+        margin-top: 10px;
+      }
+      #battle-edit-modal input[type="number"] {
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        padding: 6px;
+        background: #303030;
+        border: 1px solid #232323;
+        color: #aaa;
+        border-radius: 3px;
+      }
+      #battle-edit-modal button {
+        border: 1px solid #232323;
+        border-radius: 3px;
+        background: #272727;
+        text-transform: uppercase;
+        font: bold 12px Roboto;
+        color: #aaa;
+        height: 29px;
+        margin-top: 5px;
+        letter-spacing: 1px;
+        cursor: pointer;
+      }
+    </style>
+
+    <div id="battle-edit-modal" style="display:none;">
+      <div class="title-bar">Edit Battle Points</div>
+      <div class="modal-body">
+        <label>Set New Value:</label>
+        <input type="number" id="battle-set-value" />
+        <button id="battle-set-btn">Set</button>
+        <label>Add or Remove:</label>
+        <input type="number" id="battle-change-value" />
+        <button id="battle-add-btn">Add</button>
+        <button id="battle-remove-btn">Remove</button>
+        <button id="battle-close-btn">Close</button>
+      </div>
+    </div>`;
+    $('body').append(modalHTML);
+  }
+
+  function setupBattleStaffEditButtons() {
+    if (!isStaff) return;
+
+    $(".battle-edit-btn[data-user-id]").each(function () {
+      const $btn = $(this);
+      const memberId = $btn.data("user-id");
+      if (!memberId || $btn.data("bound")) return;
+
+      $btn.data("bound", true);
+      $btn.show();
+
+      $btn.on("click", async function () {
+        createBattleEditModal();
+        const $modal = $('#battle-edit-modal');
+        $modal.show();
+
+        const memberData = await fetchData(`users/${memberId}`);
+        const currentPoints = memberData?.points ?? 0;
+        $('#battle-set-value').val(currentPoints);
+        $('#battle-change-value').val('');
+
+        $('#battle-set-btn').off('click').on('click', async () => {
+          const newVal = parseInt($('#battle-set-value').val());
+          if (!isNaN(newVal)) {
+            memberData.points = newVal;
+            await setData(`users/${memberId}`, memberData);
+            updateAllDisplays();
+          }
+        });
+
+        $('#battle-add-btn').off('click').on('click', async () => {
+          const addVal = parseInt($('#battle-change-value').val());
+          if (!isNaN(addVal)) {
+            memberData.points += addVal;
+            await setData(`users/${memberId}`, memberData);
+            updateAllDisplays();
+          }
+        });
+
+        $('#battle-remove-btn').off('click').on('click', async () => {
+          const removeVal = parseInt($('#battle-change-value').val());
+          if (!isNaN(removeVal)) {
+            memberData.points -= removeVal;
+            if (memberData.points < 0) memberData.points = 0;
+            await setData(`users/${memberId}`, memberData);
+            updateAllDisplays();
+          }
+        });
+
+        $('#battle-close-btn').off('click').on('click', () => $modal.hide());
+      });
+    });
+  }
+
+  // -------------------------------
+  // INIT + POST DETECTION
+  // -------------------------------
   function initializeBattle() {
     updateAllDisplays();
+    setupBattleStaffEditButtons();
 
     if (isStaff) {
       $("#battle-settings-btn").off().on("click", openBattleSettingsModal);
     }
-
-    // Detect post submission success
-    $(document).on("click", "input.button[name='post']", async function () {
-      setTimeout(handleNewPost, 1500);
-    });
   }
+
+  // Detect post success via AJAX
+  $(document).on("ajax_success", function (event, data, status, xhr) {
+    const url = xhr?.responseURL || "";
+    if (url.includes("/post/") || url.includes("/thread/")) {
+      setTimeout(handleNewPost, 1000);
+    }
+  });
 
   $(document).ready(() => setTimeout(initializeBattle, 300));
   $(document).on("pageChange", () => setTimeout(initializeBattle, 300));
 })();
+
+
