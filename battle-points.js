@@ -25,11 +25,10 @@
   firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
 
-  const siteKey = "battle"; // base node in Firebase
+  const siteKey = "battle";
   const ref = (path) => database.ref(`${siteKey}/${path}`);
   const fetchData = async (path) => (await ref(path).get()).val();
   const setData = async (path, data) => ref(path).set(data);
-  const updateData = async (path, data) => ref(path).update(data);
 
   const isStaff = pb.data("user").is_staff;
   const currentUserId = pb.data("user").id;
@@ -37,7 +36,7 @@
   const POST_TAGS = ["[PVP]", "[BATTLE]"];
   const POINTS_PER_POST = 2;
 
-  // === HELPERS ===
+  // === RANK CALCULATION ===
   function calculateRank(points) {
     const step = Math.floor(points / 2);
     let rank = "";
@@ -49,7 +48,6 @@
     return rank || "A";
   }
 
-  // === MAIN ===
   async function initBattle() {
     await updateAllDisplays();
     setupBattleStaffEditButtons();
@@ -80,8 +78,7 @@
     userData.posts += 1;
 
     await setData(userRef, userData);
-
-    console.log(`[Battle Points] +${POINTS_PER_POST} awarded for ${matchedTag} thread!`);
+    console.log(`[Battle Points] +${POINTS_PER_POST} for ${matchedTag} thread!`);
     updateAllDisplays();
   }
 
@@ -90,43 +87,59 @@
     const all = await fetchData("users");
     if (!all) return;
 
-    $("[data-battle-points]").each(function () {
+    $(".battle-member-points[data-user-id]").each(function () {
       const $el = $(this);
-      const id = $el.data("battle-points");
+      const id = $el.data("user-id");
       const val = all?.[id]?.points ?? 0;
       $el.text(val);
     });
 
-    $("[data-battle-rank]").each(function () {
+    $(".battle-member-rank[data-user-id]").each(function () {
       const $el = $(this);
-      const id = $el.data("battle-rank");
+      const id = $el.data("user-id");
       const val = all?.[id]?.points ?? 0;
       const rank = calculateRank(val);
       $el.text(rank);
     });
   }
 
-  // === STAFF EDITING ===
+  // === STAFF EDITING (with Amity-style modal) ===
   function createBattleEditModal() {
     if ($("#battle-edit-modal").length) return;
     const modalHTML = `
       <div id="battle-edit-modal" style="
-        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-        background: #222; color: #eee; border-radius: 10px; padding: 20px;
-        box-shadow: 0 0 15px rgba(0,0,0,0.6); z-index: 9999; display:none;
+        position: fixed;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        background: #1e1e1e;
+        color: #eee;
+        border-radius: 12px;
+        padding: 20px 25px;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        z-index: 9999;
+        display: none;
+        max-width: 320px;
       ">
-        <div style="font-weight:700; font-size:18px; margin-bottom:10px;">Edit Battle Points</div>
-        <label>Set New Value:</label><br>
-        <input type="number" id="battle-set-value" style="width:100%; margin-bottom:6px;">
-        <button id="battle-set-btn">Set</button>
-        <button id="battle-reset-btn">Reset</button>
-        <br><br>
-        <label>Modify Points:</label><br>
-        <input type="number" id="battle-change-value" style="width:100%; margin-bottom:6px;">
-        <button id="battle-add-btn">Add</button>
-        <button id="battle-remove-btn">Remove</button>
-        <br><br>
-        <button id="battle-close-btn" style="width:100%;">Close</button>
+        <div style="font-weight:700; font-size:18px; margin-bottom:12px; text-align:center; color:#90caf9;">Edit Battle Points</div>
+        <label style="font-weight:600;">Set New Value:</label><br>
+        <input type="number" id="battle-set-value" style="width:100%; margin-bottom:8px; padding:5px; border:1px solid #444; background:#2a2a2a; color:#fff; border-radius:6px;">
+        <div style="text-align:center; margin-bottom:10px;">
+          <button id="battle-set-btn" style="margin:3px; padding:5px 12px; background:#388e3c; color:#fff; border:none; border-radius:6px; cursor:pointer;">Set</button>
+          <button id="battle-reset-btn" style="margin:3px; padding:5px 12px; background:#c62828; color:#fff; border:none; border-radius:6px; cursor:pointer;">Reset</button>
+        </div>
+
+        <label style="font-weight:600;">Modify Points:</label><br>
+        <input type="number" id="battle-change-value" style="width:100%; margin-bottom:8px; padding:5px; border:1px solid #444; background:#2a2a2a; color:#fff; border-radius:6px;">
+        <div style="text-align:center; margin-bottom:10px;">
+          <button id="battle-add-btn" style="margin:3px; padding:5px 12px; background:#1976d2; color:#fff; border:none; border-radius:6px; cursor:pointer;">Add</button>
+          <button id="battle-remove-btn" style="margin:3px; padding:5px 12px; background:#f57c00; color:#fff; border:none; border-radius:6px; cursor:pointer;">Remove</button>
+        </div>
+
+        <div style="text-align:center;">
+          <button id="battle-close-btn" style="margin-top:5px; padding:6px 12px; width:100%; background:#555; color:#fff; border:none; border-radius:6px; cursor:pointer;">Close</button>
+        </div>
       </div>`;
     $("body").append(modalHTML);
   }
@@ -188,7 +201,5 @@
     });
   }
 
-  // === INIT ===
   initBattle();
 })();
-
