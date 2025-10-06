@@ -1,8 +1,8 @@
-// Debug/robust Battle Points script
+// --- Battle Points script with fixed tag detection ---
 (async function () {
-  const DEBUG = true; // set false later when confirmed working
+  const DEBUG = true; // set to false when stable
 
-  // --- Firebase config (use your DB) ---
+  // --- Firebase config ---
   const firebaseConfig = {
     apiKey: "AIzaSyA6P4vttMoSJvBAFvrv06jq2E1VGnGTYc",
     authDomain: "battlepoints-e44ae.firebaseapp.com",
@@ -14,7 +14,7 @@
     measurementId: "G-4P60SDR786"
   };
 
-  // Load firebase compat libs if missing
+  // --- Load firebase compat libs if missing ---
   if (typeof firebase === "undefined") {
     if (DEBUG) console.log("[BP] loading firebase compat libs...");
     const s1 = document.createElement("script");
@@ -35,14 +35,12 @@
     } catch (e) {
       console.error("[BP] firebase init error", e);
     }
-  } else {
-    if (DEBUG) console.log("[BP] firebase already initialized");
   }
 
   const db = firebase.database();
   const SITE_PREFIX = "battle";
 
-  // DB wrappers with logging
+  // --- Firebase helpers ---
   const ref = (p) => db.ref(`${SITE_PREFIX}/${p}`);
   async function fetchData(p) {
     try {
@@ -64,18 +62,8 @@
       return false;
     }
   }
-  async function updateData(p, d) {
-    try {
-      await ref(p).update(d);
-      if (DEBUG) console.log(`[BP] updateData ${p} <=`, d);
-      return true;
-    } catch (e) {
-      console.error("[BP] updateData error", p, e);
-      return false;
-    }
-  }
 
-  // --- user detection (ProBoards) ---
+  // --- ProBoards user detection ---
   const userObj = (typeof proboards !== "undefined" && proboards.data)
     ? proboards.data("user")
     : (typeof pb !== "undefined" && pb.data)
@@ -83,30 +71,31 @@
       : null;
 
   if (!userObj || !userObj.id) {
-    console.warn("[BP] no proboards user detected — script will not run for guests.");
+    console.warn("[BP] guest detected — no point tracking");
     return;
   }
+
   const currentUserId = String(userObj.id);
   const isStaff = !!userObj.is_staff;
-  if (DEBUG) console.log("[BP] currentUserId:", currentUserId, "isStaff:", isStaff);
+  if (DEBUG) console.log("[BP] user:", currentUserId, "isStaff:", isStaff);
 
-  // --- tag config (per-tag values) ---
+  // --- Tag configuration ---
   const POST_TAG_VALUES = {
     "[PVP]": 2,
     "[BATTLE]": 1,
-    // add more here
+    // Add more tags here as needed
   };
   if (DEBUG) console.log("[BP] POST_TAG_VALUES:", POST_TAG_VALUES);
 
-  // --- rank reset flag (if used) ---
+  // --- Rank reset flag (optional) ---
   let battleResetFlag = false;
   async function loadResetFlag() {
     const f = await fetchData("rank_reset_flag");
     battleResetFlag = !!f;
-    if (DEBUG) console.log("[BP] loaded rank_reset_flag:", battleResetFlag);
+    if (DEBUG) console.log("[BP] rank_reset_flag:", battleResetFlag);
   }
 
-  // --- helper: calculate rank ---
+  // --- Rank calculator ---
   function calculateRank(points) {
     if (battleResetFlag) return "Z";
     const step = Math.floor(points / 2);
@@ -115,156 +104,152 @@
     return String.fromCharCode(code);
   }
 
-  // --- display helpers ---
-  function idFromElement($el) {
-    let id = $el.attr("data-user-id") ?? $el.data("user-id");
-    return id ? String(id) : null;
-  }
+  // --- Display updater ---
   async function updateAllDisplays() {
     const all = (await fetchData("users")) || {};
     $(".battle-member-points[data-user-id]").each(function () {
-      const $el = $(this);
-      const id = idFromElement($el);
-      if (!id) return;
-      $el.text(all[id]?.points ?? 0);
+      const id = $(this).attr("data-user-id");
+      $(this).text(all[id]?.points ?? 0);
     });
     $(".battle-member-rank[data-user-id]").each(function () {
-      const $el = $(this);
-      const id = idFromElement($el);
-      if (!id) return;
-      $el.text(calculateRank(all[id]?.points ?? 0));
+      const id = $(this).attr("data-user-id");
+      $(this).text(calculateRank(all[id]?.points ?? 0));
     });
-    if (DEBUG) console.log("[BP] updateAllDisplays done");
+    if (DEBUG) console.log("[BP] displays updated");
   }
 
-  // --- award function with confirmation readback ---
+  // --- Award function ---
   async function awardBattlePoints(uid, pts = 1) {
-    if (!uid) { console.error("[BP] awardBattlePoints called without uid"); return; }
+    if (!uid) return console.error("[BP] awardBattlePoints: missing uid");
     const key = `users/${String(uid)}`;
     const cur = (await fetchData(key)) || { points: 0, posts: 0 };
-    cur.points = (cur.points || 0) + Number(pts || 0);
+    cur.points = (cur.points || 0) + Number(pts);
     cur.posts = (cur.posts || 0) + 1;
-    const ok = await setData(key, cur);
-    if (!ok) { console.error("[BP] failed to write award to firebase"); return; }
-    const verify = await fetchData(key);
-    if (DEBUG) console.log(`[BP] awarded ${pts} to ${uid} — verify:`, verify);
+    await setData(key, cur);
     await updateAllDisplays();
+    if (DEBUG) console.log(`[BP] +${pts} awarded to ${uid}`);
   }
 
-  // --- subject detection (fixed for reply pages) ---
+  // --- Subject detection (using itemprop="name" for reliability) ---
   function getThreadSubject() {
-    // Always read from document.title
-    let t = document.title || "";
-    if (!t) return "";
-    // Remove board name suffix (after "|") if present
-    const parts = t.split("|");
-    return parts[0].trim();
+    let subject = "";
+
+    // 1. Try ProBoards data objects
+    try {
+      if (typeof proboards !== "undefined" && proboards.data) {
+        const thread = proboards.data("thread");
+        if (thread?.subject) subject = thread.subject;
+      }
+    } catch (e) {}
+    try {
+      if (!subject && typeof pb !== "undefined" && pb.data) {
+        const thread = pb.data("thread");
+        if (thread?.subject) subject = thread.subject;
+      }
+    } catch (e) {}
+
+    // 2. Try <span itemprop="name">
+    if (!subject) {
+      const el = document.querySelector('[itemprop="name"]');
+      if (el) subject = el.textContent.trim();
+    }
+
+    // 3. Fallback: .thread-title or <h1>
+    if (!subject) {
+      const el = document.querySelector(".thread-title, h1.thread-title, .content > h1");
+      if (el) subject = el.textContent.trim();
+    }
+
+    // 4. Fallback: document.title
+    if (!subject) subject = (document.title || "").split("|")[0].trim();
+
+    return subject.replace(/\s+/g, " ").trim();
   }
 
-  // --- event handling: robust & debug logging ---
+  // --- Post event handler ---
   async function handleNewPostEvent() {
-    // give the page a little time to settle
     await new Promise(r => setTimeout(r, 1000));
     const subject = getThreadSubject();
-    if (DEBUG) console.log("[BP] handleNewPostEvent -> subject:", subject);
-    if (!subject) { if (DEBUG) console.log("[BP] no subject found"); return; }
+    if (DEBUG) console.log("[BP] subject:", subject);
+    if (!subject) return;
 
-    // find first matching tag
+    const upper = subject.toUpperCase();
     let matchedValue = null;
     let matchedTag = null;
-    const upper = subject.toUpperCase();
+
     for (const [tag, val] of Object.entries(POST_TAG_VALUES)) {
-      if (upper.includes(tag.toUpperCase())) {
-        matchedValue = Number(val) || 1;
+      const clean = tag.replace(/[\[\]]/g, "").toUpperCase();
+      if (upper.includes(tag.toUpperCase()) || upper.includes(clean)) {
+        matchedValue = Number(val);
         matchedTag = tag;
         break;
       }
     }
-    if (!matchedValue) { if (DEBUG) console.log("[BP] no tag matched in subject"); return; }
 
-    // get post author id if ProBoards exposed it; otherwise default to current user
-    let postAuthorId = null;
+    if (!matchedValue) {
+      if (DEBUG) console.log("[BP] no tag match");
+      return;
+    }
+
+    // Detect post author
+    let postAuthorId = currentUserId;
     try {
       const p = (typeof proboards !== "undefined" && proboards.data) ? proboards.data("post") : null;
-      if (p && (p.user_id || p.author_id)) { postAuthorId = String(p.user_id || p.author_id); }
-    } catch (e) { }
+      if (p && (p.user_id || p.author_id)) postAuthorId = String(p.user_id || p.author_id);
+    } catch (e) {}
     try {
-      if (!postAuthorId && typeof pb !== "undefined" && pb.data) {
+      if (typeof pb !== "undefined" && pb.data) {
         const pp = pb.data("post");
         if (pp && (pp.user_id || pp.author_id)) postAuthorId = String(pp.user_id || pp.author_id);
       }
-    } catch (e) { }
-    if (!postAuthorId) postAuthorId = currentUserId;
+    } catch (e) {}
 
-    if (DEBUG) console.log(`[BP] matched tag ${matchedTag} (${matchedValue} pts). awarding to ${postAuthorId}`);
+    if (DEBUG) console.log(`[BP] matched ${matchedTag} (${matchedValue} pts) → ${postAuthorId}`);
     await awardBattlePoints(postAuthorId, matchedValue);
   }
 
-  // --- event hook setup ---
+  // --- Event hooks ---
   function setupEventHooks() {
     if (typeof pb !== "undefined" && pb.events) {
-      try {
-        if (DEBUG) console.log("[BP] hooking pb.events listeners");
-        try { pb.events.on("post.create", ev => { if (DEBUG) console.log("[BP] pb.events: post.create"); setTimeout(handleNewPostEvent, 1200); }); } catch(e){}
-        try { pb.events.on("post.new", ev => { if (DEBUG) console.log("[BP] pb.events: post.new"); setTimeout(handleNewPostEvent, 1200); }); } catch(e){}
-        try { pb.events.on("afterPost", ev => { if (DEBUG) console.log("[BP] pb.events: afterPost"); setTimeout(handleNewPostEvent, 1200); }); } catch(e){}
-      } catch (e) { console.warn("[BP] pb.events hook error", e); }
-    } else {
-      if (DEBUG) console.log("[BP] pb.events not available");
+      pb.events.on("post.create", () => setTimeout(handleNewPostEvent, 1200));
+      pb.events.on("post.new", () => setTimeout(handleNewPostEvent, 1200));
+      pb.events.on("afterPost", () => setTimeout(handleNewPostEvent, 1200));
     }
 
-    // old / common hook used by many forums
-    try {
-      $(document).on("ajax_success", function (event, data, status, xhr) {
-        const url = xhr?.responseURL || "";
-        if (DEBUG) console.log("[BP] ajax_success fired; url:", url);
-        if (url.includes("/post/") || url.includes("/thread/") || url.includes("/post/create") || url.includes("/reply/")) {
-          setTimeout(handleNewPostEvent, 1500);
-        }
-      });
-    } catch (e) {
-      if (DEBUG) console.log("[BP] ajax_success hook not available", e);
-    }
+    $(document).on("ajax_success", (e, d, s, xhr) => {
+      const url = xhr?.responseURL || "";
+      if (url.includes("/post/") || url.includes("/thread/") || url.includes("/reply/"))
+        setTimeout(handleNewPostEvent, 1500);
+    });
 
-    // jQuery's ajaxSuccess as an extra fallback
-    try {
-      $(document).ajaxSuccess(function (event, xhr, settings) {
-        const url = settings?.url || "";
-        if (DEBUG) console.log("[BP] jQuery ajaxSuccess; url:", url);
-        if (url.includes("/post/") || url.includes("/thread/") || url.includes("/post/create") || url.includes("/reply/")) {
-          setTimeout(handleNewPostEvent, 1500);
-        }
-      });
-    } catch (e) { if (DEBUG) console.log("[BP] ajaxSuccess hook error", e); }
+    $(document).ajaxSuccess((e, xhr, s) => {
+      const url = s?.url || "";
+      if (url.includes("/post/") || url.includes("/thread/") || url.includes("/reply/"))
+        setTimeout(handleNewPostEvent, 1500);
+    });
 
-    // MutationObserver fallback (detect DOM insertion of new post)
-    try {
-      const mo = new MutationObserver((mutations) => {
-        for (const m of mutations) {
-          for (const n of Array.from(m.addedNodes || [])) {
-            if (n.nodeType !== 1) continue;
-            const el = n;
-            if (el.matches && (el.matches(".post") || el.querySelector && el.querySelector(".post"))) {
-              if (DEBUG) console.log("[BP] MutationObserver detected post DOM insertion");
-              setTimeout(handleNewPostEvent, 1200);
-              return;
-            }
+    const mo = new MutationObserver(muts => {
+      for (const m of muts)
+        for (const n of m.addedNodes || []) {
+          if (n.nodeType === 1 && (n.matches(".post") || n.querySelector?.(".post"))) {
+            if (DEBUG) console.log("[BP] MutationObserver post detected");
+            setTimeout(handleNewPostEvent, 1200);
+            return;
           }
         }
-      });
-      mo.observe(document.body, { childList: true, subtree: true });
-      if (DEBUG) console.log("[BP] MutationObserver watching document.body");
-    } catch (e) { if (DEBUG) console.log("[BP] MutationObserver error", e); }
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    if (DEBUG) console.log("[BP] hooks ready");
   }
 
-  // --- staff quick edit buttons (very small) ---
+  // --- Staff manual edit buttons ---
   function setupStaffButtons() {
     if (!isStaff) return;
     $(".battle-edit-btn").each(function () {
       const $btn = $(this);
-      if ($btn.data("bound")) { $btn.show(); return; }
-      const id = idFromElement($btn) || $btn.attr("data-user-id");
-      if (!id) return;
+      if ($btn.data("bound")) return;
+      const id = $btn.attr("data-user-id");
       $btn.data("bound", true).show().off("click").on("click", async function () {
         const cur = (await fetchData(`users/${id}`)) || { points: 0 };
         const v = prompt("Set Battle Points for user " + id, String(cur.points || 0));
@@ -279,31 +264,24 @@
     });
   }
 
-  // --- expose debug helpers on window for manual testing ---
+  // --- Debug helpers ---
   window.BattleDebug = {
-    testSubject: () => {
-      const s = getThreadSubject();
-      console.log("[BP] testSubject ->", s);
-      return s;
-    },
-    manualAward: async (uid, pts=1) => {
-      console.log(`[BP] manualAward ${pts} to ${uid}`);
-      await awardBattlePoints(uid, pts);
-    },
-    printProboardsThreadData: () => {
-      try { console.log("proboards.data('thread'):", (typeof proboards !== 'undefined' && proboards.data) ? proboards.data('thread') : null); } catch(e){console.log(e);}
-      try { console.log("pb.data('thread'):", (typeof pb !== 'undefined' && pb.data) ? pb.data('thread') : null); } catch(e){console.log(e);}
+    testSubject: () => console.log("[BP] subject:", getThreadSubject()),
+    manualAward: (uid, pts = 1) => awardBattlePoints(uid, pts),
+    printThreadData: () => {
+      try { console.log("proboards.data('thread'):", proboards.data("thread")); } catch {}
+      try { console.log("pb.data('thread'):", pb.data("thread")); } catch {}
     }
   };
 
-  // --- initialize script ---
+  // --- Initialize ---
   async function initialize() {
-    if (DEBUG) console.log("[BP] initialize start");
+    if (DEBUG) console.log("[BP] initializing...");
     await loadResetFlag();
     await updateAllDisplays();
     setupEventHooks();
     setupStaffButtons();
-    if (DEBUG) console.log("[BP] initialization complete — listening for new posts");
+    if (DEBUG) console.log("[BP] ready");
   }
 
   $(document).ready(() => setTimeout(initialize, 300));
