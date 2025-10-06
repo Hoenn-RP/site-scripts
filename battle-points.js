@@ -335,7 +335,7 @@
 
         $('#battle-close-btn').off().on('click', () => $modal.hide());
         $('#battle-reset-all-btn').off().on('click', async () => {
-          const confirmReset = confirm("Are you sure you want to reset all user ranks globally? This will not affect total Battle Points.");
+          const confirmReset = confirm("Are you sure you want to reset all user ranks? This will not affect total Battle Points.");
           if (!confirmReset) return;
           await globalRankReset();
           updateAllDisplays();
@@ -355,3 +355,4 @@
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
+
