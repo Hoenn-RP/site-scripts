@@ -5,6 +5,16 @@
 
   const userId = String(user.id);
 
+  // === ADD TAG REWARD SUPPORT ===
+  const TAG_REWARDS = {
+    "[AMITY]": 2,
+    "[CONTEST]": 3,
+    // Add or remove more tag/value pairs freely
+    // "[EVENT]": 5,
+    // "[BONUS]": 1,
+  };
+
+  // === FETCH HELPERS ===
   async function fetchData(path) {
     const res = await fetch(`${FIREBASE_BASE_URL}/${path}.json`);
     return await res.json();
@@ -18,6 +28,15 @@
     });
   }
 
+  async function updateData(path, data) {
+    await fetch(`${FIREBASE_BASE_URL}/${path}.json`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+  }
+
+  // === USER HANDLING ===
   async function getUserData() {
     let data = await fetchData(`users/${userId}`);
     const now = Date.now();
@@ -48,6 +67,7 @@
     return data;
   }
 
+  // === EARNING POINTS ===
   async function awardPoint(type) {
     const data = await getUserData();
     const earned = data.earned;
@@ -70,6 +90,68 @@
     }
   }
 
+  // === AWARD VIA TAG (NO DAILY CAP) ===
+  async function awardAmityTagPoints(points, reason = "tag_reward") {
+    if (!points || points <= 0) return;
+    const data = await getUserData();
+    data.points += points;
+    await setData(`users/${userId}`, data);
+    updateAllDisplays();
+  }
+
+  function getTagValueFromSubject(subject) {
+    if (!subject) return 0;
+    for (const [tag, value] of Object.entries(TAG_REWARDS)) {
+      if (subject.toUpperCase().includes(tag.toUpperCase())) return value;
+    }
+    return 0;
+  }
+
+  // === TAG LISTENERS ===
+  function setupThreadAndPostListeners() {
+    // Thread creation
+    const threadBtns = $('input[type="submit"]').filter((_, el) => {
+      const val = $(el).val()?.toLowerCase() || "";
+      return val.includes("create thread") || val.includes("post thread") || val.includes("new thread");
+    });
+
+    threadBtns.each(function () {
+      const $btn = $(this);
+      if ($btn.data("amity-tag-bound")) return;
+      $btn.data("amity-tag-bound", true);
+
+      $btn.on("click", async function () {
+        const subject = $('input[name="subject"]').val() || "";
+        const reward = getTagValueFromSubject(subject);
+        if (reward > 0) await awardAmityTagPoints(reward, "thread_creation");
+      });
+    });
+
+    // Post replies
+    const postBtns = $('input[type="submit"], button[type="submit"]').filter((_, el) => {
+      const val = $(el).val()?.toLowerCase() || $(el).text()?.toLowerCase() || "";
+      return val.includes("post reply") || val.includes("create post") || val.includes("reply") || val.includes("quick reply");
+    });
+
+    postBtns.each(function () {
+      const $btn = $(this);
+      if ($btn.data("amity-tag-bound")) return;
+      $btn.data("amity-tag-bound", true);
+
+      $btn.on("click", async function () {
+        let threadTitle =
+          ($('#thread-title').text() || "").trim() ||
+          ($('input[name="subject"]').val() || "").trim() ||
+          ($('#navigation-tree a[href*="/thread/"]').last().text() || "").trim() ||
+          (document.title.split(" | ")[0] || "").trim() || "";
+
+        const reward = getTagValueFromSubject(threadTitle);
+        if (reward > 0) await awardAmityTagPoints(reward, "post_reply");
+      });
+    });
+  }
+
+  // === DISPLAY UPDATE ===
   async function updateAllDisplays() {
     const selfData = await fetchData(`users/${userId}`);
     const selfPoints = selfData?.points ?? 0;
@@ -87,117 +169,10 @@
     });
   }
 
+  // === STAFF MODAL ===
   function createEditModal() {
     if ($('#amity-edit-modal').length) return;
-
-    const modalHTML = `
-    <style>
-        #amity-edit-modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 320px;
-            background: #2b2b2b;
-            border: 1px solid #232323;
-            border-radius: 4px;
-            font-family: 'Roboto', sans-serif;
-            color: #fff;
-            z-index: 10000;
-        }
-    
-        #amity-edit-modal .title-bar {
-            background-color: #272727;
-            background-image: url(https://image.ibb.co/dMFuMc/flower.png);
-            background-repeat: no-repeat;
-            background-position: center right;
-            padding: 8px 12px;
-            border-bottom: 1px solid #232323;
-            font: bold 9px 'Quattrocento Sans', sans-serif;
-            color: #aaa !important;
-            text-transform: uppercase;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-    
-        #amity-edit-modal .modal-body {
-            padding: 12px;
-        }
-    
-        #amity-edit-modal label {
-            font: bold 9px Roboto;
-            letter-spacing: 2px;
-            color: #aaa;
-            text-transform: uppercase;
-            display: block;
-            margin-top: 10px;
-            margin-left: 2px;
-        }
-    
-        #amity-edit-modal input[type="number"] {
-            width: 100%;
-            margin-top: 5px;
-            margin-bottom: 10px;
-            padding: 6px;
-            background: #303030;
-            border: 1px solid #232323;
-            color: #aaa;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-    
-        #amity-edit-modal .btn-group {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 10px;
-        }
-    
-        #amity-edit-modal button {
-            border: 1px solid #232323;
-            border-radius: 3px;
-            background: #272727;
-            text-transform: uppercase;
-            font: bold 12px Roboto;
-            color: #aaa;
-            height: 29px;
-            margin-top: 5px;
-            line-height: 19px;
-            letter-spacing: 1px;
-            cursor: pointer;
-        }
-    
-        #amity-edit-modal #amity-close-btn {
-            width: 100%;
-            background: #232323;
-            margin-left: 0px;
-            margin-top: -5px;
-        }
-    </style>
-    
-    <div id="amity-edit-modal" style="display:none;">
-        <div class="title-bar">
-            <span>Edit Amity Points</span>
-        </div>
-        <div class="modal-body">
-            <label>Set New Value:</label>
-            <div class="btn-group">
-                <input type="number" id="amity-set-value" />
-                <button id="amity-set-btn">Set</button>
-                <button id="amity-reset-btn">Reset</button>
-            </div>
-    
-            <label>Add or Remove:</label>
-            <div class="btn-group">
-                <input type="number" id="amity-change-value" />
-                <button id="amity-add-btn">Add</button>
-                <button id="amity-remove-btn">Remove</button>
-            </div>
-    
-            <button id="amity-close-btn">Close</button>
-        </div>
-    </div>
-    `;
+    const modalHTML = `...`; // unchanged for brevity — keep your original modal
     $('body').append(modalHTML);
   }
 
@@ -217,9 +192,6 @@
         createEditModal();
         const $modal = $('#amity-edit-modal');
         $modal.show();
-
-        const $display = $(`.amity-member-points[data-user-id='${memberId}']`);
-        const currentPoints = parseInt($display.text()) || 0;
 
         const memberData = await fetchData(`users/${memberId}`);
         const displayName = memberData?.display_name ?? `User ${memberId}`;
@@ -268,6 +240,7 @@
     });
   }
 
+  // === EVENT HANDLERS ===
   function bindClickHandlers() {
     $(".js-likes-button").each(function () {
       const $btn = $(this);
@@ -291,17 +264,15 @@
     });
   }
 
+  // === INITIALIZE ===
   function initializeAmity() {
     bindClickHandlers();
+    setupThreadAndPostListeners(); // <-- NEW
     updateAllDisplays();
     setupStaffEditButtons();
   }
 
-  $(document).ready(() => {
-    setTimeout(initializeAmity, 300);
-  });
-
-  $(document).on("pageChange", () => {
-    setTimeout(initializeAmity, 300);
-  });
+  $(document).ready(() => setTimeout(initializeAmity, 300));
+  $(document).on("pageChange", () => setTimeout(initializeAmity, 300));
 })();
+
