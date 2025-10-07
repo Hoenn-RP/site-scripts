@@ -7,8 +7,8 @@
 
   // === ADD TAG REWARD SUPPORT ===
   const TAG_REWARDS = {
-    "[AMITY]": 2,
-    "[CONTEST]": 3,
+    "[AMITY]": 1,
+    "[CONTEST]": 10,
     // Add or remove more tag/value pairs freely
     // "[EVENT]": 5,
     // "[BONUS]": 1,
@@ -275,4 +275,5 @@
   $(document).ready(() => setTimeout(initializeAmity, 300));
   $(document).on("pageChange", () => setTimeout(initializeAmity, 300));
 })();
+
 
