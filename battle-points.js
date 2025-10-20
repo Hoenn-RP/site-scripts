@@ -1,8 +1,20 @@
 (async () => {
   const FIREBASE_BASE_URL = "https://battlepoints-e44ae-default-rtdb.firebaseio.com/battle";
-  const user = proboards.data("user");
-  if (!user || !user.id) return;
+  const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
 
+  function waitForUserData() {
+    return new Promise(resolve => {
+      const check = () => {
+        const user = proboards?.data("user");
+        if (user && user.id) resolve(user);
+        else setTimeout(check, 200);
+      };
+      check();
+    });
+  }
+
+  const user = await waitForUserData();
+  if (!user || !user.id) return;
   const userId = String(user.id);
 
   const TAG_REWARDS = {
@@ -75,7 +87,7 @@
         updates[id] = { ...users[id], rank_points: 0 };
       });
       await updateData("users", updates);
-      await new Promise(r => setTimeout(r, 250)); // tiny delay between batches
+      await new Promise(r => setTimeout(r, 250));
     }
     console.log("✅ Global rank reset complete");
     alert("All user ranks have been reset successfully!");
@@ -84,7 +96,7 @@
   // === UPDATE DISPLAY (BATCHED FETCH) ===
   let lastUpdate = 0;
   async function updateAllDisplays() {
-    if (Date.now() - lastUpdate < 3000) return; // throttle every 3s
+    if (Date.now() - lastUpdate < 3000) return;
     lastUpdate = Date.now();
 
     const allUsers = await fetchData("users") || {};
@@ -116,7 +128,7 @@
     return 0;
   }
 
-  // === LISTENERS ===
+  // === LISTENERS (patched for Firefox async behavior) ===
   function setupThreadAndPostListeners() {
     const threadBtns = $('input[type="submit"]').filter((_, el) => {
       const val = $(el).val()?.toLowerCase() || "";
@@ -128,10 +140,15 @@
       if ($btn.data("bp-bound")) return;
       $btn.data("bp-bound", true);
 
-      $btn.on("click", async function () {
+      $btn.on("click", async function (e) {
+        const form = this.form;
+        if (isFirefox) e.preventDefault();
+
         const subject = $('input[name="subject"]').val() || "";
         const reward = getTagValueFromSubject(subject);
         if (reward > 0) await awardBattlePoints(reward, "thread_creation");
+
+        if (isFirefox && form) form.submit();
       });
     });
 
@@ -145,7 +162,10 @@
       if ($btn.data("bp-bound")) return;
       $btn.data("bp-bound", true);
 
-      $btn.on("click", async function () {
+      $btn.on("click", async function (e) {
+        const form = this.form;
+        if (isFirefox) e.preventDefault();
+
         let threadTitle =
           ($('#thread-title').text() || "").trim() ||
           ($('input[name="subject"]').val() || "").trim() ||
@@ -154,6 +174,8 @@
 
         const reward = getTagValueFromSubject(threadTitle);
         if (reward > 0) await awardBattlePoints(reward, "post_reply");
+
+        if (isFirefox && form) form.submit();
       });
     });
   }
@@ -235,18 +257,12 @@
         cursor: pointer;
     }
 
-    #battle-edit-modal #battle-close-btn {
-        width: 100%;
-        background: #232323;
-        margin-top: -5px;
-		margin-left: 0px;
-    }
-
+    #battle-edit-modal #battle-close-btn,
     #battle-edit-modal #battle-reset-all-btn {
         width: 100%;
         background: #232323;
-		margin-top: 0px;
-		margin-left: 0px;
+        margin-top: 0px;
+        margin-left: 0px;
     }
     </style>
 
