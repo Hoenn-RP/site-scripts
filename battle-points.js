@@ -1,6 +1,4 @@
-// == Battle Points System (CommanderFoo + Firefox-safe full version, no popups) == //
-
-(async function () {
+(async () => {
   const FIREBASE_BASE_URL = "https://battlepoints-e44ae-default-rtdb.firebaseio.com/battle";
   const user = proboards.data("user");
   if (!user || !user.id) return;
@@ -47,20 +45,12 @@
     return data;
   }
 
-  async function awardBattlePoints(points, reason = "battle_reward", useBeacon = false) {
+  async function awardBattlePoints(points, reason = "battle_reward") {
     if (!points || points <= 0) return;
     const data = await getUserData();
     data.points += points;
     data.rank_points += points;
-
-    const url = `${FIREBASE_BASE_URL}/users/${userId}.json`;
-    if (useBeacon && navigator.sendBeacon) {
-      const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
-      navigator.sendBeacon(url, blob);
-    } else {
-      await setData(`users/${userId}`, data);
-    }
-
+    await setData(`users/${userId}`, data);
     updateAllDisplays();
   }
 
@@ -77,7 +67,7 @@
     const users = await fetchData("users");
     if (!users) return;
     const allIds = Object.keys(users);
-    const batchSize = 25;
+    const batchSize = 25; // process 25 users at a time
     for (let i = 0; i < allIds.length; i += batchSize) {
       const batch = allIds.slice(i, i + batchSize);
       const updates = {};
@@ -85,7 +75,7 @@
         updates[id] = { ...users[id], rank_points: 0 };
       });
       await updateData("users", updates);
-      await new Promise(r => setTimeout(r, 250));
+      await new Promise(r => setTimeout(r, 250)); // tiny delay between batches
     }
     console.log("✅ Global rank reset complete");
     alert("All user ranks have been reset successfully!");
@@ -94,7 +84,7 @@
   // === UPDATE DISPLAY (BATCHED FETCH) ===
   let lastUpdate = 0;
   async function updateAllDisplays() {
-    if (Date.now() - lastUpdate < 3000) return;
+    if (Date.now() - lastUpdate < 3000) return; // throttle every 3s
     lastUpdate = Date.now();
 
     const allUsers = await fetchData("users") || {};
@@ -126,7 +116,7 @@
     return 0;
   }
 
-  // === LISTENERS (with Firefox-safe handling) ===
+  // === LISTENERS ===
   function setupThreadAndPostListeners() {
     const threadBtns = $('input[type="submit"]').filter((_, el) => {
       const val = $(el).val()?.toLowerCase() || "";
@@ -138,10 +128,10 @@
       if ($btn.data("bp-bound")) return;
       $btn.data("bp-bound", true);
 
-      $btn.on("click", function () {
+      $btn.on("click", async function () {
         const subject = $('input[name="subject"]').val() || "";
-        const reward = getTagValueFromSubject(subject) || 10;
-        awardBattlePoints(reward, "thread_creation", true);
+        const reward = getTagValueFromSubject(subject);
+        if (reward > 0) await awardBattlePoints(reward, "thread_creation");
       });
     });
 
@@ -155,15 +145,15 @@
       if ($btn.data("bp-bound")) return;
       $btn.data("bp-bound", true);
 
-      $btn.on("click", function () {
+      $btn.on("click", async function () {
         let threadTitle =
           ($('#thread-title').text() || "").trim() ||
           ($('input[name="subject"]').val() || "").trim() ||
           ($('#navigation-tree a[href*="/thread/"]').last().text() || "").trim() ||
           (document.title.split(" | ")[0] || "").trim() || "";
 
-        const reward = getTagValueFromSubject(threadTitle) || 5;
-        awardBattlePoints(reward, "post_reply", true);
+        const reward = getTagValueFromSubject(threadTitle);
+        if (reward > 0) await awardBattlePoints(reward, "post_reply");
       });
     });
   }
@@ -245,12 +235,18 @@
         cursor: pointer;
     }
 
-    #battle-edit-modal #battle-close-btn,
+    #battle-edit-modal #battle-close-btn {
+        width: 100%;
+        background: #232323;
+        margin-top: -5px;
+		margin-left: 0px;
+    }
+
     #battle-edit-modal #battle-reset-all-btn {
         width: 100%;
         background: #232323;
-        margin-top: 0px;
-        margin-left: 0px;
+		margin-top: 0px;
+		margin-left: 0px;
     }
     </style>
 
@@ -359,5 +355,4 @@
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
-
 
