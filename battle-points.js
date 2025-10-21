@@ -67,7 +67,7 @@
     const users = await fetchData("users");
     if (!users) return;
     const allIds = Object.keys(users);
-    const batchSize = 25;
+    const batchSize = 25; // process 25 users at a time
     for (let i = 0; i < allIds.length; i += batchSize) {
       const batch = allIds.slice(i, i + batchSize);
       const updates = {};
@@ -75,7 +75,7 @@
         updates[id] = { ...users[id], rank_points: 0 };
       });
       await updateData("users", updates);
-      await new Promise(r => setTimeout(r, 250));
+      await new Promise(r => setTimeout(r, 250)); // tiny delay between batches
     }
     console.log("✅ Global rank reset complete");
     alert("All user ranks have been reset successfully!");
@@ -84,7 +84,7 @@
   // === UPDATE DISPLAY (BATCHED FETCH) ===
   let lastUpdate = 0;
   async function updateAllDisplays() {
-    if (Date.now() - lastUpdate < 3000) return;
+    if (Date.now() - lastUpdate < 3000) return; // throttle every 3s
     lastUpdate = Date.now();
 
     const allUsers = await fetchData("users") || {};
@@ -116,51 +116,54 @@
     return 0;
   }
 
-  // === THREAD & POST LISTENERS (FIREFOX-FRIENDLY) ===
-  function setupThreadAndPostListeners() {
-    const threadBtns = $('input[type="submit"]').filter((_, el) => {
-      const val = ($(el).val() || $(el).text() || "").toLowerCase();
-      return val.includes("create thread") || val.includes("post thread") || val.includes("new thread");
+  // === LISTENERS ===
+function setupThreadAndPostListeners() {
+  // --- THREAD BUTTONS ---
+  const threadBtns = $('input[type="submit"]').filter((_, el) => {
+    const val = ($(el).val() || $(el).text() || "").toLowerCase();
+    return val.includes("create thread") || val.includes("post thread") || val.includes("new thread");
+  });
+
+  threadBtns.each(function () {
+    const $btn = $(this);
+    if ($btn.data("bp-bound")) return;
+    $btn.data("bp-bound", true);
+
+    $btn.on("click", async function (e) {
+      e.preventDefault(); // stop form submission so async reward works
+      const subject = $('input[name="subject"]').val() || "";
+      const reward = getTagValueFromSubject(subject);
+      if (reward > 0) await awardBattlePoints(reward, "thread_creation");
+      $(this).closest("form").submit(); // continue normal submission
     });
+  });
 
-    threadBtns.each(function () {
-      const $btn = $(this);
-      if ($btn.data("bp-bound")) return;
-      $btn.data("bp-bound", true);
+  // --- POST BUTTONS ---
+  const postBtns = $('input[type="submit"], button[type="submit"]').filter((_, el) => {
+    const val = ($(el).val() || $(el).text() || "").toLowerCase();
+    return val.includes("post reply") || val.includes("create post") || val.includes("reply") || val.includes("quick reply");
+  });
 
-      $btn.on("click", async function (e) {
-        e.preventDefault();
-        const subject = $('input[name="subject"]').val() || "";
-        const reward = getTagValueFromSubject(subject);
-        if (reward > 0) await awardBattlePoints(reward, "thread_creation");
-        $(this).closest("form").submit();
-      });
+  postBtns.each(function () {
+    const $btn = $(this);
+    if ($btn.data("bp-bound")) return;
+    $btn.data("bp-bound", true);
+
+    $btn.on("click", async function (e) {
+      e.preventDefault();
+      let threadTitle =
+        ($('#thread-title').text() || "").trim() ||
+        ($('input[name="subject"]').val() || "").trim() ||
+        ($('#navigation-tree a[href*="/thread/"]').last().text() || "").trim() ||
+        (document.title.split(" | ")[0] || "").trim() || "";
+
+      const reward = getTagValueFromSubject(threadTitle);
+      if (reward > 0) await awardBattlePoints(reward, "post_reply");
+      $(this).closest("form").submit();
     });
+  });
+}
 
-    const postBtns = $('input[type="submit"], button[type="submit"]').filter((_, el) => {
-      const val = ($(el).val() || $(el).text() || "").toLowerCase();
-      return val.includes("post reply") || val.includes("create post") || val.includes("reply") || val.includes("quick reply");
-    });
-
-    postBtns.each(function () {
-      const $btn = $(this);
-      if ($btn.data("bp-bound")) return;
-      $btn.data("bp-bound", true);
-
-      $btn.on("click", async function (e) {
-        e.preventDefault();
-        let threadTitle =
-          ($('#thread-title').text() || "").trim() ||
-          ($('input[name="subject"]').val() || "").trim() ||
-          ($('#navigation-tree a[href*="/thread/"]').last().text() || "").trim() ||
-          (document.title.split(" | ")[0] || "").trim() || "";
-
-        const reward = getTagValueFromSubject(threadTitle);
-        if (reward > 0) await awardBattlePoints(reward, "post_reply");
-        $(this).closest("form").submit();
-      });
-    });
-  }
 
   // === STAFF MODAL ===
   function createEditModal() {
@@ -239,12 +242,18 @@
         cursor: pointer;
     }
 
-    #battle-edit-modal #battle-close-btn,
+    #battle-edit-modal #battle-close-btn {
+        width: 100%;
+        background: #232323;
+        margin-top: -5px;
+		margin-left: 0px;
+    }
+
     #battle-edit-modal #battle-reset-all-btn {
         width: 100%;
         background: #232323;
-        margin-top: 0;
-        margin-left: 0;
+		margin-top: 0px;
+		margin-left: 0px;
     }
     </style>
 
@@ -350,17 +359,7 @@
     setupStaffEditButtons();
   }
 
-  // Firefox-friendly DOM readiness
-  function waitForDOM(callback) {
-    const btns = $('input[type="submit"], button[type="submit"]');
-    if (btns.length) callback();
-    else setTimeout(() => waitForDOM(callback), 300);
-  }
-
-  $(document).ready(() => waitForDOM(initializeBattlePoints));
-  $(document).on("pageChange", () => waitForDOM(initializeBattlePoints));
+  $(document).ready(() => setTimeout(initializeBattlePoints, 400));
+  $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
-
-
-
 
