@@ -11,55 +11,32 @@
     "[BP]": 2,
   };
 
-  // === FETCH HELPERS WITH FIREFOX-FRIENDLY BEACON FALLBACK ===
+  // === SIMPLE FETCH HELPERS ===
   async function fetchData(path) {
-    try {
-      const res = await fetch(`${FIREBASE_BASE_URL}/${path}.json`);
-      return await res.json();
-    } catch (e) {
-      console.warn("[BP DEBUG] fetchData failed", e);
-      return null;
-    }
+    const res = await fetch(`${FIREBASE_BASE_URL}/${path}.json`);
+    return await res.json();
   }
 
   async function setData(path, data) {
-    const url = `${FIREBASE_BASE_URL}/${path}.json`;
-    const payload = JSON.stringify(data);
-
-    // Firefox-safe: use sendBeacon first
-    let ok = navigator.sendBeacon(url, new Blob([payload], { type: "application/json" }));
-    if (!ok) {
-      try {
-        await fetch(url, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: payload,
-          keepalive: true
-        });
-      } catch (e) { console.warn("[BP DEBUG] fetch fallback failed", e); }
-    }
+    await fetch(`${FIREBASE_BASE_URL}/${path}.json`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
   }
 
   async function updateData(path, data) {
-    const url = `${FIREBASE_BASE_URL}/${path}.json`;
-    const payload = JSON.stringify(data);
-
-    let ok = navigator.sendBeacon(url, new Blob([payload], { type: "application/json" }));
-    if (!ok) {
-      try {
-        await fetch(url, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: payload,
-          keepalive: true
-        });
-      } catch (e) { console.warn("[BP DEBUG] fetch fallback failed", e); }
-    }
+    await fetch(`${FIREBASE_BASE_URL}/${path}.json`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
   }
 
   // === USER HANDLING ===
   async function getUserData() {
-    let data = await fetchData(`users/${userId}`) || {};
+    let data = await fetchData(`users/${userId}`);
+    if (!data) data = {};
     data.username ??= user.username;
     data.display_name ??= user.name;
     data.points ??= 0;
@@ -70,17 +47,11 @@
 
   async function awardBattlePoints(points, reason = "battle_reward") {
     if (!points || points <= 0) return;
-
     const data = await getUserData();
-
     data.points += points;
     data.rank_points += points;
-
-    // Firefox-safe write
     await setData(`users/${userId}`, data);
-
     updateAllDisplays();
-    console.log("[BP DEBUG] awardBattlePoints applied:", points, reason);
   }
 
   // === RANK LOGIC ===
@@ -91,13 +62,12 @@
     return ranks[index] || "Z";
   }
 
-  // === GLOBAL RANK RESET ===
+  // === GLOBAL RANK RESET (SAFE BATCHES) ===
   async function globalRankReset() {
     const users = await fetchData("users");
     if (!users) return;
-
     const allIds = Object.keys(users);
-    const batchSize = 25;
+    const batchSize = 25; // process 25 users at a time
     for (let i = 0; i < allIds.length; i += batchSize) {
       const batch = allIds.slice(i, i + batchSize);
       const updates = {};
@@ -105,17 +75,16 @@
         updates[id] = { ...users[id], rank_points: 0 };
       });
       await updateData("users", updates);
-      await new Promise(r => setTimeout(r, 250));
+      await new Promise(r => setTimeout(r, 250)); // tiny delay between batches
     }
-
     console.log("✅ Global rank reset complete");
     alert("All user ranks have been reset successfully!");
   }
 
-  // === UPDATE DISPLAY ===
+  // === UPDATE DISPLAY (BATCHED FETCH) ===
   let lastUpdate = 0;
   async function updateAllDisplays() {
-    if (Date.now() - lastUpdate < 3000) return;
+    if (Date.now() - lastUpdate < 3000) return; // throttle every 3s
     lastUpdate = Date.now();
 
     const allUsers = await fetchData("users") || {};
@@ -192,7 +161,115 @@
   // === STAFF MODAL ===
   function createEditModal() {
     if ($('#battle-edit-modal').length) return;
-    // ... modal HTML unchanged
+    const modalHTML = `
+    <style>
+    #battle-edit-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 320px;
+        background: #2b2b2b;
+        border: 1px solid #232323;
+        border-radius: 4px;
+        font-family: 'Roboto', sans-serif;
+        color: #fff;
+        z-index: 10000;
+    }
+
+    #battle-edit-modal .title-bar {
+        background-color: #272727;
+        background-image: url(https://image.ibb.co/dMFuMc/flower.png);
+        background-repeat: no-repeat;
+        background-position: center right;
+        padding: 8px 12px;
+        border-bottom: 1px solid #232323;
+        font: bold 9px 'Quattrocento Sans', sans-serif;
+        color: #aaa !important;
+        text-transform: uppercase;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #battle-edit-modal .modal-body { padding: 12px; }
+
+    #battle-edit-modal label {
+        font: bold 9px Roboto;
+        letter-spacing: 2px;
+        color: #aaa;
+        text-transform: uppercase;
+        display: block;
+        margin-top: 10px;
+        margin-left: 2px;
+    }
+
+    #battle-edit-modal input[type="number"] {
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        padding: 6px;
+        background: #303030;
+        border: 1px solid #232323;
+        color: #aaa;
+        border-radius: 3px;
+    }
+
+    #battle-edit-modal .btn-group {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 10px;
+    }
+
+    #battle-edit-modal button {
+        border: 1px solid #232323;
+        border-radius: 3px;
+        background: #272727;
+        text-transform: uppercase;
+        font: bold 12px Roboto;
+        color: #aaa;
+        height: 29px;
+        margin-top: 5px;
+        line-height: 19px;
+        letter-spacing: 1px;
+        cursor: pointer;
+    }
+
+    #battle-edit-modal #battle-close-btn {
+        width: 100%;
+        background: #232323;
+        margin-top: -5px;
+		margin-left: 0px;
+    }
+
+    #battle-edit-modal #battle-reset-all-btn {
+        width: 100%;
+        background: #232323;
+		margin-top: 0px;
+		margin-left: 0px;
+    }
+    </style>
+
+    <div id="battle-edit-modal" style="display:none;">
+      <div class="title-bar"><span>Edit Battle Points</span></div>
+      <div class="modal-body">
+        <button id="battle-reset-all-btn">Reset All Ranks</button>
+        <label>Set New Value:</label>
+        <div class="btn-group">
+          <input type="number" id="battle-set-value" />
+          <button id="battle-set-btn">Set</button>
+          <button id="battle-reset-btn">Reset</button>
+        </div>
+        <label>Add or Remove:</label>
+        <div class="btn-group">
+          <input type="number" id="battle-change-value" />
+          <button id="battle-add-btn">Add</button>
+          <button id="battle-remove-btn">Remove</button>
+        </div>
+        <button id="battle-close-btn">Close</button>
+      </div>
+    </div>`;
+    $('body').append(modalHTML);
   }
 
   function setupStaffEditButtons() {
@@ -278,5 +355,8 @@
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
+
+
+
 
 
