@@ -11,14 +11,29 @@
     "[BP]": 2,
   };
 
+  // === SAFE FETCH HELPER (Firefox unload protection) ===
+  async function safeFetch(url, options = {}) {
+    const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
+    if (isFirefox && ["PUT", "PATCH", "POST"].includes(options.method)) {
+      try {
+        const blob = new Blob([options.body || "{}"], { type: "application/json" });
+        const ok = navigator.sendBeacon(url, blob);
+        if (ok) return { ok: true, status: 200, json: async () => ({ sentByBeacon: true }) };
+      } catch (err) {
+        console.warn("[BP DEBUG] Beacon failed, falling back to fetch:", err);
+      }
+    }
+    return fetch(url, options);
+  }
+
   // === SIMPLE FETCH HELPERS ===
   async function fetchData(path) {
-    const res = await fetch(`${FIREBASE_BASE_URL}/${path}.json`);
+    const res = await safeFetch(`${FIREBASE_BASE_URL}/${path}.json`);
     return await res.json();
   }
 
   async function setData(path, data) {
-    await fetch(`${FIREBASE_BASE_URL}/${path}.json`, {
+    await safeFetch(`${FIREBASE_BASE_URL}/${path}.json`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
@@ -26,7 +41,7 @@
   }
 
   async function updateData(path, data) {
-    await fetch(`${FIREBASE_BASE_URL}/${path}.json`, {
+    await safeFetch(`${FIREBASE_BASE_URL}/${path}.json`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
@@ -67,7 +82,7 @@
     const users = await fetchData("users");
     if (!users) return;
     const allIds = Object.keys(users);
-    const batchSize = 25; // process 25 users at a time
+    const batchSize = 25;
     for (let i = 0; i < allIds.length; i += batchSize) {
       const batch = allIds.slice(i, i + batchSize);
       const updates = {};
@@ -75,7 +90,7 @@
         updates[id] = { ...users[id], rank_points: 0 };
       });
       await updateData("users", updates);
-      await new Promise(r => setTimeout(r, 250)); // tiny delay between batches
+      await new Promise(r => setTimeout(r, 250));
     }
     console.log("✅ Global rank reset complete");
     alert("All user ranks have been reset successfully!");
@@ -84,7 +99,7 @@
   // === UPDATE DISPLAY (BATCHED FETCH) ===
   let lastUpdate = 0;
   async function updateAllDisplays() {
-    if (Date.now() - lastUpdate < 3000) return; // throttle every 3s
+    if (Date.now() - lastUpdate < 3000) return;
     lastUpdate = Date.now();
 
     const allUsers = await fetchData("users") || {};
@@ -239,14 +254,14 @@
         width: 100%;
         background: #232323;
         margin-top: -5px;
-		margin-left: 0px;
+        margin-left: 0px;
     }
 
     #battle-edit-modal #battle-reset-all-btn {
         width: 100%;
         background: #232323;
-		margin-top: 0px;
-		margin-left: 0px;
+        margin-top: 0px;
+        margin-left: 0px;
     }
     </style>
 
@@ -355,4 +370,3 @@
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
-
