@@ -115,17 +115,22 @@
       return val.includes("create thread") || val.includes("post thread") || val.includes("new thread");
     });
 
-    threadBtns.each(function () {
-      const $btn = $(this);
-      if ($btn.data("amity-tag-bound")) return;
-      $btn.data("amity-tag-bound", true);
+threadBtns.each(function () {
+  const $btn = $(this);
+  if ($btn.data("amity-tag-bound")) return;
+  $btn.data("amity-tag-bound", true);
 
-      $btn.on("click", async function () {
-        const subject = $('input[name="subject"]').val() || "";
-        const reward = getTagValueFromSubject(subject);
-        if (reward > 0) await awardAmityTagPoints(reward, "thread_creation");
-      });
-    });
+  $btn.on("click", async function (e) {
+    e.preventDefault(); // prevent immediate submission
+
+    const subject = $('input[name="subject"]').val() || "";
+    const reward = getTagValueFromSubject(subject);
+    if (reward > 0) await awardAmityTagPoints(reward, "thread_creation");
+
+    // resume normal form submission
+    $(this).closest("form").submit();
+  });
+});
 
     // Detect replies to tagged threads
     const postBtns = $('input[type="submit"], button[type="submit"]').filter((_, el) => {
@@ -133,23 +138,27 @@
       return val.includes("post reply") || val.includes("create post") || val.includes("reply") || val.includes("quick reply");
     });
 
-    postBtns.each(function () {
-      const $btn = $(this);
-      if ($btn.data("amity-tag-bound")) return;
-      $btn.data("amity-tag-bound", true);
+ postBtns.each(function () {
+  const $btn = $(this);
+  if ($btn.data("amity-tag-bound")) return;
+  $btn.data("amity-tag-bound", true);
 
-      $btn.on("click", async function () {
-        let threadTitle =
-          ($('#thread-title').text() || "").trim() ||
-          ($('input[name="subject"]').val() || "").trim() ||
-          ($('#navigation-tree a[href*="/thread/"]').last().text() || "").trim() ||
-          (document.title.split(" | ")[0] || "").trim() || "";
+  $btn.on("click", async function (e) {
+    e.preventDefault(); // stop form submission so async can finish
 
-        const reward = getTagValueFromSubject(threadTitle);
-        if (reward > 0) await awardAmityTagPoints(reward, "post_reply");
-      });
-    });
-  }
+    let threadTitle =
+      ($('#thread-title').text() || "").trim() ||
+      ($('input[name="subject"]').val() || "").trim() ||
+      ($('#navigation-tree a[href*="/thread/"]').last().text() || "").trim() ||
+      (document.title.split(" | ")[0] || "").trim() || "";
+
+    const reward = getTagValueFromSubject(threadTitle);
+    if (reward > 0) await awardAmityTagPoints(reward, "post_reply");
+
+    // resume normal submission
+    $(this).closest("form").submit();
+  });
+});
 
   // === DISPLAY UPDATES ===
   async function updateAllDisplays() {
@@ -386,3 +395,4 @@
   $(document).ready(() => setTimeout(initializeAmity, 300));
   $(document).on("pageChange", () => setTimeout(initializeAmity, 300));
 })();
+
