@@ -57,7 +57,7 @@
   // === RANK LOGIC ===
   function getRankFromPoints(points) {
     const ranks = "ZYXWVUTSRQPONMLKJIHGFEDCBA".split("");
-    const capped = Math.min(points, 52);
+    const capped = Math.min(points, 50);
     const index = Math.floor(capped / 2);
     return ranks[index] || "Z";
   }
@@ -362,5 +362,6 @@ function setupThreadAndPostListeners() {
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
+
 
 
