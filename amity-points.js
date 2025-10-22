@@ -107,58 +107,59 @@
     return 0;
   }
 
-  // === TAG DETECTION LISTENERS ===
+  // === TAG DETECTION LISTENERS (Firefox-safe) ===
   function setupThreadAndPostListeners() {
     // Detect thread creation
-    const threadBtns = $('input[type="submit"]').filter((_, el) => {
-      const val = $(el).val()?.toLowerCase() || "";
+    const threadBtns = $('input[type="submit"], button[type="submit"]').filter((_, el) => {
+      const val = ($(el).val() || $(el).text() || "").toLowerCase();
       return val.includes("create thread") || val.includes("post thread") || val.includes("new thread");
     });
 
-threadBtns.each(function () {
-  const $btn = $(this);
-  if ($btn.data("amity-tag-bound")) return;
-  $btn.data("amity-tag-bound", true);
+    threadBtns.each(function () {
+      const $btn = $(this);
+      if ($btn.data("amity-tag-bound")) return;
+      $btn.data("amity-tag-bound", true);
 
-  $btn.on("click", async function (e) {
-    e.preventDefault(); // prevent immediate submission
+      $btn.on("click", async function (e) {
+        e.preventDefault(); // prevent immediate submission
 
-    const subject = $('input[name="subject"]').val() || "";
-    const reward = getTagValueFromSubject(subject);
-    if (reward > 0) await awardAmityTagPoints(reward, "thread_creation");
+        const subject = $('input[name="subject"]').val() || "";
+        const reward = getTagValueFromSubject(subject);
+        if (reward > 0) await awardAmityTagPoints(reward, "thread_creation");
 
-    // resume normal form submission
-    $(this).closest("form").submit();
-  });
-});
+        // resume normal form submission
+        $(this).closest("form").submit();
+      });
+    });
 
     // Detect replies to tagged threads
     const postBtns = $('input[type="submit"], button[type="submit"]').filter((_, el) => {
-      const val = $(el).val()?.toLowerCase() || $(el).text()?.toLowerCase() || "";
+      const val = ($(el).val() || $(el).text() || "").toLowerCase();
       return val.includes("post reply") || val.includes("create post") || val.includes("reply") || val.includes("quick reply");
     });
 
- postBtns.each(function () {
-  const $btn = $(this);
-  if ($btn.data("amity-tag-bound")) return;
-  $btn.data("amity-tag-bound", true);
+    postBtns.each(function () {
+      const $btn = $(this);
+      if ($btn.data("amity-tag-bound")) return;
+      $btn.data("amity-tag-bound", true);
 
-  $btn.on("click", async function (e) {
-    e.preventDefault(); // stop form submission so async can finish
+      $btn.on("click", async function (e) {
+        e.preventDefault(); // stop form submission so async can finish
 
-    let threadTitle =
-      ($('#thread-title').text() || "").trim() ||
-      ($('input[name="subject"]').val() || "").trim() ||
-      ($('#navigation-tree a[href*="/thread/"]').last().text() || "").trim() ||
-      (document.title.split(" | ")[0] || "").trim() || "";
+        let threadTitle =
+          ($('#thread-title').text() || "").trim() ||
+          ($('input[name="subject"]').val() || "").trim() ||
+          ($('#navigation-tree a[href*="/thread/"]').last().text() || "").trim() ||
+          (document.title.split(" | ")[0] || "").trim() || "";
 
-    const reward = getTagValueFromSubject(threadTitle);
-    if (reward > 0) await awardAmityTagPoints(reward, "post_reply");
+        const reward = getTagValueFromSubject(threadTitle);
+        if (reward > 0) await awardAmityTagPoints(reward, "post_reply");
 
-    // resume normal submission
-    $(this).closest("form").submit();
-  });
-});
+        // resume normal submission
+        $(this).closest("form").submit();
+      });
+    });
+  }
 
   // === DISPLAY UPDATES ===
   async function updateAllDisplays() {
@@ -387,7 +388,7 @@ threadBtns.each(function () {
   // === INIT ===
   function initializeAmity() {
     bindClickHandlers();
-    setupThreadAndPostListeners(); // NEW for tag-based rewards
+    setupThreadAndPostListeners(); // Firefox-safe tag-based rewards
     updateAllDisplays();
     setupStaffEditButtons();
   }
@@ -395,4 +396,3 @@ threadBtns.each(function () {
   $(document).ready(() => setTimeout(initializeAmity, 300));
   $(document).on("pageChange", () => setTimeout(initializeAmity, 300));
 })();
-
