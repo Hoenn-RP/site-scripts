@@ -1,17 +1,6 @@
 (async () => {
   const FIREBASE_BASE_URL = "https://battlepoints-e44ae-default-rtdb.firebaseio.com/battle";
-
-  // --- wait until proboards user data is available ---
-  async function waitForUserData() {
-    for (let i = 0; i < 20; i++) {
-      const u = proboards.data("user");
-      if (u && u.id) return u;
-      await new Promise(r => setTimeout(r, 250));
-    }
-    return null;
-  }
-
-  const user = await waitForUserData();
+  const user = proboards.data("user");
   if (!user || !user.id) return;
 
   const userId = String(user.id);
@@ -24,9 +13,7 @@
 
   // === SIMPLE FETCH HELPERS ===
   async function fetchData(path) {
-    const res = await fetch(`${FIREBASE_BASE_URL}/${path}.json?nocache=${Date.now()}`, {
-      cache: "no-store",
-    });
+    const res = await fetch(`${FIREBASE_BASE_URL}/${path}.json`);
     return await res.json();
   }
 
@@ -80,7 +67,7 @@
     const users = await fetchData("users");
     if (!users) return;
     const allIds = Object.keys(users);
-    const batchSize = 25;
+    const batchSize = 25; // process 25 users at a time
     for (let i = 0; i < allIds.length; i += batchSize) {
       const batch = allIds.slice(i, i + batchSize);
       const updates = {};
@@ -88,16 +75,16 @@
         updates[id] = { ...users[id], rank_points: 0 };
       });
       await updateData("users", updates);
-      await new Promise(r => setTimeout(r, 250));
+      await new Promise(r => setTimeout(r, 250)); // tiny delay between batches
     }
     console.log("✅ Global rank reset complete");
     alert("All user ranks have been reset successfully!");
   }
 
-  // === UPDATE DISPLAY ===
+  // === UPDATE DISPLAY (BATCHED FETCH) ===
   let lastUpdate = 0;
   async function updateAllDisplays() {
-    if (Date.now() - lastUpdate < 3000) return;
+    if (Date.now() - lastUpdate < 3000) return; // throttle every 3s
     lastUpdate = Date.now();
 
     const allUsers = await fetchData("users") || {};
@@ -130,54 +117,53 @@
   }
 
   // === LISTENERS ===
-  function setupThreadAndPostListeners() {
-    // --- THREAD BUTTONS ---
-    const threadBtns = $('input[type="submit"]').filter((_, el) => {
-      const val = ($(el).val() || $(el).text() || "").toLowerCase();
-      return val.includes("create thread") || val.includes("post thread") || val.includes("new thread");
+function setupThreadAndPostListeners() {
+  // --- THREAD BUTTONS ---
+  const threadBtns = $('input[type="submit"]').filter((_, el) => {
+    const val = ($(el).val() || $(el).text() || "").toLowerCase();
+    return val.includes("create thread") || val.includes("post thread") || val.includes("new thread");
+  });
+
+  threadBtns.each(function () {
+    const $btn = $(this);
+    if ($btn.data("bp-bound")) return;
+    $btn.data("bp-bound", true);
+
+    $btn.on("click", async function (e) {
+      e.preventDefault(); // stop form submission so async reward works
+      const subject = $('input[name="subject"]').val() || "";
+      const reward = getTagValueFromSubject(subject);
+      if (reward > 0) await awardBattlePoints(reward, "thread_creation");
+      $(this).closest("form").submit(); // continue normal submission
     });
+  });
 
-    threadBtns.each(function () {
-      const $btn = $(this);
-      if ($btn.data("bp-bound")) return;
-      $btn.data("bp-bound", true);
+  // --- POST BUTTONS ---
+  const postBtns = $('input[type="submit"], button[type="submit"]').filter((_, el) => {
+    const val = ($(el).val() || $(el).text() || "").toLowerCase();
+    return val.includes("post reply") || val.includes("create post") || val.includes("reply") || val.includes("quick reply");
+  });
 
-      $btn.on("click", async function (e) {
-        e.preventDefault();
-        const subject = $('input[name="subject"]').val() || "";
-        const reward = getTagValueFromSubject(subject);
-        if (reward > 0) await awardBattlePoints(reward, "thread_creation");
-        // Firefox-safe submit
-        setTimeout(() => $(this).closest("form")[0].submit(), 50);
-      });
+  postBtns.each(function () {
+    const $btn = $(this);
+    if ($btn.data("bp-bound")) return;
+    $btn.data("bp-bound", true);
+
+    $btn.on("click", async function (e) {
+      e.preventDefault();
+      let threadTitle =
+        ($('#thread-title').text() || "").trim() ||
+        ($('input[name="subject"]').val() || "").trim() ||
+        ($('#navigation-tree a[href*="/thread/"]').last().text() || "").trim() ||
+        (document.title.split(" | ")[0] || "").trim() || "";
+
+      const reward = getTagValueFromSubject(threadTitle);
+      if (reward > 0) await awardBattlePoints(reward, "post_reply");
+      $(this).closest("form").submit();
     });
+  });
+}
 
-    // --- POST BUTTONS ---
-    const postBtns = $('input[type="submit"], button[type="submit"]').filter((_, el) => {
-      const val = ($(el).val() || $(el).text() || "").toLowerCase();
-      return val.includes("post reply") || val.includes("create post") || val.includes("reply") || val.includes("quick reply");
-    });
-
-    postBtns.each(function () {
-      const $btn = $(this);
-      if ($btn.data("bp-bound")) return;
-      $btn.data("bp-bound", true);
-
-      $btn.on("click", async function (e) {
-        e.preventDefault();
-        let threadTitle =
-          ($('#thread-title').text() || "").trim() ||
-          ($('input[name="subject"]').val() || "").trim() ||
-          ($('#navigation-tree a[href*="/thread/"]').last().text() || "").trim() ||
-          (document.title.split(" | ")[0] || "").trim() || "";
-
-        const reward = getTagValueFromSubject(threadTitle);
-        if (reward > 0) await awardBattlePoints(reward, "post_reply");
-        // Firefox-safe delayed submit
-        setTimeout(() => $(this).closest("form")[0].submit(), 50);
-      });
-    });
-  }
 
   // === STAFF MODAL ===
   function createEditModal() {
@@ -197,8 +183,12 @@
         color: #fff;
         z-index: 10000;
     }
+
     #battle-edit-modal .title-bar {
         background-color: #272727;
+        background-image: url(https://image.ibb.co/dMFuMc/flower.png);
+        background-repeat: no-repeat;
+        background-position: center right;
         padding: 8px 12px;
         border-bottom: 1px solid #232323;
         font: bold 9px 'Quattrocento Sans', sans-serif;
@@ -208,7 +198,9 @@
         justify-content: space-between;
         align-items: center;
     }
+
     #battle-edit-modal .modal-body { padding: 12px; }
+
     #battle-edit-modal label {
         font: bold 9px Roboto;
         letter-spacing: 2px;
@@ -216,7 +208,9 @@
         text-transform: uppercase;
         display: block;
         margin-top: 10px;
+        margin-left: 2px;
     }
+
     #battle-edit-modal input[type="number"] {
         width: 100%;
         margin-top: 5px;
@@ -227,11 +221,13 @@
         color: #aaa;
         border-radius: 3px;
     }
+
     #battle-edit-modal .btn-group {
         display: flex;
         gap: 6px;
         margin-bottom: 10px;
     }
+
     #battle-edit-modal button {
         border: 1px solid #232323;
         border-radius: 3px;
@@ -245,13 +241,22 @@
         letter-spacing: 1px;
         cursor: pointer;
     }
-    #battle-edit-modal #battle-close-btn,
+
+    #battle-edit-modal #battle-close-btn {
+        width: 100%;
+        background: #232323;
+        margin-top: -5px;
+		margin-left: 0px;
+    }
+
     #battle-edit-modal #battle-reset-all-btn {
         width: 100%;
         background: #232323;
-        margin-top: 0;
+		margin-top: 0px;
+		margin-left: 0px;
     }
     </style>
+
     <div id="battle-edit-modal" style="display:none;">
       <div class="title-bar"><span>Edit Battle Points</span></div>
       <div class="modal-body">
@@ -357,4 +362,6 @@
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
+
+
 
