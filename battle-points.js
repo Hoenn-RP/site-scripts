@@ -119,9 +119,10 @@
   // === LISTENERS ===
 function setupThreadAndPostListeners() {
   // --- THREAD BUTTONS ---
-  const threadBtns = $('input[type="submit"]').filter((_, el) => {
-    const val = ($(el).val() || $(el).text() || "").toLowerCase();
-    return val.includes("create thread") || val.includes("post thread") || val.includes("new thread");
+  const threadBtns = $('input[type="submit"], button[type="submit"]').filter((_, el) => {
+    const $el = $(el);
+    const val = el.tagName.toLowerCase() === 'input' ? $el.val() : $el.text();
+    return /create thread|post thread|new thread/i.test(val);
   });
 
   threadBtns.each(function () {
@@ -134,14 +135,16 @@ function setupThreadAndPostListeners() {
       const subject = $('input[name="subject"]').val() || "";
       const reward = getTagValueFromSubject(subject);
       if (reward > 0) await awardBattlePoints(reward, "thread_creation");
-      $(this).closest("form").submit(); // continue normal submission
+      // Submit the form after async work completes
+      this.form.submit();
     });
   });
 
   // --- POST BUTTONS ---
   const postBtns = $('input[type="submit"], button[type="submit"]').filter((_, el) => {
-    const val = ($(el).val() || $(el).text() || "").toLowerCase();
-    return val.includes("post reply") || val.includes("create post") || val.includes("reply") || val.includes("quick reply");
+    const $el = $(el);
+    const val = el.tagName.toLowerCase() === 'input' ? $el.val() : $el.text();
+    return /post reply|create post|reply|quick reply/i.test(val);
   });
 
   postBtns.each(function () {
@@ -159,10 +162,12 @@ function setupThreadAndPostListeners() {
 
       const reward = getTagValueFromSubject(threadTitle);
       if (reward > 0) await awardBattlePoints(reward, "post_reply");
-      $(this).closest("form").submit();
+      // Submit the form after async work completes
+      this.form.submit();
     });
   });
 }
+
 
 
   // === STAFF MODAL ===
@@ -362,7 +367,3 @@ function setupThreadAndPostListeners() {
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
-
-
-
-
