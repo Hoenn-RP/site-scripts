@@ -127,6 +127,10 @@ function setupThreadAndPostListeners() {
     if ($form.data('bp-bound')) return;
     $form.data('bp-bound', true);
 
+    // --- SKI EDIT ---
+    const submitVal = ($form.find('input[type="submit"]').val() || "").trim();
+    if (/save changes/i.test(submitVal)) return; // ignore edit-post forms
+
     $form.on('submit', async function (e) {
       e.preventDefault();
 
@@ -344,4 +348,5 @@ function setupThreadAndPostListeners() {
   $(document).ready(() => setTimeout(initializeBattlePoints, 400));
   $(document).on("pageChange", () => setTimeout(initializeBattlePoints, 400));
 })();
+
 
