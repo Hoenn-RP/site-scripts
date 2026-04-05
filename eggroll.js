@@ -17,15 +17,15 @@ function EggrollDice() {
         let resultText = '';
 
         if (finalRoll <= 20) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is really rumbling! It must have <b>1 TM MOVE!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is kind of neat! It must have <b>ONE TM MOVE!</b></div>`;
         } else if (finalRoll <= 40) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is really rumbling! It must have <b>1 EGG MOVE!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg seems different! It must have <b>ONE EGG MOVE!</b></div>`;
         } else if (finalRoll <= 60) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is really rumbling! It must have <b>TWO EGG MOVES!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is really different! It must have <b>TWO EGG MOVES!</b></div>`;
         } else if (finalRoll <= 80) {
-            resultText = `<img style="padding:28px;"" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is really rumbling! It must have <b>1 EVENT MOVE!</b></div>`;
+            resultText = `<img style="padding:28px;"" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is very special! It must have <b>ONE EVENT MOVE!</b></div>`;
         } else {
-            resultText = `<img style="padding:28px;" src="https://i.imgur.com/bwjRsaA.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is really rumbling! It must have <b>WISH MOVE!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://i.imgur.com/bwjRsaA.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is something else! It must have the move <b>WISH!</b></div>`;
         }
 
         $(this).html(resultText);
