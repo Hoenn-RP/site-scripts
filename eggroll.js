@@ -30,6 +30,9 @@ function EggrollDice() {
 
         $(this).html(resultText);
         $(this).data('processed', true);
+        $(this).closest('.eggroll-1').contents().filter(function() {
+            return this.nodeType === 3;
+        }).remove();
     });
 
     // -----------------------------
@@ -66,6 +69,9 @@ function EggrollDice() {
 
         $(this).html(resultText);
         $(this).data('processed', true);
+        $(this).closest('.eggroll-2').contents().filter(function() {
+            return this.nodeType === 3;
+        }).remove();
     });
 
     // -----------------------------
@@ -148,6 +154,9 @@ function EggrollDice() {
 
         $(this).html(resultText);
         $(this).data('processed', true);
+        $(this).closest('.eggroll-3').contents().filter(function() {
+            return this.nodeType === 3;
+        }).remove();
     });
 }
 
