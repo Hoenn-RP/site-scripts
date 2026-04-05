@@ -91,66 +91,66 @@ function EggrollDice() {
         let resultText = '';
 
 if (finalRoll <= 4) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/659.png" title="Bunnelby Egg"><div class="cramomatic-desc">The egg hatches into <b>Bunnelby</b>!</div>`;
-        } else if (finalRoll <= 8) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/420.png" title="Cherubi Egg"><div class="cramomatic-desc">The egg hatches into <b>Cherubi</b>!</div>`;
-        } else if (finalRoll <= 12) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/602.png" title="Tynamo Egg"><div class="cramomatic-desc">The egg hatches into <b>Tynamo</b>!</div>`;
-        } else if (finalRoll <= 16) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/54.png" title="Psyduck Egg"><div class="cramomatic-desc">The egg hatches into <b>Psyduck</b>!</div>`;
-        } else if (finalRoll <= 20) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/285.png" title="Shroomish Egg"><div class="cramomatic-desc">The egg hatches into <b>Shroomish</b>!</div>`;
-        } else if (finalRoll <= 24) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/175.png" title="Togepi Egg"><div class="cramomatic-desc">The egg hatches into <b>Togepi</b>!</div>`;
-        } else if (finalRoll <= 28) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/236.png" title="Tyrogue Egg"><div class="cramomatic-desc">The egg hatches into <b>Tyrogue</b>!</div>`;
-        } else if (finalRoll <= 32) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/238.png" title="Smoochum Egg"><div class="cramomatic-desc">The egg hatches into <b>Smoochum</b>!</div>`;
-        } else if (finalRoll <= 36) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/239.png" title="Elekid Egg"><div class="cramomatic-desc">The egg hatches into <b>Elekid</b>!</div>`;
-        } else if (finalRoll <= 40) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/240.png" title="Magby Egg"><div class="cramomatic-desc">The egg hatches into <b>Magby</b>!</div>`;
-        } else if (finalRoll <= 44) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/173.png" title="Cleffa Egg"><div class="cramomatic-desc">The egg hatches into <b>Cleffa</b>!</div>`;
-        } else if (finalRoll <= 48) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/174.png" title="Igglybuff Egg"><div class="cramomatic-desc">The egg hatches into <b>Igglybuff</b>!</div>`;
-        } else if (finalRoll <= 52) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/298.png" title="Azurill Egg"><div class="cramomatic-desc">The egg hatches into <b>Azurill</b>!</div>`;
-        } else if (finalRoll <= 56) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/360.png" title="Wynaut Egg"><div class="cramomatic-desc">The egg hatches into <b>Wynaut</b>!</div>`;
-        } else if (finalRoll <= 60) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/406.png" title="Budew Egg"><div class="cramomatic-desc">The egg hatches into <b>Budew</b>!</div>`;
-        } else if (finalRoll <= 64) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/433.png" title="Chingling Egg"><div class="cramomatic-desc">The egg hatches into <b>Chingling</b>!</div>`;
-        } else if (finalRoll <= 68) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/438.png" title="Bonsly Egg"><div class="cramomatic-desc">The egg hatches into <b>Bonsly</b>!</div>`;
-        } else if (finalRoll <= 72) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/439.png" title="Mime Jr. Egg"><div class="cramomatic-desc">The egg hatches into <b>Mime Jr.</b>!</div>`;
-        } else if (finalRoll <= 76) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/440.png" title="Happiny Egg"><div class="cramomatic-desc">The egg hatches into <b>Happiny</b>!</div>`;
-        } else if (finalRoll <= 80) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/446.png" title="Munchlax Egg"><div class="cramomatic-desc">The egg hatches into <b>Munchlax</b>!</div>`;
-        } else if (finalRoll <= 84) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/458.png" title="Mantyke Egg"><div class="cramomatic-desc">The egg hatches into <b>Mantyke</b>!</div>`;
-        } else if (finalRoll <= 88) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/848.png" title="Toxel Egg"><div class="cramomatic-desc">The egg hatches into <b>Toxel</b>!</div>`;
-        } else if (finalRoll <= 92) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/300.png" title="Skitty Egg"><div class="cramomatic-desc">The egg hatches into <b>Skitty</b>!</div>`;
-        } else if (finalRoll <= 96) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/427.png" title="Buneary Egg"><div class="cramomatic-desc">The egg hatches into <b>Buneary</b>!</div>`;
-        } else if (finalRoll <= 100) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/425.png" title="Drifloon Egg"><div class="cramomatic-desc">The egg hatches into <b>Drifloon</b>!</div>`;
-        } else if (finalRoll <= 104) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/216.png" title="Teddiursa Egg"><div class="cramomatic-desc">The egg hatches into <b>Teddiursa</b>!</div>`;
-        } else if (finalRoll <= 108) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/255.png" title="Torchic Egg"><div class="cramomatic-desc">The egg hatches into <b>Torchic</b>!</div>`;
-        } else if (finalRoll <= 112) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/447.png" title="Riolu Egg"><div class="cramomatic-desc">The egg hatches into <b>Riolu</b>!</div>`;
-        } else if (finalRoll <= 116) {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/172.png" title="Pichu Egg"><div class="cramomatic-desc">The egg hatches into <b>Pichu</b>!</div>`;
-        } else {
-            resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png" title="Eevee Egg"><div class="cramomatic-desc">The egg hatches into <b>Eevee</b>!</div>`;
-        }
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/659.png" title="Bunnelby Egg"><div class="cramomatic-desc"><b>Bunnelby</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 8) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/420.png" title="Cherubi Egg"><div class="cramomatic-desc"><b>Cherubi</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 12) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/602.png" title="Tynamo Egg"><div class="cramomatic-desc"><b>Tynamo</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 16) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/54.png" title="Psyduck Egg"><div class="cramomatic-desc"><b>Psyduck</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 20) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/285.png" title="Shroomish Egg"><div class="cramomatic-desc"><b>Shroomish</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 24) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/175.png" title="Togepi Egg"><div class="cramomatic-desc"><b>Togepi</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 28) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/236.png" title="Tyrogue Egg"><div class="cramomatic-desc"><b>Tyrogue</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 32) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/238.png" title="Smoochum Egg"><div class="cramomatic-desc"><b>Smoochum</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 36) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/239.png" title="Elekid Egg"><div class="cramomatic-desc"><b>Elekid</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 40) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/240.png" title="Magby Egg"><div class="cramomatic-desc"><b>Magby</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 44) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/173.png" title="Cleffa Egg"><div class="cramomatic-desc"><b>Cleffa</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 48) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/174.png" title="Igglybuff Egg"><div class="cramomatic-desc"><b>Igglybuff</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 52) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/298.png" title="Azurill Egg"><div class="cramomatic-desc"><b>Azurill</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 56) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/360.png" title="Wynaut Egg"><div class="cramomatic-desc"><b>Wynaut</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 60) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/406.png" title="Budew Egg"><div class="cramomatic-desc"><b>Budew</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 64) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/433.png" title="Chingling Egg"><div class="cramomatic-desc"><b>Chingling</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 68) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/438.png" title="Bonsly Egg"><div class="cramomatic-desc"><b>Bonsly</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 72) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/439.png" title="Mime Jr. Egg"><div class="cramomatic-desc"><b>Mime Jr.</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 76) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/440.png" title="Happiny Egg"><div class="cramomatic-desc"><b>Happiny</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 80) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/446.png" title="Munchlax Egg"><div class="cramomatic-desc"><b>Munchlax</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 84) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/458.png" title="Mantyke Egg"><div class="cramomatic-desc"><b>Mantyke</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 88) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/848.png" title="Toxel Egg"><div class="cramomatic-desc"><b>Toxel</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 92) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/300.png" title="Skitty Egg"><div class="cramomatic-desc"><b>Skitty</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 96) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/427.png" title="Buneary Egg"><div class="cramomatic-desc"><b>Buneary</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 100) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/425.png" title="Drifloon Egg"><div class="cramomatic-desc"><b>Drifloon</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 104) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/216.png" title="Teddiursa Egg"><div class="cramomatic-desc"><b>Teddiursa</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 108) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/255.png" title="Torchic Egg"><div class="cramomatic-desc"><b>Torchic</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 112) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/447.png" title="Riolu Egg"><div class="cramomatic-desc"><b>Riolu</b> hatched from the egg!</div>`;
+} else if (finalRoll <= 116) {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/172.png" title="Pichu Egg"><div class="cramomatic-desc"><b>Pichu</b> hatched from the egg!</div>`;
+} else {
+    resultText = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png" title="Eevee Egg"><div class="cramomatic-desc"><b>Eevee</b> hatched from the egg!</div>`;
+}
 
         $(this).html(resultText);
         $(this).data('processed', true);
