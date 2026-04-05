@@ -25,7 +25,7 @@ function EggrollDice() {
         } else if (finalRoll <= 80) {
             resultText = `<img style="padding:28px;"" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is very special! It must have <b>ONE EVENT MOVE!</b></div>`;
         } else {
-            resultText = `<img style="padding:28px;" src="https://i.imgur.com/bwjRsaA.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is something else! It must have the move <b>WISH!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is something else! It must have the move <b>WISH!</b></div>`;
         }
 
         $(this).html(resultText);
