@@ -64,7 +64,7 @@ function EggrollDice() {
         }
 
         // Tier 5: 101–110
-        else if (finalRoll <= 110) {
+        else if (finalRoll <= 120) {
             resultText = `
                 <div class="mkj-wrapper">
                     <div class="mkj-textbox">
