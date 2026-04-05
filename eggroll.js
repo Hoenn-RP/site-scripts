@@ -17,13 +17,13 @@ function EggrollDice() {
         let resultText = '';
 
         if (finalRoll <= 20) {
-            resultText = `<img src="https://i.imgur.com/bwjRsaA.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is really rumbling! It must have <b>1 TM MOVE!</b></div>`;
+            resultText = `<img src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is really rumbling! It must have <b>1 TM MOVE!</b></div>`;
         } else if (finalRoll <= 40) {
-            resultText = `<img src="https://i.imgur.com/bwjRsaA.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is really rumbling! It must have <b>1 EGG MOVE!</b></div>`;
+            resultText = `<img src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is really rumbling! It must have <b>1 EGG MOVE!</b></div>`;
         } else if (finalRoll <= 60) {
-            resultText = `<img src="https://i.imgur.com/bwjRsaA.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is really rumbling! It must have <b>TWO EGG MOVES!</b></div>`;
+            resultText = `<img src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is really rumbling! It must have <b>TWO EGG MOVES!</b></div>`;
         } else if (finalRoll <= 80) {
-            resultText = `<img src="https://i.imgur.com/bwjRsaA.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is really rumbling! It must have <b>1 EVENT MOVE!</b></div>`;
+            resultText = `<img src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is really rumbling! It must have <b>1 EVENT MOVE!</b></div>`;
         } else {
             resultText = `<img src="https://i.imgur.com/bwjRsaA.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg is really rumbling! It must have <b>WISH MOVE!</b></div>`;
         }
@@ -52,19 +52,19 @@ function EggrollDice() {
         let resultText = '';
 
         if (finalRoll <= 20) {
-            resultText = `<img src="https://i.imgur.com/bwjRsaA.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg has a special effect: <b>HIDDEN ABILITY</b>!</div>`;
+            resultText = `<img src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Pokemon Egg"><div class="cramomatic-desc">This egg has a special effect: <b>HIDDEN ABILITY</b>!</div>`;
         } else if (finalRoll <= 40) {
-            resultText = `<img src="https://i.imgur.com/bwjRsaA.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg has a special effect: <b>CUTE CHARM ABILITY</b>!</div>`;
+            resultText = `<img src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Pokemon Egg"><div class="cramomatic-desc">This egg has a special effect: <b>CUTE CHARM ABILITY</b>!</div>`;
         } else if (finalRoll <= 60) {
-            resultText = `<img src="https://i.imgur.com/bwjRsaA.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg has a special effect: <b>SHINY</b>!</div>`;
+            resultText = `<img src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Pokemon Egg"><div class="cramomatic-desc">This egg has a special effect: <b>SHINY</b>!</div>`;
         } else if (finalRoll <= 80) {
-            resultText = `<img src="https://i.imgur.com/bwjRsaA.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg has a special effect: <b>PINK VARIANT</b>!</div>`;
+            resultText = `<img src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Pokemon Egg"><div class="cramomatic-desc">This egg has a special effect: <b>PINK VARIANT</b>!</div>`;
         } else if (finalRoll <= 100) {
-            resultText = `<img src="https://i.imgur.com/bwjRsaA.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg has a special effect: <b>ILLUMINA POKEMON</b>!</div>`;
+            resultText = `<img src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Pokemon Egg"><div class="cramomatic-desc">This egg has a special effect: <b>ILLUMINA POKEMON</b>!</div>`;
         } else if (finalRoll <= 110) {
-            resultText = `<img src="https://i.imgur.com/bwjRsaA.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg has a special effect: <b>EXTRA MOVESLOT</b>!</div>`;
+            resultText = `<img src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Pokemon Egg"><div class="cramomatic-desc">This egg has a special effect: <b>EXTRA MOVESLOT</b>!</div>`;
         } else {
-            resultText = `<img src="https://i.imgur.com/bwjRsaA.png" title="Pokemon Egg"><div class="cramomatic-desc">This egg has a special effect: <b>EXTRA ABILITY SLOT</b>!</div>`;
+            resultText = `<img src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Pokemon Egg"><div class="cramomatic-desc">This egg has a special effect: <b>EXTRA ABILITY SLOT</b>!</div>`;
         }
 
         $(this).html(resultText);
