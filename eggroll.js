@@ -58,7 +58,7 @@ function EggrollDice() {
         } else if (finalRoll <= 60) {
             resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Pokemon Egg"><div class="cramomatic-desc">This egg is sparkling, so it must be <b>SHINY!</b></div>`;
         } else if (finalRoll <= 80) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Pokemon Egg"><div class="cramomatic-desc">This egg has a pinkish hue, so it must be a <b>PINK VARIANT!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Pokemon Egg"><div class="cramomatic-desc">This egg has a pinkish hue, so the pokemon inside must be <b>PINK!</b></div>`;
         } else if (finalRoll <= 100) {
             resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Pokemon Egg"><div class="cramomatic-desc">This egg is glowing oddly, it must be an <b>ILLUMINA POKEMON!</b></div>`;
         } else if (finalRoll <= 110) {
