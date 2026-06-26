@@ -17,19 +17,19 @@ function MirageReefDice() {
         let resultText = '';
 
         if (finalRoll <= 20) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Mirage Reef"><div class="cramomatic-desc">A shimmering trail cuts through the water! The illumina aura glows a brilliant <b>GOLD</b> color!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Aura/gold.gif" title="Mirage Reef"><div class="cramomatic-desc">A shimmering trail cuts through the water! The illumina aura glows a brilliant <b>GOLD</b> color!</div>`;
         } else if (finalRoll <= 40) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Mirage Reef"><div class="cramomatic-desc">A shimmering trail cuts through the water! The illumina aura glows a pale <b>SILVER</b> color!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Aura/silver.gif" title="Mirage Reef"><div class="cramomatic-desc">A shimmering trail cuts through the water! The illumina aura glows a pale <b>SILVER</b> color!</div>`;
         } else if (finalRoll <= 60) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Mirage Reef"><div class="cramomatic-desc">A shimmering trail cuts through the water! The illumina aura glows a soft <b>SEAFOAM</b> color!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Aura/seafoamaura.gif" title="Mirage Reef"><div class="cramomatic-desc">A shimmering trail cuts through the water! The illumina aura glows a soft <b>SEAFOAM</b> color!</div>`;
         } else if (finalRoll <= 80) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Mirage Reef"><div class="cramomatic-desc">A shimmering trail cuts through the water! The illumina aura glows a vivid <b>AZURE</b> blue color!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Aura/blue.gif" title="Mirage Reef"><div class="cramomatic-desc">A shimmering trail cuts through the water! The illumina aura glows a vivid <b>AZURE</b> blue color!</div>`;
         } else if (finalRoll <= 90) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Mirage Reef"><div class="cramomatic-desc">A shimmering trail cuts through the water! The illumina aura glows a deep <b>UMBRA</b> pinkish purple color!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Aura/umbra.gif" title="Mirage Reef"><div class="cramomatic-desc">A shimmering trail cuts through the water! The illumina aura glows a deep <b>UMBRA</b> purple color!</div>`;
         } else if (finalRoll <= 100) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Mirage Reef"><div class="cramomatic-desc">A shimmering trail cuts through the water! The illumina aura glows a warm <b>CORAL</b> pink color!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Aura/pinkaura.gif" title="Mirage Reef"><div class="cramomatic-desc">A shimmering trail cuts through the water! The illumina aura glows a warm <b>CORAL</b> pink color!</div>`;
         } else {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg1.png" title="Mirage Reef"><div class="cramomatic-desc">A shimmering trail cuts through the water! The illumina aura seems to fluctuate like a <b>RAINBOW</b>!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Aura/rainbow.gif" title="Mirage Reef"><div class="cramomatic-desc">A shimmering trail cuts through the water! The illumina aura seems to fluctuate like a <b>RAINBOW</b>!</div>`;
         }
 
         $(this).html(resultText);
@@ -56,19 +56,19 @@ function MirageReefDice() {
         let resultText = '';
 
         if (finalRoll <= 30) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Mirage Reef"><div class="cramomatic-desc">Tiny glowing specks drift up from the seafloor like living embers. The Pokemon in this group know <b>BIOLUMINESCENT BAIT!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/tm/bug.png" title="Mirage Reef"><div class="cramomatic-desc">Tiny glowing specks drift up from the seafloor like living embers. The Pokemon in this group know <b>BIOLUMINESCENT BAIT!</b></div>`;
         } else if (finalRoll <= 50) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Mirage Reef"><div class="cramomatic-desc">The water shimmers with bits of electricity. The Pokemon in this group know <b>PHOTOVOLTAIC VEIL!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/tm/electric.png" title="Mirage Reef"><div class="cramomatic-desc">The water shimmers with bits of electricity. The Pokemon in this group know <b>PHOTOVOLTAIC VEIL!</b></div>`;
         } else if (finalRoll <= 70) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Mirage Reef"><div class="cramomatic-desc">The water sparkles with drifting flecks that burst into tiny flashes. The Pokemon in this group know <b>GLITTER BOMB!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/tm/grass.png" title="Mirage Reef"><div class="cramomatic-desc">The water sparkles with drifting flecks that burst into tiny flashes. The Pokemon in this group know <b>GLITTER BOMB!</b></div>`;
         } else if (finalRoll <= 90) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Mirage Reef"><div class="cramomatic-desc">A crystalline brilliance hums beneath the surface like a focused beam. The Pokemon in this group know <b>MOISSANITE BEAM!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/tm/rock.png" title="Mirage Reef"><div class="cramomatic-desc">A crystalline brilliance hums beneath the surface like a focused beam. The Pokemon in this group know <b>MOISSANITE BEAM!</b></div>`;
         } else if (finalRoll <= 100) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Mirage Reef"><div class="cramomatic-desc">The water glints with an unusual iridescence, almost too beautiful to be natural. The Pokemon in this group are <b>SHINY!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://i.ibb.co/rk1GV3N/shiny-swap.png" title="Mirage Reef"><div class="cramomatic-desc">The water glints with an unusual iridescence, almost too beautiful to be natural. The Pokemon in this group are <b>SHINY!</b></div>`;
         } else if (finalRoll <= 110) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Mirage Reef"><div class="cramomatic-desc">Something powerful hums in the deep, like a creature with more to offer than it first appears. The Pokemon in this group have an <b>ADDITIONAL ABILITY SLOT!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/medicine/ability-capsule.png" title="Mirage Reef"><div class="cramomatic-desc">Something powerful hums in the deep, like a creature with more to offer than it first appears. The Pokemon in this group have an <b>ADDITIONAL ABILITY SLOT!</b></div>`;
         } else {
-            resultText = `<img style="padding:28px;" src="https://file.garden/Zl6qcCeckR3IfItG/Eggroll/egg2.gif" title="Mirage Reef"><div class="cramomatic-desc">Something powerful hums in the deep, like a creature with more to offer than it first appears. The Pokemon in this group have an <b>ADDITIONAL MOVE SLOT!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/key-item/rule-book.png" title="Mirage Reef"><div class="cramomatic-desc">Something powerful hums in the deep, like a creature with more to offer than it first appears. The Pokemon in this group have an <b>ADDITIONAL MOVE SLOT!</b></div>`;
         }
 
         $(this).html(resultText);
