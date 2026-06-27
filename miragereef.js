@@ -56,19 +56,19 @@ function MirageReefDice() {
         let resultText = '';
 
         if (finalRoll <= 30) {
-            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/tm/bug.png" title="Mirage Reef"><div class="cramomatic-desc">Tiny glowing specks drift up from the seafloor like living embers. The Pokemon in this group know <b>BIOLUMINESCENT BAIT!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/tm/bug.png" title="Mirage Reef"><div class="cramomatic-desc">The pokemon in this group know <b>BIOLUMINESCENT BAIT!</b></div>`;
         } else if (finalRoll <= 50) {
-            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/tm/electric.png" title="Mirage Reef"><div class="cramomatic-desc">The water shimmers with bits of electricity. The Pokemon in this group know <b>PHOTOVOLTAIC VEIL!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/tm/electric.png" title="Mirage Reef"><div class="cramomatic-desc">The pokemon in this group know <b>PHOTOVOLTAIC VEIL!</b></div>`;
         } else if (finalRoll <= 70) {
-            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/tm/grass.png" title="Mirage Reef"><div class="cramomatic-desc">The water sparkles with drifting flecks that burst into tiny flashes. The Pokemon in this group know <b>GLITTER BOMB!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/tm/grass.png" title="Mirage Reef"><div class="cramomatic-desc">The pokemon in this group know <b>GLITTER BOMB!</b></div>`;
         } else if (finalRoll <= 90) {
-            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/tm/rock.png" title="Mirage Reef"><div class="cramomatic-desc">A crystalline brilliance hums beneath the surface like a focused beam. The Pokemon in this group know <b>MOISSANITE BEAM!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/tm/rock.png" title="Mirage Reef"><div class="cramomatic-desc">The pokemon in this group know <b>MOISSANITE BEAM!</b></div>`;
         } else if (finalRoll <= 100) {
-            resultText = `<img style="padding:28px;" src="https://i.ibb.co/rk1GV3N/shiny-swap.png" title="Mirage Reef"><div class="cramomatic-desc">The water glints with an unusual iridescence, almost too beautiful to be natural. The Pokemon in this group are <b>SHINY!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://i.ibb.co/rk1GV3N/shiny-swap.png" title="Mirage Reef"><div class="cramomatic-desc">The pokemon in this group are <b>SHINY!</b></div>`;
         } else if (finalRoll <= 110) {
-            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/medicine/ability-capsule.png" title="Mirage Reef"><div class="cramomatic-desc">Something powerful hums in the deep, like a creature with more to offer than it first appears. The Pokemon in this group have an <b>ADDITIONAL ABILITY SLOT!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/medicine/ability-capsule.png" title="Mirage Reef"><div class="cramomatic-desc">The pokemon in this group have an <b>ADDITIONAL ABILITY SLOT!</b></div>`;
         } else {
-            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/key-item/rule-book.png" title="Mirage Reef"><div class="cramomatic-desc">Something powerful hums in the deep, like a creature with more to offer than it first appears. The Pokemon in this group have an <b>ADDITIONAL MOVE SLOT!</b></div>`;
+            resultText = `<img style="padding:28px;" src="https://raw.githubusercontent.com/msikma/pokesprite/master/items/key-item/rule-book.png" title="Mirage Reef"><div class="cramomatic-desc">The pokemon in this group have an <b>ADDITIONAL MOVE SLOT!</b></div>`;
         }
 
         $(this).html(resultText);
