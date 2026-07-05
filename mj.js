@@ -341,11 +341,11 @@ function MJDice() {
         } else if (finalRoll === 105) {
             resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Calico%20(White%20&%20Pink).png" title="Calico (White & Pink) Magikarp"><div class="cramomatic-desc">It has a <b>Calico (White & Pink)</b> pattern! This slightly different calico pattern has pink patches on a white field.</div>`;
         } else if (finalRoll === 106) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Pink%20Two-Tone.png" title="Pink Two-Tone Magikarp"><div class="cramomatic-desc">It has a <b>Pink Two-Tone</b> pattern! This basic two-tone pattern has clearly divided sections of pink and white.</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Pink%20Two-Tone.png" title="Pink Two-Tone Magikarp"><div class="cramomatic-desc">It has a <b>Pink Two-Tone</b> pattern! This cute two-tone pattern has clear fields of pink and white.</div>`;
         } else if (finalRoll === 107) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Pink%20Orca.png" title="Pink Orca Magikarp"><div class="cramomatic-desc">It has a <b>Pink Orca</b> pattern! This rather rare pink two-tone pattern looks like it would make for a swift swimmer.</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Pink%20Orca.png" title="Pink Orca Magikarp"><div class="cramomatic-desc">It has a <b>Pink Orca</b> pattern! This two-tone pattern manages to look both cute and cool at the same time.</div>`;
         } else if (finalRoll === 108) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Pink%20Dapples.png" title="Pink Dapples Magikarp"><div class="cramomatic-desc">It has a <b>Pink Dapples</b> pattern! This pink two-tone pattern is reminiscent of the spray thrown up by the ocean waves.</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Pink%20Dapples.png" title="Pink Dapples Magikarp"><div class="cramomatic-desc">It has a <b>Pink Dapples</b> pattern! This popular two-tone look is loved for its cute coloring and pattern.</div>`;
         } else if (finalRoll === 109) {
             resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Pink%20Bubbles.png" title="Pink Bubbles Magikarp"><div class="cramomatic-desc">It has a <b>Pink Bubbles</b> pattern! This vivid bubble pattern in pink has many fans.</div>`;
         } else if (finalRoll === 110) {
@@ -397,9 +397,9 @@ function MJDice() {
         } else if (finalRoll === 133) {
             resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Gray%20Stripes.png" title="Gray Stripes Magikarp"><div class="cramomatic-desc">It has a <b>Gray Stripes</b> pattern! This basic gray striped pattern is simply striking, no matter how you look at it.</div>`;
         } else if (finalRoll === 134) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Gray%20Forehead.png" title="Gray Forehead Magikarp"><div class="cramomatic-desc">It has a <b>Gray Forehead</b> pattern! This playful-looking pattern is known for the bright gray patch on its forehead.</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Gray%20Forehead.png" title="Black Forehead Magikarp"><div class="cramomatic-desc">It has a <b>Black Forehead</b> pattern! This rather reserved pattern has black only on its forehead.</div>`;
         } else if (finalRoll === 135) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Gray%20Mask.png" title="Gray Mask Magikarp"><div class="cramomatic-desc">It has a <b>Gray Mask</b> pattern! This eye-catching pattern has a splash of gray coloration only on its face.</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Gray%20Mask.png" title="Black Mask Magikarp"><div class="cramomatic-desc">It has a <b>Black Mask</b> pattern! This surprising pattern has just one patch of startling black across its face.</div>`;
         } else if (finalRoll === 136) {
             resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Saucy%20Gray.png" title="Saucy Gray Magikarp"><div class="cramomatic-desc">It has a <b>Saucy Gray</b> pattern! The splashy gray pattern on its back looks as though a bucket of gray paint was upended onto it.</div>`;
         } else if (finalRoll === 137) {
