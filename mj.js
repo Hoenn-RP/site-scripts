@@ -76,33 +76,33 @@ function MJDice() {
         let resultText = '';
 
         if (finalRoll <= 10) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">That’s a tiny one! It seems <b>Rattled</b>. This Magikarp weighs only <b>5.0</b> kg <b>(XXXS)</b>!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">That’s a tiny one! It seems to have its <b>Hidden Ability</b>. This Magikarp weighs only <b>5.0</b> kg <b>(XXXS)</b>!</div>`;
         } else if (finalRoll >= 11 && finalRoll <= 20) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">That’s a tiny one! It’s got <b>Swift Swim</b>. This Magikarp weighs only <b>5.0</b> kg <b>(XXXS)</b>!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">That’s a tiny one! It’s got its <b>Normal Ability</b>. This Magikarp weighs only <b>5.0</b> kg <b>(XXXS)</b>!</div>`;
         } else if (finalRoll >= 21 && finalRoll <= 30) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">This small Magikarp seems <b>Rattled</b>. It only weighs <b>7.5</b> kg <b>(XXS)</b>!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">This small Magikarp seems to have its <b>Hidden Ability</b>. It only weighs <b>7.5</b> kg <b>(XXS)</b>!</div>`;
         } else if (finalRoll >= 31 && finalRoll <= 40) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">This small Magikarp is going for a <b>Swift Swim</b>. It only weighs <b>7.5</b> kg <b>(XXS)</b>!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">This small Magikarp is rocking its <b>Normal Ability</b>. It only weighs <b>7.5</b> kg <b>(XXS)</b>!</div>`;
         } else if (finalRoll >= 41 && finalRoll <= 50) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">Appears to be slightly small and a bit <b>Rattled</b>. It only weighs <b>9.0</b> kg <b>(XS)</b>!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">Appears to be slightly small, and has its <b>Hidden Ability</b>. It only weighs <b>9.0</b> kg <b>(XS)</b>!</div>`;
         } else if (finalRoll >= 51 && finalRoll <= 60) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">Appears to be slightly small during its <b>Swift Swim</b>. It only weighs <b>9.0</b> kg <b>(XS)</b>!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">Appears to be slightly small, sporting its <b>Normal Ability</b>. It only weighs <b>9.0</b> kg <b>(XS)</b>!</div>`;
         } else if (finalRoll >= 61 && finalRoll <= 70) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">A standard catch! This one’s a bit <b>Rattled</b> and weighs <b>10.0</b> kg <b>(Normal)</b>!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">A standard catch! This one’s got its <b>Hidden Ability</b> and weighs <b>10.0</b> kg <b>(Normal)</b>!</div>`;
         } else if (finalRoll >= 71 && finalRoll <= 80) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">A standard catch! This one’s rocking <b>Swift Swim</b> and weighs <b>10.0</b> kg <b>(Normal)</b>!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">A standard catch! This one’s rocking its <b>Normal Ability</b> and weighs <b>10.0</b> kg <b>(Normal)</b>!</div>`;
         } else if (finalRoll >= 81 && finalRoll <= 90) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">Pretty hefty! This <b>Rattled</b> Magikarp weighs <b>11.0</b> kg <b>(XL)</b>!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">Pretty hefty! This Magikarp has its <b>Hidden Ability</b> and weighs <b>11.0</b> kg <b>(XL)</b>!</div>`;
         } else if (finalRoll >= 91 && finalRoll <= 100) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">Pretty hefty! This <b>Swift Swim</b> Magikarp weighs <b>11.0</b> kg <b>(XL)</b>!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">Pretty hefty! This Magikarp has its <b>Normal Ability</b> and weighs <b>11.0</b> kg <b>(XL)</b>!</div>`;
         } else if (finalRoll >= 101 && finalRoll <= 110) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">It’s heavy! With its <b>Rattled</b> nature, this Magikarp weighs <b>12.5</b> kg <b>(XXL)</b>!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">It’s heavy! With its <b>Hidden Ability</b>, this Magikarp weighs <b>12.5</b> kg <b>(XXL)</b>!</div>`;
         } else if (finalRoll >= 111 && finalRoll <= 120) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">It’s heavy! With its <b>Swift Swim</b> ability, this Magikarp weighs <b>12.5</b> kg <b>(XXL)</b>!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">It’s heavy! With its <b>Normal Ability</b>, this Magikarp weighs <b>12.5</b> kg <b>(XXL)</b>!</div>`;
         } else if (finalRoll >= 121 && finalRoll <= 130) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">Holy smokes! It’s huge! A whopping <b>15.0</b> kg <b>(XXXL)</b> and clearly <b>Rattled</b>!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">Holy smokes! It’s huge! A whopping <b>15.0</b> kg <b>(XXXL)</b> and clearly running on its <b>Hidden Ability</b>!</div>`;
         } else if (finalRoll >= 131 && finalRoll <= 140) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">Holy smokes! It’s huge! A whopping <b>15.0</b> kg <b>(XXXL)</b> and surprisingly quick with <b>Swift Swim</b>!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">Holy smokes! It’s huge! A whopping <b>15.0</b> kg <b>(XXXL)</b> and rocking its <b>Normal Ability</b>!</div>`;
         } else if (finalRoll >= 141 && finalRoll <= 150) {
             resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">It’s an <b>Alpha</b> Magikarp radiating power! It has the ability <b>Wild Might</b> and weighs <b>22.5</b> kg <b>(ALPHA)</b>!</div>`;
         } else if (finalRoll >= 151 && finalRoll <= 160) {
