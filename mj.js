@@ -45,7 +45,7 @@ function MJDice() {
         } else if (finalRoll >= 131 && finalRoll <= 140) {
             resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">A shimmering barrier appears around the Magikarp as it casts <b>Reflect</b>.</div>`;
         } else if (finalRoll >= 141 && finalRoll <= 150) {
-            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">The Magikarp throws caution to the wind and charges with a reckless <b>Double-Edge</b>!</div>`;
+            resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">The Magikarp charges with a reckless <b>Double-Edge</b>!</div>`;
         } else if (finalRoll >= 151 && finalRoll <= 160) {
             resultText = `<img style="padding:28px;" src="https://file.garden/aj8NOoeIBzAJUnjd/Magikarp%20Jump/Orange.png" title="Magikarp"><div class="cramomatic-desc">The Magikarp surges forward, wrapped in a crashing <b>Wave Crash</b>!</div>`;
         } else {
